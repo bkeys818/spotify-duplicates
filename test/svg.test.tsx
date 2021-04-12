@@ -1,7 +1,7 @@
 import React from "react"
-import { render, fireEvent, screen } from "@testing-library/react"
+import { render, fireEvent } from "@testing-library/react"
 
-import { Selected } from "./svgs"
+import { Selected } from "../src/assets/svgs"
 
 const nameToClass = (name: string) =>
     name[0].toLowerCase() +

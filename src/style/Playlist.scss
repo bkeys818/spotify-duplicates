@@ -1,0 +1,203 @@
+// @use "global" as global;
+@use "sass:color";
+
+$height: 84px;
+$loading-color: #e4e4e4;
+
+body {
+    background-color: rgba(211, 211, 211, 0.15);
+}
+
+// .playlist,
+// .playlist * {
+//     border: 0.5px solid rgba(255, 0, 0, 0.4);
+// }
+
+/*** Layout ***/
+.playlist {
+    display: flex;
+    align-items: center;
+
+    height: $height;
+    background-color: #fff;
+    border-radius: 9px;
+    overflow: hidden;
+
+    .cover {
+        height: $height;
+        width: $height;
+        img {
+            height: 100%;
+            width: auto;
+        }
+    }
+
+    $text-height: 44px;
+    p {
+        margin: 0 22px;
+        font-family: 'Rubik', sans-serif;
+        font-weight: 300;
+        font-size: 34px;
+        line-height: $text-height;
+    }
+
+    &.loading .cover,
+    .cover.empty {
+        $padding: 16px;
+        height: $height - (2 * $padding);
+        width: $height - (2 * $padding);
+        padding: $padding;
+    }
+
+    &.loading {
+        .cover {
+            background-color: color.adjust($loading-color, $blackness: 20%);
+        }
+        img {
+            filter: invert(100%);
+            opacity: 0.25;
+        }
+        p:empty {
+            display: inline-block;
+            background-color: $loading-color;
+            padding-top: #{$text-height / 2};
+            padding-bottom: #{$text-height / 2};
+        }
+        // p {
+        //     display: inline-block;
+        //     background-color: #e4e4e4;
+        //     color: transparent;
+        // }
+    }
+
+    .cover.empty {
+        background-color: #257457;
+    }
+}
+
+// &.loading {
+//     .cover {
+//         img {
+//             filter: invert(100%);
+//             opacity: 0.2;
+//             background-color: color.invert(color.adjust(#e4e4e4, $blackness: 55%));
+//         }
+//     }
+//     .info {
+//         * {
+//             display: inline-block;
+//             background-color: #e4e4e4;
+//             color: transparent;
+//         }
+//     }
+// }
+// .cover.empty {
+//     img {
+//         background-color: #257457; // inverted Spotify green
+//         // filter: invert(100%);
+//     }
+// }
+
+/*
+
+//*** Basic Layout/
+.playlist {
+    display: flex;
+    align-items: center;
+    // padding-right: 14px;
+
+    $height: 106px;
+    height: $height;
+
+    .cover {
+        height: $height;
+        width: $height;
+        img {
+            height: 100%;
+            width: auto;
+        }
+    }
+
+    &.loading .cover img, .cover.empty img {
+        $padding: 20px;
+        height: $height - (2 * $padding);
+        width: $height - (2 * $padding);
+        padding: $padding;
+    }
+
+    .info {
+        flex-grow: 1;
+        $margin: 12px;
+        margin: $margin $margin - 2;
+        height: $height - (2 * $margin);
+        h4, p {
+            float: left;
+            margin: 0;
+        }
+        p { clear: left; }
+    }
+}
+
+ //*** Theme /
+.playlist-conatiner {
+    background-color: #fff;
+    border-radius: 9px;
+    overflow: hidden;
+
+    &.loading {
+        .cover {
+            img {
+                filter: invert(100%);
+                opacity: 0.2;
+                background-color: color.invert(color.adjust(#e4e4e4, $blackness: 55%));
+            }
+        }
+        .info {
+            * {
+                display: inline-block;
+                background-color: #e4e4e4;
+                color: transparent;
+            }
+        }
+    }
+    .cover.empty {
+        img {
+            background-color: #257457; // inverted Spotify green
+            // filter: invert(100%);
+        }
+    }
+
+    &.searching {
+        .info p:after {
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: bottom;
+            animation: ellipsis steps(4,end) 1200ms infinite;
+            content: "\2026"; // ascii code for the ellipsis character
+            width: 0px;
+            
+            @keyframes ellipsis { to {
+                width: 0.8em;    
+            }}
+            
+        }
+    }
+
+    .info {
+        font-family: 'Rubik', sans-serif;
+
+        h4 {
+            font-weight: 400;
+            font-size: 34px;
+            line-height: 1.4em;
+        }
+
+        p {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 400;
+            font-size: 22px;
+        }
+    }
+}
+
+*/

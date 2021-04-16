@@ -1,12 +1,8 @@
 name: Status Checks
 
 on:
-  push:
-    branches: [ master ]
-    paths-ignore: [ .github/** ]
   pull_request:
     branches: [ master ]
-  workflow_dispatch:
 
 jobs:
 

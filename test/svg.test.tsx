@@ -1,21 +1,27 @@
 import React from "react"
-import { render, fireEvent } from "@testing-library/react"
+import { render } from "@testing-library/react"
 
-import { Selected } from "../src/assets/svgs"
+import { ChevronRight, Selected, Xmark } from "../src/assets/svgs"
 
 const nameToClass = (name: string) =>
     name[0].toLowerCase() +
-    name.slice(1, name.length)
-        .replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`)
+    name
+        .slice(1, name.length)
+        .replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`)
 
-describe("Symbols are functional", () => {
-    test("Selected symbol toggles when clicked", () => {
-        render(<Selected />)
-
-        const instance = document.querySelector(".symbol_"+nameToClass(Selected.name))
-        expect(instance).toBeTruthy()
-        expect(instance?.lastElementChild).toHaveAttribute("visibility", "hidden")
-        fireEvent.click(instance!)
-        expect(instance?.lastElementChild).toHaveAttribute("visibility", "visible")
+describe("Symbols have the correct formatting", () => {
+    test("Correct class format", () => {
+        const check = <S extends (...args: any) => JSX.Element>(
+            symbol: S,
+            params: Parameters<S>
+        ): void => {
+            const { container } = render(symbol(params))
+            expect(container.firstChild).toHaveClass(
+                "symbol_" + nameToClass(symbol.name)
+            ) 
+        }
+        check(ChevronRight, [])
+        check(Selected, [{active: false}])
+        check(Xmark, [])
     })
 })

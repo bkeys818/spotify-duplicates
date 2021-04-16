@@ -1,5 +1,70 @@
+@use 'sass:math';
+
 [class^=symbol_] {
     justify-self: center;
     stroke-linecap: round;
     stroke-linejoin: round;
+}
+
+%stroke-only {
+    fill: none;
+    stroke: currentcolor;
+}
+
+.symbol_ {
+    &chevron-right,
+    &xmark,
+    &load-status {
+        fill: none;
+        stroke: currentcolor;
+    }
+
+    &load-status {
+        max-width: 120px;
+        stroke-width: 10px;
+
+        &[data-state=ACTIVE] {
+
+            path:last-of-type { opacity: 0; }
+      
+            animation: 2s linear infinite svg-animation;
+        
+            // SVG animation.
+            @keyframes svg-animation {
+                0% { transform: rotateZ(0deg); }
+                100% { transform: rotateZ(360deg); }
+            }
+        
+            // Circle styles.
+            path:first-of-type {
+                animation: 1.4s cubic-bezier(0.38, 0, 0.62, 1) infinite both circle-animation;
+        
+                $radius: 45;
+                $circumference: math.ceil(2 * math.$pi * $radius);
+                $dashoffset_small-state: math.round($circumference * .99);
+                $dashoffset_large-state: math.round($circumference * .25);
+        
+                stroke-dasharray: $circumference;
+                stroke-dashoffset: $dashoffset_small-state;
+                // stroke-width: 10px;
+                transform-origin: 50% 50%;
+            
+                // Circle animation.
+                @keyframes circle-animation {
+                    0%, 25% {
+                        stroke-dashoffset: $dashoffset_small-state;
+                        transform: rotate(0);
+                    }
+                    50%, 75% {
+                        stroke-dashoffset: $dashoffset_large-state;
+                        transform: rotate(45deg);
+                    }
+                    100% {
+                        stroke-dashoffset: $dashoffset_small-state;
+                        transform: rotate(360deg);
+                    }
+                }
+            }
+        }
+    }
 }

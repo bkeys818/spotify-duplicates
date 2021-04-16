@@ -10,15 +10,18 @@ on:
 
 jobs:
 
-  install-dependencies:
-    runs-on: ubuntu-latest
-    steps:
-      - run: yarn
-
   run-jest:
     runs-on: ubuntu-latest
-    needs: [ install-dependencies ]
     steps:
+
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Install Dependencies
+        run: yarn 
+
       - name: Jest Annotations & Coverage
         uses: mattallty/jest-github-action@v1
         env:

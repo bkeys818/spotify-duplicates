@@ -1,8 +1,8 @@
 import React from "react";
 import { Story } from "@storybook/react";
 
-import Playlist from "./Playlist"
-import type { PlaylistProps } from "./Playlist"
+import Playlist from "../components/Playlist"
+import type { PlaylistProps } from "../components/Playlist"
 
 export default {
     component: Playlist,

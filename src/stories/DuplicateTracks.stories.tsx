@@ -1,7 +1,7 @@
 import React from "react"
 import { Story } from "@storybook/react";
 
-import DuplicateTracks, { DuplicateTracksProps } from "./DuplicateTracks"
+import DuplicateTracks, { DuplicateTracksProps } from "../components/DuplicateTracks"
 
 export default {
     component: DuplicateTracks,

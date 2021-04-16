@@ -1,6 +1,6 @@
 import React from "react"
 
-import "./Playlist.scss"
+import "../style/Playlist.scss"
 
 // @ts-ignore
 import spotifyLogo from "../assets/spotify-logos/Spotify_Icon_RGB_White.png"

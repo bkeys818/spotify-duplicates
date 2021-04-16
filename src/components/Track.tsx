@@ -1,6 +1,6 @@
 import React from "react"
 
-import "./Track.scss"
+import "../style/Track.scss"
 
 interface SongInfo {
     name: string

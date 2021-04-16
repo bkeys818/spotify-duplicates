@@ -20,7 +20,8 @@ jobs:
           ref: ${{ github.ref }}
 
       - name: Install Dependencies
-        run: yarn 
+        run: yarn
+
 
       - name: Jest Annotations & Coverage
         uses: mattallty/jest-github-action@v1

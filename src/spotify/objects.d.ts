@@ -179,7 +179,7 @@ declare interface CopyrightObject {
 
 /** [Currently Playing Context Object](https://developer.spotify.com/documentation/web-api/reference/#object-currentlyplayingcontextobject) */
 declare interface CurrentlyPlayingContextObject extends CurrentlyPlayingObject {
-    /** Allows to update the user declare interface based on which playback actions are available within the current context. */
+    /** Allows to update the user export interface based on which playback actions are available within the current context. */
     actions: DisallowsObject
     /** The device that is currently active. */
     device: DeviceObject;
@@ -788,4 +788,20 @@ declare interface TuneableTrackObject {
      * @type Float
      */
     valence: number
+}
+
+/** Whenever the application makes requests related to authentication or authorization to Web API, such as retrieving an access token or refreshing an access token, the error response follows RFC 6749 on the OAuth 2.0 Authorization Framework. */
+declare interface AuthenticationError {
+    /** A high level description of the error as specified in [RFC 6749 Section 5.2.](https://tools.ietf.org/html/rfc6749#section-5.2) */
+    error: string
+    /** A more detailed description of the error as specified in [RFC 6749 Section 4.1.2.1.](https://tools.ietf.org/html/rfc6749#section-4.1.2.1) */
+    error_description: string
+}
+
+/** Apart from the response code, unsuccessful responses return a JSON object containing the following information: */
+declare interface AuthenticationError {
+    /** A high level description of the error as specified in [RFC 6749 Section 5.2.](https://tools.ietf.org/html/rfc6749#section-5.2) */
+    status: number
+    /** A more detailed description of the error as specified in [RFC 6749 Section 4.1.2.1.](https://tools.ietf.org/html/rfc6749#section-4.1.2.1) */
+    message: string
 }

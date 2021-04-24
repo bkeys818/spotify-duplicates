@@ -3,11 +3,14 @@ import React, { Component } from "react"
 import { navigate } from "gatsby"
 import Cookies from "universal-cookie"
 
+import { spotifyRequest } from "../spotify";
+
 interface AppProps {
     location: Location
 }
 interface AppStates {
     accessToken?: string
+    response?: string
 }
 
 export default class App extends Component<AppProps, AppStates> {
@@ -82,9 +85,11 @@ export default class App extends Component<AppProps, AppStates> {
         }
 
         this.state = {
+            response: "Here",
             accessToken: accessToken,
         }
 
+        this.handleClick = this.handleClick.bind(this)
     }
 
     componentDidMount() {
@@ -93,6 +98,16 @@ export default class App extends Component<AppProps, AppStates> {
     }
 
     render() {
-        return <h1>{this.state.accessToken}</h1>
+        return <h1 onClick={this.handleClick}>{this.state.response}</h1>
+    }
+
+    async handleClick() {
+        const response = await spotifyRequest("Get an Album", {
+            token: this.state.accessToken!,
+            pathParameter: {
+                "{id}": "6a8GwYiEMrXgMvZBvuBXrt",
+            }
+        })
+        if (response) this.setState({ response: JSON.stringify(response) })
     }
 }

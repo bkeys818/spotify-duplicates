@@ -1,7 +1,7 @@
 import React from "react"
 import { render } from "@testing-library/react"
 
-import { ChevronRight, Selected, Xmark } from "../src/assets/svgs"
+import { ChevronRight, Selected, Xmark } from "./svgs"
 
 const nameToClass = (name: string) =>
     name[0].toLowerCase() +

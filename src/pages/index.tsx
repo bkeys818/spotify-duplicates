@@ -5,6 +5,7 @@ import Cookies from "universal-cookie"
 
 import { request } from "../spotify/request"
 
+import "./index.scss"
 interface AppProps {
     location: Location
 }

@@ -1,9 +1,8 @@
-import React from "react"
-
-import "../style/Playlist.scss"
+import React from "react";
 
 // @ts-ignore
-import spotifyLogo from "../assets/spotify-logos/Spotify_Icon_RGB_White.png"
+import spotifyLogo from "../assets/spotify-logos/Spotify_Icon_RGB_White.png";
+import "./Playlist.scss";
 
 
 export interface PlaylistProps {

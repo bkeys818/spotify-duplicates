@@ -5,6 +5,10 @@ import Cookies from "universal-cookie"
 export default (props: { location: Location }) => 
     <h1 onClick={() => login(props.location)}>Get Started</h1>
 
+const scopes = [
+    "user-library-modify",
+    "playlist-modify-private"
+]
 
 function login(location: Location) {
     const cookies = new Cookies()
@@ -23,5 +27,5 @@ function login(location: Location) {
             "&response_type=" + "token" +
             "&redirect_uri=" + encodeURI(location.origin) +
             "&state=" + state +
-            "&scope=" + "playlist-modify-private"
+            "&scope=" + scopes.join(" ")
 }

@@ -3,7 +3,7 @@ import React, { Component } from "react"
 import { navigate } from "gatsby"
 import Cookies from "universal-cookie"
 
-import { spotifyRequest } from "../spotify";
+import { request } from "../spotify/request"
 
 interface AppProps {
     location: Location

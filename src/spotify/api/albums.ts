@@ -21,13 +21,13 @@ export const requestInfo: RequestInfo<Names> = {
 };
 
 export type RequestParams<R extends Names> = 
-      R extends "Get Multiple Albums" ? GetMultipleAlbumsRequest
-    : R extends "Get an Album" ? GetAnAlbumRequest
-    : R extends "Get an Album's Tracks" ? GetAnAlbumsTracksRequest
+      R extends "Get Multiple Albums" ? GetMultipleAlbums
+    : R extends "Get an Album" ? GetAlbum
+    : R extends "Get an Album's Tracks" ? GetAlbumTracks
     : {};
 
 /** Get Spotify catalog information for multiple albums identified by their Spotify IDs. */
-type GetMultipleAlbumsRequest = {
+type GetMultipleAlbums = {
     queryParameter: {
         /**
          * A comma-separated list of[Spotify IDs](https://developer.spotify.com/documentation/web-api/#spotify-uris-and-ids) for albums. Maximum: 20 IDs.
@@ -40,7 +40,7 @@ type GetMultipleAlbumsRequest = {
 };
 
 /** Get Spotify catalog information for a single album. */
-type GetAnAlbumRequest = {
+type GetAlbum = {
     pathParameter: {
         /** Spotify ID of the album. */
         "{id}": string;
@@ -52,7 +52,7 @@ type GetAnAlbumRequest = {
 };
 
 /** Get Spotify catalog information about an album’s tracks. Optional parameters can be used to limit the number of tracks returned. */
-type GetAnAlbumsTracksRequest = {
+type GetAlbumTracks = {
     pathParameter: {
         /** Spotify ID of the album. */
         "{id}": string;
@@ -69,8 +69,8 @@ type GetAnAlbumsTracksRequest = {
 
 export type Response<R extends Names> = 
       R extends "Get Multiple Albums" ? GetMultipleAlbumsResponse
-    : R extends "Get an Album" ? GetAnAlbumResponse
-    : R extends "Get an Album's Tracks" ? GetAnAlbumsTracksResponse
+    : R extends "Get an Album" ? GetAlbumResponse
+    : R extends "Get an Album's Tracks" ? GetAlbumsTracksResponse
     : {};
 
 /**
@@ -81,7 +81,7 @@ export type Response<R extends Names> =
 type GetMultipleAlbumsResponse = { albums: (AlbumObject | null)[] };
 
 /** An album object in JSON format */
-type GetAnAlbumResponse = AlbumObject;
+type GetAlbumResponse = AlbumObject;
 
 /** An album object in JSON format */
-type GetAnAlbumsTracksResponse = PagingObject<AlbumObject>;
+type GetAlbumsTracksResponse = PagingObject<AlbumObject>;

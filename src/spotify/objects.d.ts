@@ -403,7 +403,7 @@ declare interface PlayerErrorObject {
 }
 
 /** [Playlist Object](https://developer.spotify.com/documentation/web-api/reference/#object-playlistobject) */
-declare interface PlaylistObject {
+declare interface PlaylistObject extends SimplifiedPlaylistObject {
     /** Information about the followers of the playlist. */
     followers: FollowersObject;
     /** Information about the tracks of the playlist. */

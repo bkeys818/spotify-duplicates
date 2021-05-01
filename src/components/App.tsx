@@ -1,12 +1,12 @@
-import React, { Component } from "react"
+import React, { Component } from 'react'
 
-import { request } from "../spotify"
-import { filterImages } from "./CoverImage"
+import { request } from '../spotify'
+import { filterImages } from './CoverImage'
 
-import Modal from "./Modal"
-import PlaylistPreview from "./PlaylistPreview"
+import Modal from './Modal'
+import PlaylistPreview from './PlaylistPreview'
 
-import "./App.scss"
+import './App.scss'
 
 type ModifiedPlaylistObject = ReturnType<typeof modifyPlaylistObject>
 interface AppProps {
@@ -28,11 +28,13 @@ export default class App extends Component<AppProps, AppStates> {
 
     componentDidMount() {
         request("Get a List of Current User's Playlists", {
-            token: this.props.accessToken ?? "",
+            token: this.props.accessToken ?? '',
         })
             .then(response => {
                 this.setState({
-                    playlists: (response?.items ?? this.state.playlists).map(modifyPlaylistObject)
+                    playlists: (response?.items ?? this.state.playlists).map(
+                        modifyPlaylistObject
+                    ),
                 })
             })
             .catch(console.error)
@@ -72,12 +74,11 @@ export default class App extends Component<AppProps, AppStates> {
     }
 }
 
-
 export function modifyPlaylistObject(original: SimplifiedPlaylistObject) {
     const { images, ...otherProps } = original
     return {
         ...otherProps,
         selected: false,
-        cover: filterImages(images)?.url
+        cover: filterImages(images)?.url,
     }
 }

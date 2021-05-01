@@ -1,28 +1,28 @@
-import type { RequestInfo } from "./index";
+import type { RequestInfo } from './index'
 
 export type Names =
-    | "Get Multiple Albums"
-    | "Get an Album"
-    | "Get an Album's Tracks";
+    | 'Get Multiple Albums'
+    | 'Get an Album'
+    | "Get an Album's Tracks"
 
 export const requestInfo: RequestInfo<Names> = {
-    "Get Multiple Albums": {
-        type: "GET",
-        urlPath: "albums",
+    'Get Multiple Albums': {
+        type: 'GET',
+        urlPath: 'albums',
     },
-    "Get an Album": {
-        type: "GET",
-        urlPath: "albums/{id}",
+    'Get an Album': {
+        type: 'GET',
+        urlPath: 'albums/{id}',
     },
     "Get an Album's Tracks": {
-        type: "GET",
-        urlPath: "albums/{id}/tracks",
+        type: 'GET',
+        urlPath: 'albums/{id}/tracks',
     },
-};
+}
 
 export type RequestParams<R extends Names> = 
-      R extends "Get Multiple Albums" ? GetMultipleAlbums
-    : R extends "Get an Album" ? GetAlbum
+      R extends 'Get Multiple Albums' ? GetMultipleAlbums
+    : R extends 'Get an Album' ? GetAlbum
     : R extends "Get an Album's Tracks" ? GetAlbumTracks
     : {};
 
@@ -33,43 +33,43 @@ type GetMultipleAlbums = {
          * A comma-separated list of[Spotify IDs](https://developer.spotify.com/documentation/web-api/#spotify-uris-and-ids) for albums. Maximum: 20 IDs.
          * @example "4iV5W9uYEdYUVa79Axb7Rh,1301WleyT98MSxVHPZCA6M"
          */
-        ids: string;
+        ids: string
         /** An [ISO 3166-1 alpha-2 country code](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) orstring `from_token`. Provide this parameter if you want to apply [Track Relinking](https://developer.spotify.com/documentation/general/guides/track-relinking-guide/). */
-        market?: string;
-    };
-};
+        market?: string
+    }
+}
 
 /** Get Spotify catalog information for a single album. */
 type GetAlbum = {
     pathParameter: {
         /** Spotify ID of the album. */
-        "{id}": string;
-    };
+        '{id}': string
+    }
     queryParameter?: {
         /** An [ISO 3166-1 alpha-2 country code](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) orstring `from_token`. Provide this parameter if you want to apply [Track Relinking](https://developer.spotify.com/documentation/general/guides/track-relinking-guide/). */
-        market?: string;
-    };
-};
+        market?: string
+    }
+}
 
 /** Get Spotify catalog information about an album’s tracks. Optional parameters can be used to limit the number of tracks returned. */
 type GetAlbumTracks = {
     pathParameter: {
         /** Spotify ID of the album. */
-        "{id}": string;
-    };
+        '{id}': string
+    }
     queryParameter?: {
         /** An [ISO 3166-1 alpha-2 country code](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) orstring `from_token`. Provide this parameter if you want to apply [Track Relinking](https://developer.spotify.com/documentation/general/guides/track-relinking-guide/). */
-        market?: string;
+        market?: string
         /** The maximum number of objects to return. Default: 20. Minimum: 1. Maximum: 50. */
-        limit?: number;
+        limit?: number
         /** The index offirst object to return. Default: 0 (i.e.,first object). Use with limit to get the next set of objects. */
-        offset?: number;
-    };
-};
+        offset?: number
+    }
+}
 
 export type Response<R extends Names> = 
-      R extends "Get Multiple Albums" ? GetMultipleAlbumsResponse
-    : R extends "Get an Album" ? GetAlbumResponse
+      R extends 'Get Multiple Albums' ? GetMultipleAlbumsResponse
+    : R extends 'Get an Album' ? GetAlbumResponse
     : R extends "Get an Album's Tracks" ? GetAlbumsTracksResponse
     : {};
 
@@ -78,10 +78,10 @@ export type Response<R extends Names> =
  *
  * Objects are returned in the order requested. If an object is not found, a `null` value is returned in the appropriate position. Duplicate `ids` in the query will result in duplicate objects in the response.
  */
-type GetMultipleAlbumsResponse = { albums: (AlbumObject | null)[] };
+type GetMultipleAlbumsResponse = { albums: (AlbumObject | null)[] }
 
 /** An album object in JSON format */
-type GetAlbumResponse = AlbumObject;
+type GetAlbumResponse = AlbumObject
 
 /** An album object in JSON format */
-type GetAlbumsTracksResponse = PagingObject<AlbumObject>;
+type GetAlbumsTracksResponse = PagingObject<AlbumObject>

@@ -1,11 +1,11 @@
-import React from "react"
+import React from 'react'
 
 // @ts-ignore
-import spotifyLogo from "../assets/spotify-logos/Spotify_Icon_RGB_White.png"
-import "./CoverImage.scss"
+import spotifyLogo from '../assets/spotify-logos/Spotify_Icon_RGB_White.png'
+import './CoverImage.scss'
 
 export default ({ src }: { src?: string }) => (
-    <div className={"cover" + (src ? "" : " empty")}>
+    <div className={'cover' + (src ? '' : ' empty')}>
         <img src={src ?? spotifyLogo} alt="Playlist Cover" />
     </div>
 )

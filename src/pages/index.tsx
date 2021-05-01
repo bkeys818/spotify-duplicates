@@ -1,12 +1,16 @@
-import React, { Component } from "react"
+import React, { Component } from 'react'
 
-import App from "../components/App"
+import App from '../components/App'
 
-import { navigate } from "gatsby"
-import Cookies from "universal-cookie"
+import { navigate } from 'gatsby'
+import Cookies from 'universal-cookie'
 
-interface IndexProps { location: Location }
-interface IndexStates { token?: string }
+interface IndexProps {
+    location: Location
+}
+interface IndexStates {
+    token?: string
+}
 export default class Index extends Component<IndexProps, IndexStates> {
     constructor(props: IndexProps) {
         super(props)
@@ -16,40 +20,39 @@ export default class Index extends Component<IndexProps, IndexStates> {
     }
 
     componentDidMount() {
-        if (!this.state.token) navigate("/login/")
-        window.location.hash = ""
+        if (!this.state.token) navigate('/login/')
+        window.location.hash = ''
     }
 
     render() {
-        return <App accessToken={this.state.token!}/>
+        return <App accessToken={this.state.token!} />
     }
-
 }
 
-function authenticate(hashStr: Location["hash"]) {
+function authenticate(hashStr: Location['hash']) {
     const cookies = new Cookies()
 
-    let accessToken = cookies.get<string | undefined>("access_token")
+    let accessToken = cookies.get<string | undefined>('access_token')
 
     if (!accessToken) {
         let isMissingValues = false
 
         const spotifyAuthState = cookies.get<string | undefined>(
-            "spotify_auth_state"
+            'spotify_auth_state'
         )
 
         const hash = Object.fromEntries(
             new Map(
                 hashStr
                     .slice(1)
-                    .split("&")
+                    .split('&')
                     .map(value => {
-                        return value.split("=")
+                        return value.split('=')
                     }) as [string, string][]
             )
         )
 
-        if (!(spotifyAuthState && "state" in hash)) {
+        if (!(spotifyAuthState && 'state' in hash)) {
             isMissingValues = true
             // const missingValue = []
             // if (!spotifyAuthState)
@@ -60,7 +63,7 @@ function authenticate(hashStr: Location["hash"]) {
             //     "Missing authentication values: " +
             //         missingValue.join(" and ")
             // )
-        } else if (spotifyAuthState !== hash["state"]) {
+        } else if (spotifyAuthState !== hash['state']) {
             isMissingValues = true
             // console.error(
             //     "Autherize values unequal.",
@@ -68,7 +71,7 @@ function authenticate(hashStr: Location["hash"]) {
             //     `hash = ${hash["state"]}`
             // )
         }
-        if (!("access_token" in hash && "token_type" in hash)) {
+        if (!('access_token' in hash && 'token_type' in hash)) {
             isMissingValues = true
             const missingValue = []
             // if (!("access_token" in hash))
@@ -82,14 +85,14 @@ function authenticate(hashStr: Location["hash"]) {
         }
 
         if (!isMissingValues) {
-            accessToken = `${hash["token_type"]} ${hash["access_token"]}`
+            accessToken = `${hash['token_type']} ${hash['access_token']}`
 
-            cookies.set("access_token", accessToken, {
+            cookies.set('access_token', accessToken, {
                 expires: ((today: Date, min: number) => {
                     return new Date(today.getTime() + min * 60000)
                 })(new Date(), 59),
             })
-            cookies.remove("spotify_auth_state")
+            cookies.remove('spotify_auth_state')
         }
     }
 

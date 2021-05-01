@@ -1,6 +1,5 @@
 @use "../global/style" as global;
 
-
 // size & position
 .modal {
     z-index: 1;
@@ -25,18 +24,18 @@
     }
 }
 
-// style 
+// style
 .modal {
     background-color: global.$spotify-white;
     box-shadow: global.$box-shadow-large;
 }
 
 // animation
-[class^=modal][class$=active] {
-    transition: bottom .3s ease-in-out;
+[class^='modal'][class$='active'] {
+    transition: bottom 0.3s ease-in-out;
     & ~ .scroll-wrapper {
-        transition: filter .15s ease-out;
-        transition-delay: .15s;
+        transition: filter 0.15s ease-out;
+        transition-delay: 0.15s;
     }
 }
 .modal {
@@ -48,7 +47,8 @@
             overflow: hidden;
         }
     }
-    &-enter-active, &-enter-done {
+    &-enter-active,
+    &-enter-done {
         bottom: -2vh;
         & ~ .scroll-wrapper {
             filter: blur(4px);
@@ -62,12 +62,13 @@
             overflow: hidden;
         }
     }
-    &-exit-active, &-exit-done {
+    &-exit-active,
+    &-exit-done {
         bottom: -97vh;
     }
     &-exit-active ~ .scroll-wrapper {
-            filter: blur(0px);
-            overflow: hidden;
+        filter: blur(0px);
+        overflow: hidden;
     }
 
     // tablet & desktop
@@ -75,13 +76,15 @@
         &-enter {
             bottom: -90vh;
         }
-        &-enter-active, &-enter-done {
+        &-enter-active,
+        &-enter-done {
             bottom: 5vh;
         }
         &-exit {
             bottom: 5vh;
         }
-        &-exit-active, &-exit-done {
+        &-exit-active,
+        &-exit-done {
             bottom: -90vh;
         }
     }

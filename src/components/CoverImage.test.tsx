@@ -1,21 +1,21 @@
-import React from "react"
-import { render, screen } from "@testing-library/react"
+import React from 'react'
+import { render, screen } from '@testing-library/react'
 
-import CoverImage, { filterImages, imageMin } from "./CoverImage"
-import * as Spotify from "../spotify"
-import { modifyPlaylistObject } from "./App"
+import CoverImage, { filterImages, imageMin } from './CoverImage'
+import * as Spotify from '../spotify'
+import { modifyPlaylistObject } from './App'
 
 describe('Function "modifyPlaylistObject" works as expected', () => {
     test(`Filters out images smaller than ${imageMin}px`, () => {
         expect(
             filterImages([
                 {
-                    url: "height too small",
+                    url: 'height too small',
                     height: imageMin - 1,
                     width: imageMin + 1,
                 },
                 {
-                    url: "width too small",
+                    url: 'width too small',
                     height: imageMin + 1,
                     width: imageMin - 1,
                 },
@@ -27,67 +27,66 @@ describe('Function "modifyPlaylistObject" works as expected', () => {
         expect(
             filterImages([
                 {
-                    url: "Correct Image",
+                    url: 'Correct Image',
                     height: imageMin + 1,
                     width: imageMin + 1,
                 },
                 {
-                    url: "No smallest Image",
+                    url: 'No smallest Image',
                     height: imageMin + 100,
                     width: imageMin + 100,
                 },
             ])?.url
-        ).toBe("Correct Image")
+        ).toBe('Correct Image')
     })
 
-    test("Uses image if no size is defined", () => {
+    test('Uses image if no size is defined', () => {
         expect(
             filterImages([
                 {
-                    url: "Correct Image"
+                    url: 'Correct Image',
                 },
             ])?.url
-        ).toBe("Correct Image")
+        ).toBe('Correct Image')
     })
 })
 
-describe("Playlist component renders correctly", () => {
-
+describe('Playlist component renders correctly', () => {
     let playlist: ReturnType<typeof modifyPlaylistObject>
     beforeAll(() => {
         return Spotify.authorize().then(token => {
-            return Spotify.request("Get a Playlist", {
-                token: token.token_type + " " + token.access_token,
+            return Spotify.request('Get a Playlist', {
+                token: token.token_type + ' ' + token.access_token,
                 pathParameter: {
-                    "{playlist_id}": "2oGXW218O4QdwjtKEEGKGP",
+                    '{playlist_id}': '2oGXW218O4QdwjtKEEGKGP',
                 },
             }).then(response => (playlist = modifyPlaylistObject(response)))
         })
     })
 
-    test("Default state", () => {
+    test('Default state', () => {
         const Component = render(
             <CoverImage
-                src={"https://i.scdn.co/image/ab67706c0000bebb2272d38d7afa166cefa7d6d9"}
+                src={
+                    'https://i.scdn.co/image/ab67706c0000bebb2272d38d7afa166cefa7d6d9'
+                }
             />
         ).container.firstElementChild
 
-        expect(Component).not.toHaveClass("empty")
+        expect(Component).not.toHaveClass('empty')
 
-        const imgSrc = Component?.firstElementChild?.getAttribute("src")
+        const imgSrc = Component?.firstElementChild?.getAttribute('src')
         expect(imgSrc).toMatch(
             /^https:\/\/(i\.scdn|mosaic\.scdn)\.co\/(image|\d+)\/[a-z\d]+$/
         )
     })
 
-    test("No cover", () => {
-        const Component = render(
-            <CoverImage />
-        ).container.firstElementChild
+    test('No cover', () => {
+        const Component = render(<CoverImage />).container.firstElementChild
 
-        expect(Component).toHaveClass("empty")
+        expect(Component).toHaveClass('empty')
 
-        const imgSrc = Component?.firstElementChild?.getAttribute("src")
-        expect(imgSrc).toBe("test-file-stub")
+        const imgSrc = Component?.firstElementChild?.getAttribute('src')
+        expect(imgSrc).toBe('test-file-stub')
     })
 })

@@ -6,7 +6,7 @@ $large: 168px;
 
 @mixin responsive-design($size) {
     width: $size;
-    margin: ($size * .035) ($size * .1);
+    margin: ($size * 0.035) ($size * 0.1);
 
     font-size: $size / ($small / 18px);
 
@@ -14,28 +14,27 @@ $large: 168px;
         height: $size;
         width: $size;
     }
-};
+}
 
 .playlist {
     @include responsive-design($small);
 
-    @media (min-width:$small * $ratio) {
-        @include responsive-design(100vw / $ratio)
+    @media (min-width: $small * $ratio) {
+        @include responsive-design(100vw / $ratio);
     }
 
-    @media (min-width:$large * $ratio) {
+    @media (min-width: $large * $ratio) {
         @include responsive-design($large);
     }
 }
 
-
 .playlist {
     p {
-        font-family: "Rubik", sans-serif;
+        font-family: 'Rubik', sans-serif;
         font-weight: 400;
         margin: 0.5em auto;
         text-align: center;
-    
+
         max-height: 2.75em;
         overflow: hidden;
     }

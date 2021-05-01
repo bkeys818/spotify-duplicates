@@ -2,6 +2,7 @@ import React, { Component } from "react"
 
 import { request } from "../spotify"
 
+import Modal from "./Modal";
 import Playlist from "./Playlist"
 
 import "./App.scss"
@@ -20,6 +21,7 @@ export default class App extends Component<AppProps, AppStates> {
         this.state = {
             playlists: [],
         }
+        this.closeModal = this.closeModal.bind(this)
     }
 
     componentDidMount() {
@@ -32,10 +34,17 @@ export default class App extends Component<AppProps, AppStates> {
             .catch(console.error)
     }
 
+    selectPlaylist(value: SimplifiedPlaylistObject) {
+        this.setState({ selected: value })
+    }
+    closeModal() {
+        this.setState({ selected: null })
+    }
+
     render() {
-        const { playlists } = this.state
+        const { selected, playlists } = this.state
         return (
-            <div className="app-wrapper">
+            <div className={"app-wrapper" + (selected ? " showing-modal" : "")}>
                 <div className="playlist-container">
                     {playlists.map(playlist => (
                         <Playlist
@@ -43,9 +52,13 @@ export default class App extends Component<AppProps, AppStates> {
                             name={playlist.name}
                             images={playlist.images}
                             tracks={playlist.tracks}
+                            handleClick={() => {
+                                this.selectPlaylist(playlist)
+                            }}
                         />
                     ))}
                 </div>
+                <Modal handleClose={this.closeModal} />
             </div>
         )
     }

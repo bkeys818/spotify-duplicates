@@ -1,0 +1,45 @@
+@use "../global/style" as global;
+
+// size & position
+.modal {
+    z-index: 1;
+    position: fixed;
+    overflow-y: auto;
+    overflow-x: hidden;
+    left: 50%;
+    transform: translate3d(-50%, 0, 0);
+
+    width: 100vw;
+    height: 97vh;
+    padding-bottom: 2vh;
+    @media screen and (min-width: 450px) {
+        width: 90vw;
+        height: 90vh;
+        padding-bottom: 0;
+    }
+}
+
+// style 
+.modal {
+    background-color: global.$spotify-white;
+    box-shadow: global.$box-shadow-large;
+}
+
+// animation
+.modal {
+    transition: bottom 0.3s ease-in-out;
+    bottom: -90vh;
+}
+.app-wrapper.showing-modal {
+    .modal {
+        bottom: -2vh;
+        @media screen and (min-width: 450px) {
+            bottom: 5vh;
+        }
+    }
+    .playlist-container { 
+        overflow: hidden;
+        // TODO - Animated blur
+        filter: blur(5px)
+    }
+};

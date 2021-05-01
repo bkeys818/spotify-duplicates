@@ -5,7 +5,9 @@ import spotifyLogo from "../assets/spotify-logos/Spotify_Icon_RGB_White.png";
 import "./Playlist.scss";
 
 
-export type PlaylistProps = Pick<SimplifiedPlaylistObject, "name" | "images" | "tracks">
+export type PlaylistProps = Pick<SimplifiedPlaylistObject, "name" | "images" | "tracks"> & {
+    handleClick: React.MouseEventHandler<HTMLDivElement>
+}
 
 interface PlaylistState {
     tracks?: (SimplifiedTrackObject & {
@@ -19,7 +21,7 @@ export default class Playlist extends React.Component<PlaylistProps, PlaylistSta
     }
 
     render() {
-        const { name, images } = this.props
+        const { handleClick, name, images } = this.props
         const cover = ((origImgs: ImageObject[]) => {
             const imgs = origImgs.map(img => {
                 return {
@@ -38,7 +40,7 @@ export default class Playlist extends React.Component<PlaylistProps, PlaylistSta
         })(images)?.url;
 
         return (
-            <div className="playlist">
+            <div className="playlist" onClick={handleClick}>
                 <div className={"cover" + (cover ? "" : " empty")}>
                     <img src={cover ?? spotifyLogo} alt="Album Cover" />
                 </div>

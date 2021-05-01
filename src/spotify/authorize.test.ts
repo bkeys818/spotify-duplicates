@@ -1,4 +1,4 @@
-import Spotify, { Token } from "."
+import * as Spotify from "."
 
 const environments = ["development", "production"]
 

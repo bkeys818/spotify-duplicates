@@ -2,7 +2,7 @@ import React from "react"
 import { render, screen } from "@testing-library/react"
 
 import Playlist from "./Playlist"
-import Spotify from "../spotify"
+import * as Spotify from "../spotify"
 
 let playlist: PlaylistObject
 

@@ -1,7 +1,7 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
 
-import Playlist from "./Playlist"
+import PlaylistPreview from "./PlaylistPreview"
 import * as Spotify from "../spotify"
 
 let playlist: PlaylistObject
@@ -21,7 +21,7 @@ describe("Playlist component renders correctly", () => {
 
     test("Default", () => {
         const Component = render(
-            <Playlist
+            <PlaylistPreview
                 name={playlist.name}
                 images={playlist.images}
                 tracks={playlist.tracks}
@@ -42,7 +42,7 @@ describe("Playlist component renders correctly", () => {
         })
         
         const Component = render(
-            <Playlist
+            <PlaylistPreview
                 name={playlist.name}
                 images={images}
                 tracks={playlist.tracks}

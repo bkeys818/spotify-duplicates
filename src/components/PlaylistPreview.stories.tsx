@@ -1,17 +1,17 @@
 import React from 'react';
 import { Story,  } from "@storybook/react";
 
-import Playlist from "./Playlist"
-import type { PlaylistProps } from "./Playlist"
+import PlaylistPreview from "./PlaylistPreview"
+import type { PlaylistPreviewProps } from "./PlaylistPreview"
 import * as Spotify from "../spotify"
 
 export default {
-    component: Playlist,
+    component: PlaylistPreview,
     title: "Playlist"
 }
 
-interface DefaultLoaders { loaded: { playlist: PlaylistProps } }
-export const Default = (args: any, { loaded: { playlist } }: DefaultLoaders) => <Playlist {...playlist} />;
+interface DefaultLoaders { loaded: { playlist: PlaylistPreviewProps } }
+export const Default = (args: any, { loaded: { playlist } }: DefaultLoaders) => <PlaylistPreview {...playlist} />;
 Default.loaders = [
     async () => ({
         playlist: await Spotify.request("Get a Playlist", {
@@ -26,6 +26,6 @@ Default.loaders = [
     }),
 ]
 
-interface NoCoverLoaders { loaded: { playlist: Omit<PlaylistProps, "images"> } }
-export const NoCover = (args: any, { loaded: { playlist } }: NoCoverLoaders) => <Playlist {...playlist} images={[]} />;
+interface NoCoverLoaders { loaded: { playlist: Omit<PlaylistPreviewProps, "images"> } }
+export const NoCover = (args: any, { loaded: { playlist } }: NoCoverLoaders) => <PlaylistPreview {...playlist} images={[]} />;
 NoCover.loaders = Default.loaders

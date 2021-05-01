@@ -2,8 +2,7 @@ import React, { Component } from "react"
 
 import { request } from "../spotify"
 
-import Modal from "./Modal";
-import Playlist from "./Playlist"
+import PlaylistPreview from "./PlaylistPreview"
 
 import "./App.scss"
 
@@ -47,7 +46,7 @@ export default class App extends Component<AppProps, AppStates> {
             <div className={"app-wrapper" + (selected ? " showing-modal" : "")}>
                 <div className="playlist-container">
                     {playlists.map(playlist => (
-                        <Playlist
+                            <PlaylistPreview
                             key={playlist.id}
                             name={playlist.name}
                             images={playlist.images}

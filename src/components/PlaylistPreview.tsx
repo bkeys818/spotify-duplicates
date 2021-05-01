@@ -2,20 +2,20 @@ import React from "react";
 
 // @ts-ignore
 import spotifyLogo from "../assets/spotify-logos/Spotify_Icon_RGB_White.png";
-import "./Playlist.scss";
+import "./PlaylistPreview.scss";
 
 
-export type PlaylistProps = Pick<SimplifiedPlaylistObject, "name" | "images" | "tracks"> & {
+export type PlaylistPreviewProps = Pick<SimplifiedPlaylistObject, "name" | "images" | "tracks"> & {
     handleClick: React.MouseEventHandler<HTMLDivElement>
 }
 
-interface PlaylistState {
+interface PlaylistPreviewState {
     tracks?: (SimplifiedTrackObject & {
         selected: boolean
     })[]
 };
-export default class Playlist extends React.Component<PlaylistProps, PlaylistState> {
-    constructor(props: PlaylistProps) {
+export default class PlaylistPreview extends React.Component<PlaylistPreviewProps, PlaylistPreviewState> {
+    constructor(props: PlaylistPreviewProps) {
         super(props)
         this.state = {}
     }

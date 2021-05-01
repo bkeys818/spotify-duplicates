@@ -4,6 +4,7 @@ import { request } from "../spotify"
 
 import Playlist from "./Playlist"
 
+import "./App.scss"
 
 interface AppProps {
     accessToken: string

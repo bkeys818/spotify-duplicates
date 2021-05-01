@@ -1,78 +1,66 @@
-@mixin responsive-cover($size) {
-    height: $size;
-    width: $size;
+@use "../global/style" as global;
 
-    &.empty img {
-        $padding: 14; //percent
-        height: #{$size * (.01*(100-(2*$padding)))};
-        width: #{$size * (.01*(100-(2*$padding)))};
-        padding: #{$padding+"%"}
-    }
-}
+$ratio: 4;
+$small: 128px;
+$large: 168px;
 
-.playlist {
-    $size: 140px;
+@mixin responsive-design($size) {
     width: $size;
     margin: ($size * .035) ($size * .1);
 
-    font-size: 1.25em;
+    font-size: $size / ($small / 18px);
 
-    @media (min-width:481px) {
-        $size: calc(700vw / 24);
+    .cover {
+        height: $size;
         width: $size;
-        margin: calc(700vw / 24 * .035) calc(700vw / 24 * .1);
 
-        font-size: calc(100vw / 24)
+        &.empty img {
+            $padding: 14; //percent
+            height: #{$size * (.01*(100-(2*$padding)))};
+            width: #{$size * (.01*(100-(2*$padding)))};
+            padding: #{$padding+"%"}
+        }
+    }
+};
+
+.playlist {
+    @include responsive-design($small);
+
+    @media (min-width:$small * $ratio) {
+        @include responsive-design(100vw / $ratio)
     }
 
-    @media (min-width:673px) {
-        $size: 196px;
-        width: $size;
-        margin: ($size * .035) ($size * .1);
-
-        font-size: 1.75em;
+    @media (min-width:$large * $ratio) {
+        @include responsive-design($large);
     }
 }
 
-.playlist .cover {
-    img {
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
-        object-position: center;
+
+.playlist {
+    .cover {
+        img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        box-shadow: global.$box-shadow;
+
+        border-radius: 12px;
+        overflow: hidden;
+
+        &.empty {
+            background-color: global.$spotify-dark-green
+        }
     }
-
-    box-shadow:
-        0 1.2px 3.3px rgba(0, 0, 0, 0.12),
-        0 4px 11.2px rgba(0, 0, 0, 0.072),
-        0 18px 50px rgba(0, 0, 0, 0.048)
-    ;
-
-    border-radius: 12px;
-    overflow: hidden;
-
-    &.empty {
-        background-color: #257457;
+    p {
+        font-family: "Rubik", sans-serif;
+        font-weight: 400;
+        margin: 0.5em auto;
+        text-align: center;
+    
+        max-height: 2.75em;
+        overflow: hidden;
     }
-
-    @include responsive-cover(140px);
-
-    @media (min-width:481px) {
-        @include responsive-cover(700vw / 24);
-
-    }
-
-    @media (min-width:673px) {
-        @include responsive-cover(196px);
-    }
-}
-
-.playlist p {
-    font-family: "Rubik", sans-serif;
-    font-weight: 400;
-    margin: 0.5em auto;
-    text-align: center;
-
-    max-height: 2.5em;
-    overflow: hidden;
 }

@@ -19,6 +19,7 @@ export default class Playlist extends React.Component<PlaylistProps, PlaylistSta
     }
 
     render() {
+        const { name, images } = this.props
         const cover = ((origImgs: ImageObject[]) => {
             const imgs = origImgs.map(img => {
                 return {
@@ -34,14 +35,14 @@ export default class Playlist extends React.Component<PlaylistProps, PlaylistSta
                 if (img.size === null) return true
                 return img.size == coverSize
             })
-        })(this.props.images)?.url;
+        })(images)?.url;
 
         return (
             <div className="playlist">
                 <div className={"cover" + (cover ? "" : " empty")}>
                     <img src={cover ?? spotifyLogo} alt="Album Cover" />
                 </div>
-                <p>{this.props.name}</p>
+                <p>{name}</p>
             </div>
         );
     }

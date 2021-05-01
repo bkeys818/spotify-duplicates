@@ -1,20 +1,18 @@
 import React from 'react';
-import { Story,  } from "@storybook/react";
 
 import PlaylistPreview from "./PlaylistPreview"
-import type { PlaylistPreviewProps } from "./PlaylistPreview"
 import * as Spotify from "../spotify"
+import { modifyPlaylistObject } from "./App"
 
 export default {
     component: PlaylistPreview,
-    title: "Playlist"
+    title: "Playlist Preview"
 }
 
-interface DefaultLoaders { loaded: { playlist: PlaylistPreviewProps } }
-export const Default = (args: any, { loaded: { playlist } }: DefaultLoaders) => <PlaylistPreview {...playlist} />;
-Default.loaders = [
+type Loaders = { loaded: { playlist: ReturnType<typeof modifyPlaylistObject> } }
+const loaders = [
     async () => ({
-        playlist: await Spotify.request("Get a Playlist", {
+        playlist: modifyPlaylistObject(await Spotify.request("Get a Playlist", {
             token: "Bearer " + (await Spotify.authorize({
                 clientID: process.env.STORYBOOK_CLIENT_ID!,
                 clientSecret: process.env.STORYBOOK_CLIENT_SECRET!
@@ -22,10 +20,12 @@ Default.loaders = [
             pathParameter: {
                 "{playlist_id}": "2oGXW218O4QdwjtKEEGKGP"
             }
-        })
+        }))
     }),
-]
+];
 
-interface NoCoverLoaders { loaded: { playlist: Omit<PlaylistPreviewProps, "images"> } }
-export const NoCover = (args: any, { loaded: { playlist } }: NoCoverLoaders) => <PlaylistPreview {...playlist} images={[]} />;
-NoCover.loaders = Default.loaders
+export const Default = (args: any, { loaded: { playlist } }: Loaders) => <PlaylistPreview name={playlist.name} cover={playlist.cover} />;
+Default.loaders = loaders
+
+export const NoCover = (args: any, { loaded: { playlist } }: Loaders) => <PlaylistPreview name={playlist.name} />;
+NoCover.loaders = loaders

@@ -13,13 +13,6 @@ $large: 168px;
     .cover {
         height: $size;
         width: $size;
-
-        &.empty img {
-            $padding: 14; //percent
-            height: #{$size * (.01*(100-(2*$padding)))};
-            width: #{$size * (.01*(100-(2*$padding)))};
-            padding: #{$padding+"%"}
-        }
     }
 };
 
@@ -37,23 +30,6 @@ $large: 168px;
 
 
 .playlist {
-    .cover {
-        img {
-            height: 100%;
-            width: 100%;
-            object-fit: cover;
-            object-position: center;
-        }
-
-        box-shadow: global.$box-shadow;
-
-        border-radius: 12px;
-        overflow: hidden;
-
-        &.empty {
-            background-color: global.$spotify-dark-green
-        }
-    }
     p {
         font-family: "Rubik", sans-serif;
         font-weight: 400;

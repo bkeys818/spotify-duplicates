@@ -1,17 +1,19 @@
 import React, { Component } from "react"
 
 import { request } from "../spotify"
+import { filterImages } from "./CoverImage"
 
 import PlaylistPreview from "./PlaylistPreview"
 
 import "./App.scss"
 
+type ModifiedPlaylistObject = ReturnType<typeof modifyPlaylistObject>
 interface AppProps {
     accessToken: string
 }
 interface AppStates {
-    playlists: SimplifiedPlaylistObject[]
-    selected?: SimplifiedPlaylistObject | null
+    playlists: ModifiedPlaylistObject[]
+    selected?: ModifiedPlaylistObject | null
 }
 
 export default class App extends Component<AppProps, AppStates> {
@@ -27,13 +29,15 @@ export default class App extends Component<AppProps, AppStates> {
         request("Get a List of Current User's Playlists", {
             token: this.props.accessToken ?? "",
         })
-            .then(res => {
-                this.setState({ playlists: res?.items ?? this.state.playlists })
+            .then(response => {
+                this.setState({
+                    playlists: (response?.items ?? this.state.playlists).map(modifyPlaylistObject)
+                })
             })
             .catch(console.error)
     }
 
-    selectPlaylist(value: SimplifiedPlaylistObject) {
+    selectPlaylist(value: ModifiedPlaylistObject) {
         this.setState({ selected: value })
     }
     closeModal() {
@@ -49,8 +53,7 @@ export default class App extends Component<AppProps, AppStates> {
                             <PlaylistPreview
                             key={playlist.id}
                             name={playlist.name}
-                            images={playlist.images}
-                            tracks={playlist.tracks}
+                                cover={playlist.cover}
                             handleClick={() => {
                                 this.selectPlaylist(playlist)
                             }}
@@ -60,5 +63,15 @@ export default class App extends Component<AppProps, AppStates> {
                 <Modal handleClose={this.closeModal} />
             </div>
         )
+    }
+}
+
+
+export function modifyPlaylistObject(original: SimplifiedPlaylistObject) {
+    const { images, ...otherProps } = original
+    return {
+        ...otherProps,
+        selected: false,
+        cover: filterImages(images)?.url
     }
 }

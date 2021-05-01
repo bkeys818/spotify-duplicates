@@ -324,11 +324,11 @@ declare interface FollowersObject {
 /** [Image Object](https://developer.spotify.com/documentation/web-api/reference/#object-imageobject) */
 declare interface ImageObject {
     /** The image height in pixels. If unknown: `null` or not returned. */
-    height: number
+    height?: number | null
     /** The source URL of the image. */
     url: string
     /** The image width in pixels. If unknown: null or not returned. */
-    width: number
+    width?: number | null
 }
 
 /** [Linked Track Object](https://developer.spotify.com/documentation/web-api/reference/#object-linkedtrackobject) */

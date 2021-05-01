@@ -1,51 +1,19 @@
-import React from "react";
+import React from "react"
 
-// @ts-ignore
-import spotifyLogo from "../assets/spotify-logos/Spotify_Icon_RGB_White.png";
-import "./PlaylistPreview.scss";
+import CoverImage from "./CoverImage"
 
+import "./PlaylistPreview.scss"
 
-export type PlaylistPreviewProps = Pick<SimplifiedPlaylistObject, "name" | "images" | "tracks"> & {
-    handleClick: React.MouseEventHandler<HTMLDivElement>
+interface PlaylistPreviewProps {
+    name: string
+    cover?: string
+    handleClick?: React.MouseEventHandler<HTMLDivElement>
 }
 
-interface PlaylistPreviewState {
-    tracks?: (SimplifiedTrackObject & {
-        selected: boolean
-    })[]
-};
-export default class PlaylistPreview extends React.Component<PlaylistPreviewProps, PlaylistPreviewState> {
-    constructor(props: PlaylistPreviewProps) {
-        super(props)
-        this.state = {}
-    }
 
-    render() {
-        const { handleClick, name, images } = this.props
-        const cover = ((origImgs: ImageObject[]) => {
-            const imgs = origImgs.map(img => {
-                return {
-                    url: img.url,
-                    size: (img.height < img.width) ? img.height : img.width
-                }
-            }).filter(img => {
-                if (img.size === null) return true
-                return img.size >= 84 // px size
-            })
-            const coverSize = Math.max.apply(null, imgs.map(img => img.size))
-            return imgs.find(img => {
-                if (img.size === null) return true
-                return img.size == coverSize
-            })
-        })(images)?.url;
-
-        return (
-            <div className="playlist" onClick={handleClick}>
-                <div className={"cover" + (cover ? "" : " empty")}>
-                    <img src={cover ?? spotifyLogo} alt="Album Cover" />
-                </div>
-                <p>{name}</p>
-            </div>
-        );
-    }
-}
+export default (props: PlaylistPreviewProps) => (
+    <div className="playlist" onClick={props.handleClick}>
+        <CoverImage src={props.cover} />
+        <p>{props.name}</p>
+    </div>
+)

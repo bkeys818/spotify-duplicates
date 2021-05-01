@@ -1,0 +1,24 @@
+@use "../global/style" as global;
+
+.cover {
+    img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    box-shadow: global.$box-shadow;
+
+    border-radius: 7%;
+    overflow: hidden;
+
+    &.empty {
+        background-color: global.$spotify-dark-green;
+        img {
+            height: 70%;
+            width: 70%;
+            margin: 15%;
+        }
+    }
+}

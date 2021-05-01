@@ -1,5 +1,6 @@
 @use "../global/style" as global;
 
+
 // size & position
 .modal {
     z-index: 1;
@@ -9,13 +10,18 @@
     left: 50%;
     transform: translate3d(-50%, 0, 0);
 
+    // mobile
     width: 100vw;
     height: 97vh;
     padding-bottom: 2vh;
+    bottom: -97vh;
+
+    // tablet & desktop
     @media screen and (min-width: 450px) {
         width: 90vw;
         height: 90vh;
         padding-bottom: 0;
+        bottom: -90vh;
     }
 }
 
@@ -26,20 +32,57 @@
 }
 
 // animation
-.modal {
-    transition: bottom 0.3s ease-in-out;
-    bottom: -90vh;
+[class^=modal][class$=active] {
+    transition: bottom .3s ease-in-out;
+    & ~ .scroll-wrapper {
+        transition: filter .15s ease-out;
+        transition-delay: .15s;
+    }
 }
-.app-wrapper.showing-modal {
-    .modal {
-        bottom: -2vh;
-        @media screen and (min-width: 450px) {
-            bottom: 5vh;
+.modal {
+    // mobile
+    &-enter {
+        bottom: -97vh;
+        & ~ .scroll-wrapper {
+            filter: blur(0px);
+            overflow: hidden;
         }
     }
-    .playlist-container { 
-        overflow: hidden;
-        // TODO - Animated blur
-        filter: blur(5px)
+    &-enter-active, &-enter-done {
+        bottom: -2vh;
+        & ~ .scroll-wrapper {
+            filter: blur(4px);
+            overflow: hidden;
+        }
     }
-};
+    &-exit {
+        bottom: -2vh;
+        & ~ .scroll-wrapper {
+            filter: blur(4px);
+            overflow: hidden;
+        }
+    }
+    &-exit-active, &-exit-done {
+        bottom: -97vh;
+    }
+    &-exit-active ~ .scroll-wrapper {
+            filter: blur(0px);
+            overflow: hidden;
+    }
+
+    // tablet & desktop
+    @media screen and (min-width: 450px) {
+        &-enter {
+            bottom: -90vh;
+        }
+        &-enter-active, &-enter-done {
+            bottom: 5vh;
+        }
+        &-exit {
+            bottom: 5vh;
+        }
+        &-exit-active, &-exit-done {
+            bottom: -90vh;
+        }
+    }
+}

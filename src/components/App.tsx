@@ -3,6 +3,7 @@ import React, { Component } from "react"
 import { request } from "../spotify"
 import { filterImages } from "./CoverImage"
 
+import Modal from "./Modal"
 import PlaylistPreview from "./PlaylistPreview"
 
 import "./App.scss"
@@ -47,20 +48,25 @@ export default class App extends Component<AppProps, AppStates> {
     render() {
         const { selected, playlists } = this.state
         return (
-            <div className={"app-wrapper" + (selected ? " showing-modal" : "")}>
-                <div className="playlist-container">
-                    {playlists.map(playlist => (
+            <div className="app-wrapper">
+                <Modal
+                    handleClose={this.closeModal}
+                    active={selected ? true : false}
+                />
+                <div className="scroll-wrapper">
+                    <div className="playlist-container">
+                        {playlists.map(playlist => (
                             <PlaylistPreview
-                            key={playlist.id}
-                            name={playlist.name}
+                                key={playlist.id}
+                                name={playlist.name}
                                 cover={playlist.cover}
-                            handleClick={() => {
-                                this.selectPlaylist(playlist)
-                            }}
-                        />
-                    ))}
+                                handleClick={() => {
+                                    this.selectPlaylist(playlist)
+                                }}
+                            />
+                        ))}
+                    </div>
                 </div>
-                <Modal handleClose={this.closeModal} />
             </div>
         )
     }

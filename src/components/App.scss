@@ -1,5 +1,10 @@
 @use "../global/style" as global;
 
+.scroll-wrapper {
+    width: 100%;
+    height: 100vh;
+    overflow-y: auto;
+}
 .playlist-container {
     margin: 0 18px;
     @media screen and (min-width: 750px) {
@@ -13,7 +18,4 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-
-    height: 100vh;
-    overflow-y: auto;
 }

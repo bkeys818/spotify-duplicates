@@ -3,7 +3,7 @@ import { Story,  } from "@storybook/react";
 
 import Playlist from "./Playlist"
 import type { PlaylistProps } from "./Playlist"
-import Spotify from "../spotify"
+import * as Spotify from "../spotify"
 
 export default {
     component: Playlist,

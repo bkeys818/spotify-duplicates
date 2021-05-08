@@ -1,29 +1,27 @@
-import React, { Component } from 'react'
-
-import { request } from '../spotify'
-import { filterImages } from './CoverImage'
-
-import Modal from './Modal'
+import React from 'react'
+import { Page, ScrollLock } from './wrappers'
 import PlaylistPreview from './PlaylistPreview'
+import EditPlaylist from './EditPlaylist'
 
 import '../style/App.scss'
 
-type ModifiedPlaylistObject = ReturnType<typeof modifyPlaylistObject>
+import Playlist from '../utils/Playlist'
+import { request } from '../utils/spotify'
+
 interface AppProps {
     accessToken: string
 }
 interface AppStates {
-    playlists: ModifiedPlaylistObject[]
-    selected?: ModifiedPlaylistObject | null
+    playlists: Playlist[]
+    selected?: Playlist
 }
 
-export default class App extends Component<AppProps, AppStates> {
+export default class App extends React.Component<AppProps, AppStates> {
     constructor(props: AppProps) {
         super(props)
         this.state = {
             playlists: [],
         }
-        this.closeModal = this.closeModal.bind(this)
     }
 
     componentDidMount() {
@@ -32,53 +30,43 @@ export default class App extends Component<AppProps, AppStates> {
         })
             .then(response => {
                 this.setState({
-                    playlists: (response?.items ?? this.state.playlists).map(
-                        modifyPlaylistObject
+                    playlists: response.items.map(
+                        playlist => new Playlist(playlist)
                     ),
                 })
             })
             .catch(console.error)
     }
 
-    selectPlaylist(value: ModifiedPlaylistObject) {
-        this.setState({ selected: value })
-    }
-    closeModal() {
-        this.setState({ selected: null })
+    selectPlaylist(playlist: Playlist) {
+        playlist.getTracks(this.props.accessToken)
+            .then(() => this.setState({ selected: playlist }))
     }
 
     render() {
-        const { selected, playlists } = this.state
+        const { playlists, selected } = this.state
         return (
-            <div className="app-wrapper">
-                <Modal
-                    handleClose={this.closeModal}
-                    active={selected ? true : false}
-                />
-                <div className="scroll-wrapper">
-                    <div className="playlist-container">
-                        {playlists.map(playlist => (
-                            <PlaylistPreview
-                                key={playlist.id}
-                                name={playlist.name}
-                                cover={playlist.cover}
-                                handleClick={() => {
-                                    this.selectPlaylist(playlist)
-                                }}
-                            />
-                        ))}
-                    </div>
-                </div>
+            <div id="app-container">
+                <Page>
+                    <ScrollLock>
+                        <div className="playlist-container">
+                            {playlists.map(playlist => (
+                                <PlaylistPreview
+                                    key={playlist.id}
+                                    name={playlist.name}
+                                    cover={playlist.coverImage}
+                                    handleClick={() => {
+                                        this.selectPlaylist(playlist)
+                                    }}
+                                />
+                            ))}
+                        </div>
+                    </ScrollLock>
+                </Page>
+                <Page layer={1} in={selected ? true : false} >
+                    <EditPlaylist playlist={selected} ></EditPlaylist>
+                </Page>
             </div>
         )
-    }
-}
-
-export function modifyPlaylistObject(original: SimplifiedPlaylistObject) {
-    const { images, ...otherProps } = original
-    return {
-        ...otherProps,
-        selected: false,
-        cover: filterImages(images)?.url,
     }
 }

@@ -1,0 +1,54 @@
+.page-container {
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    opacity: 0;
+    left: 100vw;
+    &.main{
+        opacity: 1;
+        left: 0;
+    }
+
+    background-color: white;
+}
+
+.slide {
+    // assigned before transition in starts
+    &-enter {
+        opacity: 0;
+        left: 100vw;
+    }
+    // assigned as transition in starts
+    &-enter-active {
+        opacity: 1;
+        left: 0;
+        transition: left 350ms ease-out,
+                    opacity ease-out 150ms;
+    }
+    // assigned after transition in is over
+    &-enter-done {
+        opacity: 1;
+        left: 0;
+    }
+    // assigned before transition out starts
+    &-exit {
+        opacity: 1;
+        left: 0;
+    }
+    // assigned as transition out starts
+    &-exit-active {
+        opacity: 0;
+        left: 100vw;
+        transition: left 350ms ease-in,
+                    opacity 150ms ease-in 200ms;
+    }
+    // assigned after transition out is over
+    &-exit-done {
+        opacity: 0;
+        left: 100vw;
+    }
+    &-appear, &-appear-active, &-appear-done {
+        opacity: 0;
+        left: 100vw;
+    }
+}

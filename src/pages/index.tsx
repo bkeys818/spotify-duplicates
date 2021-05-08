@@ -1,32 +1,79 @@
-import React, { Component } from 'react'
-
-import App from '../components/App'
-
-import { navigate } from 'gatsby'
+import React from 'react'
+import { Link, navigate } from 'gatsby'
 import Cookies from 'universal-cookie'
+import { request } from '../utils/spotify'
+import Playlist, { convertPlaylist } from '../utils/Playlist'
+
+import type { EditPlaylistLinkProps as EditPlaylistProps } from './edit-playlist'
+
+import PageTemplate from '../template/Page'
+import PlaylistPreview from '../components/PlaylistPreview'
 
 interface IndexProps {
     location: Location
 }
 interface IndexStates {
-    token?: string
+    playlists: Playlist[]
+    selected?: Playlist
 }
-export default class Index extends Component<IndexProps, IndexStates> {
+export default class Index extends React.Component<IndexProps, IndexStates> {
+    private readonly token: string
+
     constructor(props: IndexProps) {
         super(props)
+        this.token = authenticate(props.location.hash) ?? ''
         this.state = {
-            token: authenticate(props.location.hash),
+            playlists: [],
         }
     }
 
     componentDidMount() {
-        if (!this.state.token) navigate('/login/')
-        window.location.hash = ''
+        if (this.token == '') navigate('/login/')
+
+        console.log(window.location.hash)
+        navigate('/', {
+            replace: true
+        })
+
+        request("Get a List of Current User's Playlists", {
+            token: this.token,
+        })
+            .then(response => {
+                this.setState({
+                    playlists: response.items.map(convertPlaylist),
+                })
+            })
+            .catch(console.error)
     }
 
     render() {
-        return <App accessToken={this.state.token!} />
+        return (
+            <PageTemplate>
+                <div className='playlist-container'>
+                    {this.state.playlists.map(playlist => (
+                        <Link
+                            to={`/edit-playlist?id=${playlist.id}`}
+                            state={linkProps({
+                                playlist: playlist,
+                                token: this.token,
+                            })}
+                            id={playlist.id}
+                        >
+                            <PlaylistPreview
+                                key={playlist.id}
+                                name={playlist.name}
+                                cover={playlist.coverImage}
+                            />
+                        </Link>
+                    ))}
+                </div>
+            </PageTemplate>
+        )
     }
+}
+
+function linkProps(props: EditPlaylistProps) {
+    return props
 }
 
 function authenticate(hashStr: Location['hash']) {

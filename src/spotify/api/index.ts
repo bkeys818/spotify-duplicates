@@ -1,10 +1,3 @@
-export type RequestInfo<Names extends string> = {
-    [key in Names]: {
-        readonly type: 'GET' | 'POST' | 'DELETE' | 'PUT'
-        readonly urlPath: string
-    }
-}
-
 import * as Albums from './albums'
 // import * as Artists from './artists'
 // import * as Browse from './browse'
@@ -24,7 +17,17 @@ export type Names =
     | Albums.Names
     | Playlists.Names
 
-export const requestInfo: RequestInfo<Names> = {
+export type RequestInfo<R extends Names> = 
+    R extends Albums.Names ? Albums.RequestInfo<R>
+    : R extends Playlists.Names ? Playlists.RequestInfo<R>
+    : never;
+
+export const requestInfo: {
+    [key in Names]: {
+        type: "GET" | "POST" | "PUT" | "DELETE",
+        urlPath: string
+    }
+} = {
     ...Albums.requestInfo,
     ...Playlists.requestInfo
 }

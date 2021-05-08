@@ -11,7 +11,7 @@ interface AuthorizeParams {
     clientSecret: string
 }
 
-export function authorize(params?: AuthorizeParams) {
+export default function authorize(params?: AuthorizeParams) {
     return new Promise(function (resolve: (value: Token) => void, reject) {
         fetch('https://accounts.spotify.com/api/token', {
             method: 'POST',

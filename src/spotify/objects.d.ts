@@ -438,6 +438,16 @@ declare interface PlaylistTrackObject {
     is_local: boolean
     /** Information about the track or episode. */
     track: TrackObject | EpisodeObject
+    // TODO - Update documentation
+    // Update documentation for primary_color.
+    /** This property is not currently on the official SpotifyAPI documentation */
+    primary_color: null
+    // TODO - Update documentation
+    // Update documentation for video_thumbnail.
+    /** This property is not currently on the official SpotifyAPI documentation */
+    video_thumbnail: {
+        url: null
+    }
 }
 
 /** [Playlist Tracks Ref Object](https://developer.spotify.com/documentation/web-api/reference/#object-playlisttracksrefobject) */
@@ -564,7 +574,8 @@ declare interface SimplifiedAlbumObject extends ContextObject {
     release_date_precision: 'year' | 'month' | 'day'
     /** Included in the response when a content restriction is applied. See [Restriction Object](https://developer.spotify.com/documentation/web-api/reference/#object-albumrestrictionobject) for more details. */
     restrictions?: RestrictionObject
-    // TODO - Update documentation for track_number. (Is it optional?)
+    // TODO - Update documentation
+    // Update documentation for track_number. (Is it optional?)
     /** This property is not currently on the official SpotifyAPI documentation */
     total_tracks: number
     type: 'album'
@@ -727,7 +738,8 @@ declare interface TrackObject extends SimplifiedTrackObject {
      * Generally speaking, songs that are being played a lot now will have a higher popularity than songs that were played a lot in the past. Duplicate tracks (e.g. the same track from a single and an album) are rated independently. Artist and album popularity is derived mathematically from track popularity. Note that the popularity value may lag actual popularity by a few days: the value is not updated in real time.
      */
     popularity: number
-    // TODO - Update documentation for episode & track. (Is it optional? Is it part of SimplifiedTrackObject)
+    // TODO - Update documentation
+    // Update documentation for episode & track. (Is it optional? Is it part of SimplifiedTrackObject)
     /** This property is not currently on the official SpotifyAPI documentation */
     episode?: boolean
     /** This property is not currently on the official SpotifyAPI documentation */

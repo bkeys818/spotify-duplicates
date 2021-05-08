@@ -1,5 +1,3 @@
-import type { RequestInfo } from './index'
-
 export type Names =
     | "Get a List of Current User's Playlists"
     | "Get a List of a User's Playlists"
@@ -13,7 +11,54 @@ export type Names =
     | 'Get a Playlist Cover Image'
     | 'Upload a Custom Playlist Cover Image'
 
-export const requestInfo: RequestInfo<Names> = {
+export type RequestInfo<R extends Names> = 
+    R extends "Get a List of Current User's Playlists" ? {
+        type: 'GET',
+        urlPath: 'me/playlists',
+    }
+  : R extends "Get a List of a User's Playlists" ? {
+        type: 'GET',
+        urlPath: `users/${string}/playlists`,
+    }
+  : R extends 'Create a Playlist' ? {
+        type: 'POST',
+        urlPath: `users/${string}/playlists`,
+    }
+  : R extends 'Get a Playlist' ? {
+        type: 'GET',
+        urlPath: `playlists/${string}`,
+    }
+  : R extends "Change a Playlist's Details" ? {
+        type: 'PUT',
+        urlPath: `playlists/${string}`,
+    }
+  : R extends "Get a Playlist's Items" ? {
+        type: 'GET',
+        urlPath: `playlists/${string}/tracks`,
+    }
+  : R extends 'Add Items to a Playlist' ? {
+        type: 'POST',
+        urlPath: `playlists/${string}/tracks`,
+    }
+  : R extends "Reorder or Replace a Playlist's Items" ? {
+        type: 'PUT',
+        urlPath: `playlists/${string}/tracks`,
+    }
+  : R extends 'Remove Items from a Playlist' ? {
+        type: 'DELETE',
+        urlPath: `playlists/${string}/tracks`,
+    }
+  : R extends 'Get a Playlist Cover Image' ? {
+        type: 'GET',
+        urlPath: `playlists/${string}/images`,
+    }
+  : R extends 'Upload a Custom Playlist Cover Image' ? {
+        type: 'PUT',
+        urlPath: `playlists/${string}/images`,
+    }
+  : never
+
+export const requestInfo: { [key in Names]: RequestInfo<key> } = {
     "Get a List of Current User's Playlists": {
         type: 'GET',
         urlPath: 'me/playlists',

@@ -1,11 +1,24 @@
-import type { RequestInfo } from './index'
-
 export type Names =
     | 'Get Multiple Albums'
     | 'Get an Album'
     | "Get an Album's Tracks"
 
-export const requestInfo: RequestInfo<Names> = {
+export type RequestInfo<R extends Names> =
+    R extends 'Get Multiple Albums' ? {
+        type: 'GET',
+        urlPath: `albums`,
+    }
+    : R extends 'Get an Album' ? {
+        type: 'GET',
+        urlPath: `albums/${string}`,
+    }
+    : R extends "Get an Album's Tracks" ? {
+        type: 'GET',
+        urlPath: `albums/${string}/tracks`
+    }
+    : never
+
+export const requestInfo: { [key in Names]: RequestInfo<key> }= {
     'Get Multiple Albums': {
         type: 'GET',
         urlPath: 'albums',

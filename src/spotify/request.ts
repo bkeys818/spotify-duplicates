@@ -1,7 +1,7 @@
-import { Names, requestInfo, RequestParams, Response } from './api'
+import { Names, requestInfo, RequestParams, Response, RequestInfo } from './api'
 import fetch from 'node-fetch'
 
-export function request<R extends Names>(
+function request<R extends Names>(
     type: R,
     options: {
         token: string
@@ -59,3 +59,12 @@ export function request<R extends Names>(
             .catch(reject)
     })
 }
+
+// type FullUrl<R extends Names> = `"https://api.spotify.com/v1/${RequestInfo<R>}`
+
+// function request<R extends Names>(
+//     url: UrlPath<R>,
+
+// )
+
+export default request

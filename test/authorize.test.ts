@@ -1,4 +1,4 @@
-import * as Spotify from "."
+import * as Spotify from "../src/spotify"
 
 const environments = ["development", "production"]
 

@@ -12,14 +12,13 @@
     // mobile
     width: 100vw;
     height: 97vh;
-    padding-bottom: 2vh;
+    padding-bottom: 2vh!important;
     bottom: -97vh;
 
     // tablet & desktop
     @media screen and (min-width: 450px) {
         width: 90vw;
         height: 90vh;
-        padding-bottom: 0;
         bottom: -90vh;
     }
 }
@@ -87,5 +86,57 @@
         &-exit-done {
             bottom: -90vh;
         }
+    }
+}
+
+
+// ------------------- //
+//       Content       //
+// ------------------- //
+
+.modal {
+    padding: 2% 3% 0 3%;
+    padding-bottom: 0;
+}
+
+#playlist-header {
+    $size: 136px;
+
+    height: $size;
+
+    .cover {
+        height: $size;
+        width: $size;
+        float: left;
+
+        margin-right: 12px;
+    }
+
+    >div:not(.cover) {
+        margin: 0 12px;
+
+        h3 {
+            font-size: 2.3em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+}
+
+#playlist-actions {
+    display: flex;
+}
+
+#tracks-container {
+    clear: left;
+    margin: 18px 5% 0;
+
+    .headers {
+    }
+
+    >* {
+        display: grid;
+        grid-template-columns: [title] 3fr [artist] 2fr [album] 2fr;
     }
 }

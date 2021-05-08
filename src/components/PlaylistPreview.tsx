@@ -2,7 +2,7 @@ import React from 'react'
 
 import CoverImage from './CoverImage'
 
-import './PlaylistPreview.scss'
+import '../style/PlaylistPreview.scss'
 
 interface PlaylistPreviewProps {
     name: string

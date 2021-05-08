@@ -1,4 +1,12 @@
-@use "../global/style" as global;
+@use "global" as global;
+
+#app-container {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
 
 .scroll-wrapper {
     width: 100%;

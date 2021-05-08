@@ -1,7 +1,7 @@
 import React from 'react'
 import { CSSTransition } from 'react-transition-group'
 
-import './Modal.scss'
+import '../style/Modal.scss'
 
 interface ModalProps {
     active: boolean

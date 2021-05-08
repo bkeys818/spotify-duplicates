@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 
-import "./svgs.scss"
+import "../style/svgs.scss"
 
 type SVGTemplateProps = Omit<React.SVGProps<SVGSVGElement>, "xmlns"> & {
     name: string

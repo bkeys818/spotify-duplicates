@@ -1,0 +1,12 @@
+.track {
+    display: grid;
+    grid-template-columns: [title] 3fr [artist] 2fr [album] 2fr;
+    // justify-items: left;
+    align-items: center;
+    // border-bottom: 1px solid rgba(119, 136, 153, 0.2);
+}
+p {
+    font-family:  'Quicksand', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+}

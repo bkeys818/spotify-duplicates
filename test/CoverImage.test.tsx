@@ -1,9 +1,9 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 
-import CoverImage, { filterImages, imageMin } from './CoverImage'
-import * as Spotify from '../spotify'
-import { modifyPlaylistObject } from './App'
+import CoverImage, { filterImages, imageMin } from '../src/components/CoverImage'
+import * as Spotify from '../src/utils/spotify'
+import { modifyPlaylistObject } from '../src/components/App'
 
 describe('Function "modifyPlaylistObject" works as expected', () => {
     test(`Filters out images smaller than ${imageMin}px`, () => {

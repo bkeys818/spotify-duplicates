@@ -2,7 +2,7 @@ import React from 'react'
 
 // @ts-ignore
 import spotifyLogo from '../assets/spotify-logos/Spotify_Icon_RGB_White.png'
-import './CoverImage.scss'
+import '../style/CoverImage.scss'
 
 export default ({ src }: { src?: string }) => (
     <div className={'cover' + (src ? '' : ' empty')}>

@@ -6,7 +6,7 @@ import { filterImages } from './CoverImage'
 import Modal from './Modal'
 import PlaylistPreview from './PlaylistPreview'
 
-import './App.scss'
+import '../style/App.scss'
 
 type ModifiedPlaylistObject = ReturnType<typeof modifyPlaylistObject>
 interface AppProps {

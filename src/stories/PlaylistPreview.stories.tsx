@@ -1,8 +1,8 @@
 import React from 'react'
 
-import PlaylistPreview from './PlaylistPreview'
-import * as Spotify from '../spotify'
-import { modifyPlaylistObject } from './App'
+import PlaylistPreview from '../components/PlaylistPreview'
+import * as Spotify from '../utils/spotify'
+import { modifyPlaylistObject } from '../components/App'
 
 export default {
     component: PlaylistPreview,

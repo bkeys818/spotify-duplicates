@@ -1,12 +1,18 @@
 import React from 'react'
-import { Page, ScrollLock } from './wrappers'
-import PlaylistPreview from './PlaylistPreview'
-import EditPlaylist from './EditPlaylist'
+import { Link } from 'gatsby'
 
-import '../style/App.scss'
+import Header from './Header'
+import Footer from './Footer'
+import { Page, ScrollLock } from '../wrappers'
+import PlaylistPreview from '../PlaylistPreview'
+import EditPlaylist from '../EditPlaylist'
 
-import Playlist from '../utils/Playlist'
-import { request } from '../utils/spotify'
+import '../../style/App.scss'
+
+import Playlist from '../../utils/Playlist'
+import { request } from '../../utils/spotify'
+
+import type { EditPlaylistProps } from '../../pages/edit-playlist'
 
 interface AppProps {
     accessToken: string
@@ -39,7 +45,8 @@ export default class App extends React.Component<AppProps, AppStates> {
     }
 
     selectPlaylist(playlist: Playlist) {
-        playlist.getTracks(this.props.accessToken)
+        playlist
+            .getTracks(this.props.accessToken)
             .then(() => this.setState({ selected: playlist }))
     }
 
@@ -47,26 +54,32 @@ export default class App extends React.Component<AppProps, AppStates> {
         const { playlists, selected } = this.state
         return (
             <div id="app-container">
-                <Page>
-                    <ScrollLock>
-                        <div className="playlist-container">
-                            {playlists.map(playlist => (
+                <Header />
+                <main>
+                    <div className="playlist-container">
+                        {playlists.map(playlist => (
+                            <Link
+                                to="/edit-playlist"
+                                state={linkProps({
+                                    playlist: playlist,
+                                    token: this.props.accessToken,
+                                })}
+                            >
                                 <PlaylistPreview
                                     key={playlist.id}
                                     name={playlist.name}
                                     cover={playlist.coverImage}
-                                    handleClick={() => {
-                                        this.selectPlaylist(playlist)
-                                    }}
                                 />
-                            ))}
-                        </div>
-                    </ScrollLock>
-                </Page>
-                <Page layer={1} in={selected ? true : false} >
-                    <EditPlaylist playlist={selected} ></EditPlaylist>
-                </Page>
+                            </Link>
+                        ))}
+                    </div>
+                </main>
+                <Footer />
             </div>
         )
     }
+}
+
+function linkProps(props: EditPlaylistProps) {
+    return props
 }

@@ -1,0 +1,75 @@
+{
+    "files.exclude": {
+        "node_modules": true,
+        // "package.json": true,
+        "yarn.lock": true,
+        ".gitignore": true,
+        ".github": true,
+
+        "tsconfig.json": true,
+        "gatsby-config.js": true,
+        "jest.config.js": true,
+        ".prettierrc": true,
+        ".prettierignore": true,
+
+        ".storybook": true,
+        "setup-test-env.js": true,
+        "jest-preprocess.js": true,
+        "loadershim.js": true,
+        "__mocks__": true,
+
+        ".cache": true,
+        "public": true,
+
+        ".env*": true,
+        "mock": true,
+        "coverage": true
+    },
+
+    // -------------------- //
+    //      EXTENSIONS      //
+    // -------------------- //
+
+    // todo-tree
+    "todo-tree.filtering.includeHiddenFiles": true,
+    "todo-tree.general.tags": [
+        "TODO",
+        "FIXME",
+        "REVIEW",
+        "HACK",
+        "REF",
+    ],
+    "todo-tree.highlights.customHighlight": {
+        "TODO": {
+            "foreground": "white",
+            "background": "ForestGreen",
+            "iconColour": "ForestGreen",
+            "icon": "check",
+        },
+        "FIXME": {
+            "foreground": "black",
+            "background": "red",
+            "iconColour": "#E64A4A",
+            "icon": "bug"
+        },
+        "REVIEW": {
+            "foreground": "black",
+            "background": "Turquoise",
+            "iconColour": "LightSeaGreen",
+            "icon": "eye"
+        },
+        "HACK": {
+            "foreground": "black",
+            "background": "#FFA500",
+            "iconColour": "orange",
+            "icon": "alert"
+        },
+        "REF": {
+            "foreground": "black",
+            "background": "grey",
+            "iconColour": "grey",
+            "icon": "link",
+            "type": "tag"
+        }
+    }
+}

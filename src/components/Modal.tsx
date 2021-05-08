@@ -14,7 +14,7 @@ interface ModalProps {
 }
 
 const className = 'modal'
-export default (props: ModalProps) => {
+export default function Modal(props: ModalProps) {
     console.log(props.playlist?.tracks.values)
     return (
         <CSSTransition classNames={className} in={props.active} timeout={500}>

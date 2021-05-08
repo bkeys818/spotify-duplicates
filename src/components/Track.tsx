@@ -14,7 +14,7 @@ export interface TrackProps {
     album: string
 }
 
-export default (props: TrackProps) => {
+const Track = (props: TrackProps) => {
     const { title, artist, album } = props;
     return (
         <div className="track">
@@ -24,3 +24,4 @@ export default (props: TrackProps) => {
         </div>
     );
 }
+export default Track

@@ -8,7 +8,7 @@ interface EditPlaylistProps {
     playlist?: Playlist
 }
 
-export default (props: EditPlaylistProps) => {
+export default function EditPlaylist(props: EditPlaylistProps) {
     if (!props.playlist) return <div className="edit-playlist"></div>
     const { name, coverImage, tracks } = props.playlist
     return (

@@ -10,9 +10,10 @@ interface PlaylistPreviewProps {
     handleClick?: React.MouseEventHandler<HTMLDivElement>
 }
 
-export default (props: PlaylistPreviewProps) => (
+const PlaylistPreview = (props: PlaylistPreviewProps) => (
     <div className="playlist" onClick={props.handleClick}>
         <CoverImage src={props.cover} />
         <p>{props.name}</p>
     </div>
 )
+export default PlaylistPreview

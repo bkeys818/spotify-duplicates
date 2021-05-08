@@ -4,11 +4,12 @@ import React from 'react'
 import spotifyLogo from '../assets/spotify-logos/Spotify_Icon_RGB_White.png'
 import '../style/CoverImage.scss'
 
-export default ({ src }: { src?: string }) => (
+const CoverImage =({ src }: { src?: string }) => (
     <div className={'cover' + (src ? '' : ' empty')}>
         <img src={src ?? spotifyLogo} alt="Playlist Cover" />
     </div>
 )
+export default CoverImage
 
 export const imageMin = 84
 

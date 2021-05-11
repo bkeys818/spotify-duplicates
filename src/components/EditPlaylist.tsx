@@ -4,6 +4,8 @@ import Track from './Track'
 
 import Playlist from '../utils/Playlist'
 
+import "../style/EditPlaylist.scss"
+
 interface EditPlaylistProps {
     playlist?: Playlist
 }

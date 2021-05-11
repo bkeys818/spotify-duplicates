@@ -1,0 +1,18 @@
+
+@mixin responsive-size($property, $bp1, $s1, $bp2, $s2) {
+    $m: ($s2 - $s1) / ($bp2 - $bp1);
+    $b: $s1 - ($m * $bp1);
+
+    // @debug "#{$m}";
+    // @debug "#{$b}";
+
+    #{$property}: $s1;
+    @media screen and (min-width: $bp1) {
+        #{$property}: calc(#{$m * 100}vw + #{$b})
+    }
+    @media screen and (min-width: $bp2) {
+        #{$property}: $s2;
+    }
+
+    // @debug "#{$property}: #{$s1};\n@media screen and (min-width: #{$bp1}) {\n#{$property}: calc(#{$m * 100}vw + #{$b})\n}\n@media screen and (min-width: #{$bp2}) {\n#{$property}: #{$s2};\n}";
+}

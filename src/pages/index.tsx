@@ -9,6 +9,8 @@ import type { EditPlaylistLinkProps as EditPlaylistProps } from './edit-playlist
 import PageTemplate from '../template/Page'
 import PlaylistPreview from '../components/PlaylistPreview'
 
+import '../style/MainPage.scss'
+
 interface IndexProps {
     location: Location
 }
@@ -49,7 +51,7 @@ export default class Index extends React.Component<IndexProps, IndexStates> {
     render() {
         return (
             <PageTemplate>
-                <div className='playlist-container'>
+                <div className="playlist-container">
                     {this.state.playlists.map(playlist => (
                         <Link
                             to={`/edit-playlist?id=${playlist.id}`}

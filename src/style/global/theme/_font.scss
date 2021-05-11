@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500,700&family=Rubik:wght@300;350;400&display=swap');
+/*  font-family:  'Rubik', sans-serif;
+    weights:  300, 400
+
+    font-family:  'Quicksand', sans-serif;
+    weights:  400, 500, 700
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+
+// Font Family
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    font-family:  'Quicksand', sans-serif;
+}
+
+
+// Font Weight
+
+h1,
+h2 {
+    font-weight: 300; // light
+}
+
+h3,
+h4,
+h5,
+p.subtitle1,
+p, p.body1,
+p.body2,
+caption, caption.catption, p.catption,
+p.overline {
+    font-weight: 400; // regular
+}
+
+h6,
+p.subtitle2,
+button, p.button {
+    font-weight: 500; // medium
+}
+
+
+// Font Case
+button, p.button,
+p.overline {
+    text-transform: uppercase;
+}
+
+
+// Font Size and Letter Spacing
+
+h1 {
+    font-size: 96px;
+    letter-spacing: -1.5px;
+}
+h2 {
+    font-size: 60px;
+    letter-spacing: 0.5px;
+}
+h3 {
+    font-size: 48px;
+    letter-spacing: 0px;
+}
+h4 {
+    font-size: 34px;
+    letter-spacing: 0.25px;
+}
+h5 {
+    font-size: 24px;
+    letter-spacing: 0px;
+}
+h6 {
+    font-size: 20px;
+    letter-spacing: 0.15px;
+}
+p.subtitle1 {
+    font-size: 16px;
+    letter-spacing: 0.15px;
+}
+p.subtitle2 {
+    font-size: 14px;
+    letter-spacing: 0.1px;
+}
+p, p.body1 {
+    font-size: 16px;
+    letter-spacing: 0.25px;
+}
+p.body2 {
+    font-size: 14px;
+    letter-spacing: 0.15px;
+}
+button, p.button {
+    font-size: 16px;
+    letter-spacing: 1.25px;
+}
+caption, caption.catption, p.catption {
+    font-size: 12px;
+    letter-spacing: 0.4px;
+}
+p.overline {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+}
+
+
+// Font Color
+h1,h2,h3,h4,h5,h6,p {
+    &, &.primary {
+        opacity: 87%;
+    }
+    &.secondary {
+        opacity: 60%;
+    }
+    &.disabled {
+        opacity: 38%;
+    }
+}
+button {
+    opacity: 87%;
+}
+p.body2, caption {
+    opacity: 60%;
+}
+
+.clip-text {
+    overflow: hidden;
+}
+.clip-text_one-line {
+    overflow: hidden;
+    white-space: nowrap;
+}
+.clip-text_one-line_ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

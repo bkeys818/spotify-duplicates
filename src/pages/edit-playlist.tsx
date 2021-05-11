@@ -7,6 +7,9 @@ import { request } from '../utils/spotify'
 import PageTemplate from '../template/Page'
 import CoverImage from '../components/CoverImage'
 import Track from '../components/Track'
+import Button from '../components/Button'
+
+import '../style/EditPlaylist.scss'
 
 interface EditPlaylistProps {
     location: Location & {
@@ -79,36 +82,50 @@ export default class EditPlaylist extends React.Component<
 
     render() {
         const { playlist } = this.state
+
+        const Buttons = () => (
+            <div className="align-container">
+                <div id="playlist-actions">
+                    <Button>Button 1</Button>
+                    <Button>Button 2</Button>
+                    <Button>Button 3</Button>
+                </div> 
+            </div>
+        )
+
+        const PlaylistHeader = () => (
+            <div id="playlist-header">
+                <CoverImage src={playlist?.coverImage} />
+                <h3 className={'clip-text ' + (playlist ? undefined : 'loading-text')}>{playlist?.name ?? ''}</h3>
+            </div>
+        )
+
+        const TrackList = () => (
+            <div id="tracks-container">
+                <Track title="Title" artist="Artist" album="Album" />
+                {playlist?.tracks.map(playlistItem => {
+                    // TODO - Build view for episode playlist
+                    if ('album' in playlistItem.track) {
+                        return (
+                            <Track
+                                id={playlistItem.track.id}
+                                title={playlistItem.track.name}
+                                artist={playlistItem.track.artists
+                                    .map(artist => artist.name)
+                                    .join(', ')}
+                                album={playlistItem.track.album.name}
+                            />
+                        )
+                    }
+                })}
+            </div>
+        )
+
         return (
             <PageTemplate>
-                <div id="playlist-header">
-                    <CoverImage src={playlist?.coverImage} />
-                    <div>
-                        <h3 className={playlist ? undefined : 'loading-text'}>{playlist?.name ?? ''}</h3>
-                        <div id="playlist-actions">
-                            <p>Button 1</p>
-                            <p>Button 2</p>
-                            <p>Button 3</p>
-                        </div>
-                    </div>
-                </div>
-                <div id="tracks-container">
-                    <Track title="Title" artist="Artist" album="Album" />
-                    {playlist?.tracks.map(playlistItem => {
-                        // TODO - Build view for episode playlist
-                        if ('album' in playlistItem.track) {
-                            return (
-                                <Track
-                                    title={playlistItem.track.name}
-                                    artist={playlistItem.track.artists
-                                        .map(artist => artist.name)
-                                        .join(', ')}
-                                    album={playlistItem.track.album.name}
-                                />
-                            )
-                        }
-                    })}
-                </div>
+                <Buttons/>
+                <PlaylistHeader/>
+                <TrackList/>
             </PageTemplate>
         )
     }

@@ -1,0 +1,40 @@
+@forward 'font';
+@forward 'color';
+@forward 'functionsAndMixins';
+
+@function funcForLine($x1, $y1, $x2, $y2) {
+    $m: ($y2 - $y1) / ($x2 - $x1);
+    $b: $y1 - ($m * $x1);
+    @return $m $b;
+}
+@mixin responsive-size($property, $bp1, $s1, $bp2, $s2) {
+    $m: ($s2 - $s1) / ($bp2 - $bp1);
+    $b: $s1 - ($m * $bp1);
+
+    // @debug "#{$m}";
+    // @debug "#{$b}";
+
+    #{$property}: $s1;
+    @media screen and (min-width: $bp1) {
+        #{$property}: calc(#{$m * 100}vw + #{$b})
+    }
+    @media screen and (min-width: $bp2) {
+        #{$property}: $s2;
+    }
+
+    // @debug "#{$property}: #{$s1};\n@media screen and (min-width: #{$bp1}) {\n#{$property}: calc(#{$m * 100}vw + #{$b})\n}\n@media screen and (min-width: #{$bp2}) {\n#{$property}: #{$s2};\n}";
+}
+
+$box-shadow-large:
+    0 0.6px 0.9px rgba(0, 0, 0, 0.024),
+    0 1.6px 2.3px rgba(0, 0, 0, 0.034),
+    0 3.2px 4.6px rgba(0, 0, 0, 0.044),
+    0 6.6px 9.5px rgba(0, 0, 0, 0.055),
+    0 18px 26px rgba(0, 0, 0, 0.08)
+;
+
+$box-shadow:
+    0 1.2px 3.3px rgba(0, 0, 0, 0.12),
+    0 4px 11.2px rgba(0, 0, 0, 0.072),
+    0 18px 50px rgba(0, 0, 0, 0.048)
+;

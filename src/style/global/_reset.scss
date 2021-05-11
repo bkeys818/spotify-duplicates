@@ -44,9 +44,10 @@ ol[class] {
     list-style: none;
 }
 
-/* A elements that don't have a class get default styles */
-a:not([class]) {
-    text-decoration-skip-ink: auto;
+/* A links that have a class or id get cleared styles */
+a[class], a[id] {
+    color: inherit;
+    text-decoration: inherit;
 }
 
 /* Make images easier to work with */

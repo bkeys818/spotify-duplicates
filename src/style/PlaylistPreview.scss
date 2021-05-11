@@ -8,7 +8,7 @@ $large: 168px;
     width: $size;
     margin: ($size * 0.035) ($size * 0.1);
 
-    font-size: $size / ($small / 18px);
+    // p { font-size: $size / ($small / 18px); }
 
     .cover {
         height: $size;
@@ -29,9 +29,8 @@ $large: 168px;
 }
 
 .playlist {
-    p {
-        font-family: 'Rubik', sans-serif;
-        font-weight: 400;
+    h6 {
+        font-weight: 500;
         margin: 0.5em auto;
         text-align: center;
 

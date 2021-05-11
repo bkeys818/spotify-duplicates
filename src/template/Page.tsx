@@ -20,6 +20,5 @@ const Footer = () => (
 
 const Header = () => (
     <header>
-        <h2>Edit Spotify Playlist</h2>
     </header>
 )

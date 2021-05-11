@@ -1,12 +1,29 @@
 .track {
-    display: grid;
-    grid-template-columns: [title] 3fr [artist] 2fr [album] 2fr;
-    // justify-items: left;
-    align-items: center;
-    // border-bottom: 1px solid rgba(119, 136, 153, 0.2);
+    margin: .25em 0;
+    padding: .25em 0;
+    border-bottom: 1px solid rgba(119, 136, 153, 0.2);
 }
+
 p {
-    font-family:  'Quicksand', sans-serif;
-    font-size: 18px;
-    font-weight: 400;
+    line-height: 1.25em;
+}
+
+@media screen and (max-width: 749px) {
+    .track:first-of-type {
+        display: none;
+        
+    }
+    p:nth-child(3) {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 750px) {
+    .track {
+        display: grid;
+        grid-template-columns: [title] 3fr [artist] 2fr [album] 2fr;
+        // justify-items: left;
+        align-items: center;
+        // border-bottom: 1px solid rgba(119, 136, 153, 0.2);
+    }
 }

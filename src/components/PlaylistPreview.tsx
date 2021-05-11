@@ -13,7 +13,7 @@ interface PlaylistPreviewProps {
 const PlaylistPreview = (props: PlaylistPreviewProps) => (
     <div className="playlist" onClick={props.handleClick}>
         <CoverImage src={props.cover} />
-        <p>{props.name}</p>
+        <h6>{props.name}</h6>
     </div>
 )
 export default PlaylistPreview

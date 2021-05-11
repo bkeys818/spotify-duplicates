@@ -1,9 +1,9 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 
-import CoverImage, { filterImages, imageMin } from '../src/components/CoverImage'
+import CoverImage  from '../src/components/CoverImage'
+import Playlist, { convertPlaylist, filterImages, imageMin } from '../src/utils/Playlist'
 import * as Spotify from '../src/utils/spotify'
-import { modifyPlaylistObject } from '../src/components/App'
 
 describe('Function "modifyPlaylistObject" works as expected', () => {
     test(`Filters out images smaller than ${imageMin}px`, () => {
@@ -52,7 +52,7 @@ describe('Function "modifyPlaylistObject" works as expected', () => {
 })
 
 describe('Playlist component renders correctly', () => {
-    let playlist: ReturnType<typeof modifyPlaylistObject>
+    let playlist: Playlist
     beforeAll(() => {
         return Spotify.authorize().then(token => {
             return Spotify.request('Get a Playlist', {
@@ -60,7 +60,7 @@ describe('Playlist component renders correctly', () => {
                 pathParameter: {
                     '{playlist_id}': '2oGXW218O4QdwjtKEEGKGP',
                 },
-            }).then(response => (playlist = modifyPlaylistObject(response)))
+            }).then(response => (playlist = convertPlaylist(response)))
         })
     })
 

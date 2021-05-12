@@ -1,7 +1,7 @@
 import React from 'react'
 import { navigate } from 'gatsby'
 import Cookies from 'universal-cookie'
-import Playlist, { getTracks, convertPlaylist } from '../utils/Playlist'
+import Playlist, { PlaylistInfo } from '../utils/playlist'
 import { request } from '../utils/spotify'
 
 import PageTemplate from '../template/Page'
@@ -15,7 +15,7 @@ interface EditPlaylistProps {
     location: Location & {
         state: {
             token: string
-            playlist: Playlist
+            playlist: PlaylistInfo
         }
     }
 }
@@ -32,23 +32,21 @@ export default class EditPlaylist extends React.Component<
 
     constructor(props: EditPlaylistProps | { location: Location }) {
         super(props)
-        this.token = 'state' in props.location
-            ? new Cookies().get<string | undefined>('access_token') ?? ''
-            : ''
+        this.token =
+            'state' in props.location
+                ? new Cookies().get<string | undefined>('access_token') ?? ''
+                : ''
         this.state = {}
     }
 
     componentDidMount() {
         const { location } = this.props
-        let promise: Promise<string>
+        let promise: Promise<PlaylistInfo>
 
         if ('state' in location) {
             this.token = location.state.token
-            this.setState({
-                playlist: location.state.playlist,
-            })
             promise = new Promise(resolve => {
-                resolve(location.state.playlist.tracksURL)
+                resolve(location.state.playlist)
             })
         } else {
             if (this.token == '') navigate('/login/')
@@ -62,20 +60,21 @@ export default class EditPlaylist extends React.Component<
             promise = request('Get a Playlist', {
                 token: this.token,
                 pathParameter: {
-                    "{playlist_id}": id
-                }
-            }).then(playlist => {
-                const converted = convertPlaylist(playlist)
-                this.setState({ playlist: converted })
-                return playlist.tracks.href
-            })
+                    '{playlist_id}': id,
+                },
+            }).then(playlist => Playlist.convertResponse(playlist))
         }
 
-        promise.then(url => getTracks(url, this.token)).then(respTracks => {
-            const playlist = this.state.playlist!
-            playlist.tracks = respTracks
+        promise.then(info => {
             this.setState({
-                playlist: playlist
+                playlist: new Playlist(info),
+            })
+            this.state.playlist?.getTracks(this.token).then(respTracks => {
+                const playlist = this.state.playlist!
+                playlist.tracks = respTracks
+                this.setState({
+                    playlist: playlist,
+                })
             })
         })
     }
@@ -89,14 +88,20 @@ export default class EditPlaylist extends React.Component<
                     <Button>Button 1</Button>
                     <Button>Button 2</Button>
                     <Button>Button 3</Button>
-                </div> 
+                </div>
             </div>
         )
 
         const PlaylistHeader = () => (
             <div id="playlist-header">
                 <CoverImage src={playlist?.coverImage} />
-                <h3 className={'clip-text ' + (playlist ? undefined : 'loading-text')}>{playlist?.name ?? ''}</h3>
+                <h3
+                    className={
+                        'clip-text ' + (playlist ? undefined : 'loading-text')
+                    }
+                >
+                    {playlist?.name ?? ''}
+                </h3>
             </div>
         )
 
@@ -123,9 +128,9 @@ export default class EditPlaylist extends React.Component<
 
         return (
             <PageTemplate>
-                <Buttons/>
-                <PlaylistHeader/>
-                <TrackList/>
+                <Buttons />
+                <PlaylistHeader />
+                <TrackList />
             </PageTemplate>
         )
     }

@@ -2,7 +2,8 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 
 import CoverImage  from '../src/components/CoverImage'
-import Playlist, { convertPlaylist, filterImages, imageMin } from '../src/utils/Playlist'
+import Playlist, { PlaylistInfo } from '../src/utils/playlist'
+import { filterImages, imageMin } from '../src/utils/playlist/convert-response'
 import * as Spotify from '../src/utils/spotify'
 
 describe('Function "modifyPlaylistObject" works as expected', () => {
@@ -52,7 +53,7 @@ describe('Function "modifyPlaylistObject" works as expected', () => {
 })
 
 describe('Playlist component renders correctly', () => {
-    let playlist: Playlist
+    let playlist: PlaylistInfo
     beforeAll(() => {
         return Spotify.authorize().then(token => {
             return Spotify.request('Get a Playlist', {
@@ -60,7 +61,7 @@ describe('Playlist component renders correctly', () => {
                 pathParameter: {
                     '{playlist_id}': '2oGXW218O4QdwjtKEEGKGP',
                 },
-            }).then(response => (playlist = convertPlaylist(response)))
+            }).then(response => (playlist = Playlist.convertResponse(response)))
         })
     })
 

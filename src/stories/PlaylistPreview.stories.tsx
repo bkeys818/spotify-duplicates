@@ -2,17 +2,17 @@ import React from 'react'
 
 import PlaylistPreview from '../components/PlaylistPreview'
 import * as Spotify from '../utils/spotify'
-import { modifyPlaylistObject } from '../components/App'
+import Playlist from '../utils/playlist'
 
 export default {
     component: PlaylistPreview,
     title: 'Playlist Preview',
 }
 
-type Loaders = { loaded: { playlist: ReturnType<typeof modifyPlaylistObject> } }
+type Loaders = { loaded: { playlist: Playlist } }
 const loaders = [
     async () => ({
-        playlist: modifyPlaylistObject(await Spotify.request('Get a Playlist', {
+        playlist: Playlist.convertResponse(await Spotify.request('Get a Playlist', {
             token: 'Bearer ' + (await Spotify.authorize({
                 clientID: process.env.STORYBOOK_CLIENT_ID!,
                 clientSecret: process.env.STORYBOOK_CLIENT_SECRET!
@@ -25,7 +25,7 @@ const loaders = [
 ];
 
 export const Default = (args: any, { loaded: { playlist } }: Loaders) => (
-    <PlaylistPreview name={playlist.name} cover={playlist.cover} />
+    <PlaylistPreview name={playlist.name} cover={playlist.coverImage} />
 )
 Default.loaders = loaders
 

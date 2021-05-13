@@ -1,7 +1,7 @@
 import React from 'react'
 import { navigate } from 'gatsby'
 import Cookies from 'universal-cookie'
-import Playlist, { PlaylistInfo } from '../utils/playlist'
+import  Playlist from '../utils/playlist'
 import { request } from '../utils/spotify'
 
 import PageTemplate from '../template/Page'
@@ -15,12 +15,12 @@ interface EditPlaylistProps {
     location: Location & {
         state: {
             token: string
-            playlist: PlaylistInfo
+            playlist: Playlist
         }
     }
 }
 export type EditPlaylistLinkProps = EditPlaylistProps['location']['state']
-interface EditPlaylistStates {
+export interface EditPlaylistStates {
     playlist?: Playlist
 }
 
@@ -41,7 +41,7 @@ export default class EditPlaylist extends React.Component<
 
     componentDidMount() {
         const { location } = this.props
-        let promise: Promise<PlaylistInfo>
+        let promise: Promise<Playlist>
 
         if ('state' in location) {
             this.token = location.state.token
@@ -65,15 +65,17 @@ export default class EditPlaylist extends React.Component<
             }).then(playlist => Playlist.convertResponse(playlist))
         }
 
-        promise.then(info => {
+        promise.then(playlist => {
             this.setState({
-                playlist: new Playlist(info),
+                playlist: playlist
             })
-            this.state.playlist?.getTracks(this.token).then(respTracks => {
-                const playlist = this.state.playlist!
-                playlist.tracks = respTracks
+            Playlist.getTracks(playlist.tracksURL, this.token).then(tracks => {
+
                 this.setState({
-                    playlist: playlist,
+                    playlist: {
+                        ...playlist,
+                        tracks: tracks,
+                    },
                 })
             })
         })
@@ -85,9 +87,10 @@ export default class EditPlaylist extends React.Component<
         const Buttons = () => (
             <div className="align-container">
                 <div id="playlist-actions">
-                    <Button>Button 1</Button>
-                    <Button>Button 2</Button>
-                    <Button>Button 3</Button>
+                    <Button onClick={() => { 
+                        // @ts-ignore
+                        Playlist.findDuplicates(this.state.playlist!.tracks)
+                    }} >Button 1</Button>
                 </div>
             </div>
         )
@@ -113,7 +116,7 @@ export default class EditPlaylist extends React.Component<
                     if ('album' in playlistItem.track) {
                         return (
                             <Track
-                                id={playlistItem.track.id}
+                                key={playlistItem.track.id}
                                 title={playlistItem.track.name}
                                 artist={playlistItem.track.artists
                                     .map(artist => artist.name)

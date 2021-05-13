@@ -8,7 +8,8 @@
     .button:nth-child(n+2) {
         margin-left: 14px;
     }
-    overflow-y: auto;
+    overflow: visible;
+    // overflow-y: auto;
     &::-webkit-scrollbar {
         display: none;
     }

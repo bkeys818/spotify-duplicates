@@ -1,4 +1,4 @@
-import { PlaylistInfo } from './index'
+import Playlist from './index'
 
 export const imageMin = 84
 
@@ -33,7 +33,7 @@ export function filterImages(values: ImageObject[]): ImageObject | null {
     else return null
 }
 
-export function convertResponse(from: PlaylistObject): PlaylistInfo {
+export function convertResponse(from: PlaylistObject): Playlist {
     return {
         id: from.id,
         name: from.name,

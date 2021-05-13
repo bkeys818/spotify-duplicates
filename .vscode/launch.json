@@ -18,6 +18,12 @@
             "args": ["build"],
             "runtimeArgs": ["--nolazy"],
             "console": "integratedTerminal"
+        },
+        {
+            "command": "jest",
+            "name": "Run test",
+            "request": "launch",
+            "type": "node-terminal"
         }
     ]
 }

@@ -40,7 +40,7 @@ export type RequestParams<R extends Names> =
     : {};
 
 /** Get Spotify catalog information for multiple albums identified by their Spotify IDs. */
-type GetMultipleAlbums = {
+interface GetMultipleAlbums {
     queryParameter: {
         /**
          * A comma-separated list of[Spotify IDs](https://developer.spotify.com/documentation/web-api/#spotify-uris-and-ids) for albums. Maximum: 20 IDs.
@@ -53,7 +53,7 @@ type GetMultipleAlbums = {
 }
 
 /** Get Spotify catalog information for a single album. */
-type GetAlbum = {
+interface GetAlbum {
     pathParameter: {
         /** Spotify ID of the album. */
         '{id}': string
@@ -65,7 +65,7 @@ type GetAlbum = {
 }
 
 /** Get Spotify catalog information about an album’s tracks. Optional parameters can be used to limit the number of tracks returned. */
-type GetAlbumTracks = {
+interface GetAlbumTracks {
     pathParameter: {
         /** Spotify ID of the album. */
         '{id}': string
@@ -93,8 +93,8 @@ export type Response<R extends Names> =
  */
 type GetMultipleAlbumsResponse = { albums: (AlbumObject | null)[] }
 
-/** An album object in JSON format */
+/** An [album object](https://developer.spotify.com/documentation/web-api/reference/#object-albumobject) in JSON format */
 type GetAlbumResponse = AlbumObject
 
-/** An album object in JSON format */
+/** An [album object](https://developer.spotify.com/documentation/web-api/reference/#object-albumobject) in JSON format */
 type GetAlbumsTracksResponse = PagingObject<AlbumObject>

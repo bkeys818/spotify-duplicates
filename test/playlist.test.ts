@@ -1,6 +1,6 @@
-import Playlist from '../src/utils/playlist'
-import { Unique } from '../src/utils/playlist/track-object'
-import { compareTracks, findDuplicates } from '../src/utils/playlist/read-data'
+import Playlist from '../utils/playlist'
+import { Unique } from '../utils/playlist/track-object'
+import { compareTracks, findDuplicates } from '../utils/playlist/read-data'
 
 describe('Functions in "track-object.ts" work as intended', () => {
     test('Tracks Class catches duplicates', () => {

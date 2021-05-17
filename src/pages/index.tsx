@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link, navigate } from 'gatsby'
 import Cookies from 'universal-cookie'
-import { request } from '../utils/spotify'
-import Playlist from '../utils/playlist'
+import { request } from '../../utils/spotify'
+import Playlist from '../../utils/playlist'
 
 import type { EditPlaylistLinkProps as EditPlaylistProps } from './edit-playlist'
 

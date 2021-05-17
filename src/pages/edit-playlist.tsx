@@ -1,8 +1,8 @@
 import React from 'react'
 import { navigate } from 'gatsby'
 import Cookies from 'universal-cookie'
-import  Playlist from '../utils/playlist'
-import { request } from '../utils/spotify'
+import  Playlist from '../../utils/playlist'
+import { request } from '../../utils/spotify'
 
 import PageTemplate from '../template/Page'
 import CoverImage from '../components/CoverImage'

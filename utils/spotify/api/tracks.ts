@@ -1,62 +1,94 @@
-export type Names =
-    | 'Get Several Tracks'
-    | 'Get a Track'
-    | 'Get Audio Features for Several Tracks'
-    | 'Get Audio Features for a Track'
-    | 'Get Audio Analysis for a Track'
+type EndpointInfoByIndex<i extends number> = [
+    {
+        url: `https://api.spotify.com/v1/tracks`
+        type: 'GET'
+    },
+    {
+        url: `https://api.spotify.com/v1/tracks/${string}`
+        type: 'GET'
+    },
+    {
+        url: `https://api.spotify.com/v1/audio-features`
+        type: 'GET'
+    },
+    {
+        url: `https://api.spotify.com/v1/audio-features/${string}`
+        type: 'GET'
+    },
+    {
+        url: `https://api.spotify.com/v1/audio-analysis/${string}`
+        type: 'GET'
+    }
+][i]
 
-export type RequestInfo<R extends Names> =
-    R extends 'Get Several Tracks' ? {
-        type: 'GET',
-        urlPath: `tracks`,
-    }
-    : R extends 'Get a Track' ? {
-        type: 'GET',
-        urlPath: `tracks/${string}`,
-    }
-    : R extends "Get Audio Features for Several Tracks" ? {
-        type: 'GET',
-        urlPath: `audio-features`
-    }
-    : R extends 'Get Audio Features for a Track' ? {
-        type: 'GET',
-        urlPath: `audio-features/${string}`,
-    }
-    : R extends 'Get Audio Analysis for a Track' ? {
-        type: 'GET',
-        urlPath: `audio-analysis/${string}`,
-    }
-    : never
+export type EndpointInfo<key extends 'name' | 'url' | 'type'> =
+    | Pick<{
+        name: 'Get Several Tracks'
+        url: EndpointInfoByIndex<0>['url']
+        type: EndpointInfoByIndex<0>['type']
+      }, key>
+    | Pick<{
+        name: 'Get a Track'
+        url: EndpointInfoByIndex<1>['url']
+        type: EndpointInfoByIndex<1>['type']
+      }, key>
+    | Pick<{
+        name: 'Get Audio Features for Several Tracks'
+        url: EndpointInfoByIndex<2>['url']
+        type: EndpointInfoByIndex<2>['type']
+      }, key>
+    | Pick<{
+        name: 'Get Audio Features for a Track'
+        url: EndpointInfoByIndex<3>['url']
+        type: EndpointInfoByIndex<3>['type']
+      }, key>
+    | Pick<{
+        name: 'Get Audio Analysis for a Track'
+        url: EndpointInfoByIndex<4>['url']
+        type: EndpointInfoByIndex<4>['type']
+      }, key>
 
-export const requestInfo: { [key in Names]: RequestInfo<key> }= {
+
+export const requestInfo: {
+    [key in EndpointInfo<'name'>['name']]: EndpointInfo<'url' | 'type'>
+} = {
     'Get Several Tracks': {
         type: 'GET',
-        urlPath: `tracks`,
+        url: 'https://api.spotify.com/v1/tracks',
     },
     'Get a Track': {
         type: 'GET',
-        urlPath: `tracks/{id}`,
+        url: 'https://api.spotify.com/v1/tracks/{id}',
     },
     "Get Audio Features for Several Tracks": {
         type: 'GET',
-        urlPath: `audio-features`
+        url: 'https://api.spotify.com/v1/audio-features'
     },
     'Get Audio Features for a Track': {
         type: 'GET',
-        urlPath: `audio-features/{id}`,
+        url: 'https://api.spotify.com/v1/audio-features/{id}',
     },
     'Get Audio Analysis for a Track': {
         type: 'GET',
-        urlPath: `audio-analysis/{id}`,
+        url: 'https://api.spotify.com/v1/audio-analysis/{id}',
     }
 }
 
-export type RequestParams<R extends Names> = 
+export type RequestParams<
+R extends
+    | EndpointInfo<'name'>['name']
+    | EndpointInfo<'url' | 'type'>
+> =
       R extends 'Get Several Tracks' ? GetSeveralTracks
+    : R extends EndpointInfoByIndex<0> ? GetSeveralTracks
     : R extends 'Get a Track' ? GetTrack
+    : R extends EndpointInfoByIndex<1> ? GetTrack
     : R extends "Get Audio Features for Several Tracks" ? GetAudioFeaturesForSeveralTracks
+    : R extends EndpointInfoByIndex<2> ? GetAudioFeaturesForSeveralTracks
     : R extends 'Get Audio Features for a Track' ? GetAudioFeaturesForTrack
+    : R extends EndpointInfoByIndex<3> ? GetAudioFeaturesForTrack
     : R extends 'Get Audio Analysis for a Track' ? GetAudioAnalysisForTrack
+    : R extends EndpointInfoByIndex<4> ? GetAudioAnalysisForTrack
     : {}
 
 /** Get Spotify catalog information for multiple tracks based on their Spotify IDs. */
@@ -113,12 +145,21 @@ interface GetAudioAnalysisForTrack {
 
 
 
-export type Response<R extends Names> = 
+export type Response<
+R extends
+    | EndpointInfo<'name'>['name']
+    | EndpointInfo<'url' | 'type'>
+> =
       R extends 'Get Several Tracks' ? GetSeveralTracksResponse
+    : R extends EndpointInfoByIndex<0> ? GetSeveralTracksResponse
     : R extends 'Get a Track' ? GetTrackResponse
+    : R extends EndpointInfoByIndex<1> ? GetTrackResponse
     : R extends "Get Audio Features for Several Tracks" ? GetAudioFeaturesForSeveralTracksResponse
+    : R extends EndpointInfoByIndex<2> ? GetAudioFeaturesForSeveralTracksResponse
     : R extends 'Get Audio Features for a Track' ? GetAudioFeaturesForTrackResponse
+    : R extends EndpointInfoByIndex<3> ? GetAudioFeaturesForTrackResponse
     : R extends 'Get Audio Analysis for a Track' ? GetAudioAnalysisForTrackResponse
+    : R extends EndpointInfoByIndex<4> ? GetAudioAnalysisForTrackResponse
     : {}
 
 /**

@@ -1,43 +1,64 @@
-export type Names =
-    | 'Get Multiple Albums'
-    | 'Get an Album'
-    | "Get an Album's Tracks"
+type EndpointInfoByIndex<i extends number> = [
+    {
+        url: `https://api.spotify.com/v1/albums`
+        type: 'GET'
+    },
+    {
+        url: `https://api.spotify.com/v1/albums/${string}`
+        type: 'GET'
+    },
+    {
+        url: `https://api.spotify.com/v1/albums/${string}/tracks`
+        type: 'GET'
+    }
+][i]
 
-export type RequestInfo<R extends Names> =
-    R extends 'Get Multiple Albums' ? {
-        type: 'GET',
-        urlPath: `albums`,
-    }
-    : R extends 'Get an Album' ? {
-        type: 'GET',
-        urlPath: `albums/${string}`,
-    }
-    : R extends "Get an Album's Tracks" ? {
-        type: 'GET',
-        urlPath: `albums/${string}/tracks`
-    }
-    : never
+export type EndpointInfo<key extends 'name' | 'url' | 'type'> =
+    | Pick<{
+        name: 'Get Multiple Albums'
+        url: EndpointInfoByIndex<0>['url']
+        type: EndpointInfoByIndex<0>['type']
+    }, key>
+    | Pick<{
+        name: 'Get an Album'
+        url: EndpointInfoByIndex<1>['url']
+        type: EndpointInfoByIndex<1>['type']
+    }, key>
+    | Pick<{
+        name: "Get an Album's Tracks"
+        url: EndpointInfoByIndex<2>['url']
+        type: EndpointInfoByIndex<2>['type']
+    }, key>
 
-export const requestInfo: { [key in Names]: RequestInfo<key> }= {
+export const endpointInfo: {
+    [key in EndpointInfo<'name'>['name']]: EndpointInfo<'url' | 'type'>
+} = {
     'Get Multiple Albums': {
+        url: 'https://api.spotify.com/v1/albums',
         type: 'GET',
-        urlPath: 'albums',
     },
     'Get an Album': {
+        url: 'https://api.spotify.com/v1/albums/{id}',
         type: 'GET',
-        urlPath: 'albums/{id}',
     },
     "Get an Album's Tracks": {
+        url: 'https://api.spotify.com/v1/albums/{id}/tracks',
         type: 'GET',
-        urlPath: 'albums/{id}/tracks',
     },
 }
 
-export type RequestParams<R extends Names> = 
+export type RequestParams<
+    R extends
+        | EndpointInfo<'name'>['name']
+        | EndpointInfo<'url' | 'type'>
+> =
       R extends 'Get Multiple Albums' ? GetMultipleAlbums
+    : R extends EndpointInfoByIndex<0> ? GetMultipleAlbums
     : R extends 'Get an Album' ? GetAlbum
+    : R extends EndpointInfoByIndex<1> ? GetAlbum
     : R extends "Get an Album's Tracks" ? GetAlbumTracks
-    : {};
+    : R extends EndpointInfoByIndex<2> ? GetAlbumTracks
+    : {}
 
 /** Get Spotify catalog information for multiple albums identified by their Spotify IDs. */
 interface GetMultipleAlbums {
@@ -80,11 +101,18 @@ interface GetAlbumTracks {
     }
 }
 
-export type Response<R extends Names> = 
-      R extends 'Get Multiple Albums' ? GetMultipleAlbumsResponse
-    : R extends 'Get an Album' ? GetAlbumResponse
-    : R extends "Get an Album's Tracks" ? GetAlbumsTracksResponse
-    : {};
+export type Response<
+R extends
+    | EndpointInfo<'name'>['name']
+    | EndpointInfo<'url' | 'type'>
+> =
+R extends 'Get Multiple Albums' ? GetMultipleAlbumsResponse
+: R extends EndpointInfoByIndex<0> ? GetMultipleAlbumsResponse
+: R extends 'Get an Album' ? GetAlbumResponse
+: R extends EndpointInfoByIndex<1> ? GetAlbumResponse
+: R extends "Get an Album's Tracks" ? GetAlbumsTracksResponse
+: R extends EndpointInfoByIndex<2> ? GetAlbumsTracksResponse
+: {}
 
 /**
  * An object whose key is `"albums"` and whose value is an array of [album objects](https://developer.spotify.com/documentation/web-api/reference/#object-albumobject) in JSON format.

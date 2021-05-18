@@ -1,3 +1,21 @@
+type HasURL = 
+    | SimplifiedAlbumObject
+    | SimplifiedArtistObject
+    | SimplifiedEpisodeObject
+    | SimplifiedPlaylistObject
+    | SimplifiedShowObject
+    | SimplifiedTrackObject
+type SpotifyURL<R extends HasURL> = 
+    R extends SimplifiedAlbumObject ? `https://api.spotify.com/v1/albums/${string}`
+    : R extends SimplifiedArtistObject ? `https://api.spotify.com/v1/artists/${string}`
+    : R extends SimplifiedEpisodeObject ? `https://api.spotify.com/v1/episodes/${string}`
+    : R extends SimplifiedPlaylistObject ? `https://api.spotify.com/v1/playlists/${string}`
+    : R extends SimplifiedShowObject ? `https://api.spotify.com/v1/shows/${string}`
+    : R extends SimplifiedTrackObject ? `https://api.spotify.com/v1/tracks/${string}`
+    : {};
+
+
+
 /** [Album Object](https://developer.spotify.com/documentation/web-api/reference/#object-albumobject) */
 declare interface AlbumObject extends SimplifiedAlbumObject {
     /**
@@ -214,7 +232,7 @@ declare interface AudioFeaturesObject {
      */
     time_signature: number
     /** A link to the Web API endpoint providing full details of the track. */
-    track_href: string
+    track_href: `https://api.spotify.com/v1/tracks/${string}`
     /** The object type: “audio_features” */
     type: 'audio_features'
     /** The Spotify URI for the track. */
@@ -243,7 +261,12 @@ declare interface ContextObject {
     /** The object type. */
     type: 'artist' | 'playlist' | 'album' | 'show' | 'episode'
     /** A link to the Web API endpoint providing full details. */
-    href: string
+    href:
+        | `https://api.spotify.com/v1/artists/${string}`
+        | `https://api.spotify.com/v1/playlists/${string}`
+        | `https://api.spotify.com/v1/albums/${string}`
+        | `https://api.spotify.com/v1/shows/${string}`
+        | `https://api.spotify.com/v1/episodes/${string}`
     /** Known external URLs. */
     external_urls: ExternalUrlObject
     /** The [Spotify URI](https://developer.spotify.com/documentation/web-api/#spotify-uris-and-ids). */
@@ -417,7 +440,7 @@ declare interface LinkedTrackObject {
     /** Known external URLs for this track. */
     external_urls: ExternalUrlObject
     /** A link to the Web API endpoint providing full details of the track. */
-    href: string
+    href: `https://api.spotify.com/v1/tracks/${string}`
     /** The [Spotify ID](https://developer.spotify.com/documentation/web-api/#spotify-uris-and-ids) for the track. */
     id: string
     /** The object type: “track”. */
@@ -502,7 +525,7 @@ declare interface PlayerErrorObject {
 }
 
 /** [Playlist Object](https://developer.spotify.com/documentation/web-api/reference/#object-playlistobject) */
-declare interface PlaylistObject extends SimplifiedPlaylistObject {
+declare interface PlaylistObject extends Omit<SimplifiedPlaylistObject, 'tracks'> {
     /** Information about the followers of the playlist. */
     followers: FollowersObject
     /** Information about the tracks of the playlist. */
@@ -534,7 +557,7 @@ declare interface PlaylistTrackObject {
 /** [Playlist Tracks Ref Object](https://developer.spotify.com/documentation/web-api/reference/#object-playlisttracksrefobject) */
 declare interface PlaylistTracksRefObject {
     /** A link to the Web API endpoint where full details of the playlist’s tracks can be retrieved. */
-    href: string
+    href: `https://api.spotify.com/v1/playlists/${string}/tracks`
     /** Number of tracks in the playlist. */
     total: number
 }
@@ -560,7 +583,7 @@ declare interface PublicUserObject {
     /** Information about the followers of this user. */
     followers: FollowersObject
     /** A link to the Web API endpoint for this user. */
-    href: string
+    href: `https://api.spotify.com/v1/users/${string}`
     /** The [Spotify user ID](https://developer.spotify.com/documentation/web-api/#spotify-uris-and-ids) for this user. */
     id: string
     /** The user’s profile image. */
@@ -782,7 +805,7 @@ declare interface SimplifiedTrackObject {
     /** Known external URLs for this track. */
     external_urls: ExternalUrlObject
     /** A link to the Web API endpoint providing full details of the track. */
-    href: string
+    href: `https://api.spotify.com/v1/tracks/${string}`
     /** The [Spotify ID](https://developer.spotify.com/documentation/web-api/#spotify-uris-and-ids) for the track. */
     id: string
     /** Whether or not the track is from a local file. */

@@ -2,31 +2,24 @@ import * as Spotify from "."
 
 const environments = ["development", "production"]
 
-test("Client credentials are valid and working", async () => {
-    environments.forEach(env => {
-        require("dotenv").config({
-            path: `.env.${env}`,
-        })
+describe("Spotify.authorize", () => {
+
+    test.concurrent('access client id', async () => {
         expect(process.env.CLIENT_ID).toEqual(expect.any(String))
     })
 
-    expect(process.env.CLIENT_SECRET).toEqual(expect.any(String))
+    test.concurrent('access client secret', async () => {
+        expect(process.env.CLIENT_SECRET).toEqual(expect.any(String))
+    })
 
-    const token = await Spotify.authorize()
-    expect(token).toEqual(
-        expect.objectContaining({
-            access_token: expect.any(String),
-            token_type: "Bearer",
-            expires_in: expect.any(Number),
-        })
-    )
-
-    expect(
-        await Spotify.request("Get an Album", {
-            token: "Bearer " + token.access_token,
-            pathParameter: {
-                "{id}": "6a8GwYiEMrXgMvZBvuBXrt",
-            },
-        })
-    ).toHaveProperty("artists")
+    test.concurrent('authirization request', async () => {
+        expect(Spotify.authorize()).resolves.toEqual(
+            expect.objectContaining({
+                access_token: expect.any(String),
+                token_type: "Bearer",
+                expires_in: expect.any(Number),
+            })
+        )
+    })
+    
 })

@@ -11,33 +11,31 @@ interface AuthorizeParams {
     clientSecret: string
 }
 
-export default function authorize(params?: AuthorizeParams) {
-    return new Promise(function (resolve: (value: Token) => void, reject) {
-        fetch('https://accounts.spotify.com/api/token', {
-            method: 'POST',
-            headers: {
-                Authorization: `Basic ${Buffer.from(
-                    `${params?.clientID ?? process.env.CLIENT_ID}:${params?.clientSecret ?? process.env.CLIENT_SECRET}`
-                ).toString("base64")}`,
-                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-            },
-            body: encodeURIComponent('grant_type') + '=' + encodeURIComponent('client_credentials'),
-        })
-            .then(res => {
-                if (res.status === 200) res.json().then(resolve)
-                else {
-                    try {
-                        res.json().then(reject)
-                    } catch {
-                        try {
-                            res.text().then(reject)
-                        } catch {
-                            if (res.statusText) reject(res.statusText)
-                            else reject('Uknown error during authorization.')
-                        }
-                    }
-                }
-            })
-            .catch(reject)
+export default async function authorize(params?: AuthorizeParams): Promise<Token> {
+    const res = await fetch('https://accounts.spotify.com/api/token', {
+        method: 'POST',
+        headers: {
+            Authorization: `Basic ${Buffer.from(
+                `${params?.clientID ?? process.env.CLIENT_ID}:${params?.clientSecret ?? process.env.CLIENT_SECRET}`
+            ).toString("base64")}`,
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        },
+        body: encodeURIComponent('grant_type') + '=' + encodeURIComponent('client_credentials'),
     })
+    if (res.status === 200) return (await res.json()) as Token
+    else {
+        let error
+        try {
+            error = await res.json()
+        } catch {
+            try {
+                error = await res.text()
+            } catch {
+                if (res.statusText) error = (res.statusText)
+                else error = 'Uknown error during authorization.'
+            }
+        }
+        if (error instanceof Error) throw error
+        else throw new Error(error)
+    }
 }

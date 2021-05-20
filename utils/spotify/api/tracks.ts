@@ -1,94 +1,35 @@
-type EndpointInfoByIndex<i extends number> = [
-    {
-        url: `https://api.spotify.com/v1/tracks`
-        type: 'GET'
+export const endpoints = {
+    ['Get Several Tracks' as const]: {
+        url: 'https://api.spotify.com/v1/tracks' as `https://api.spotify.com/v1/tracks`,
+        method: 'GET' as const
     },
-    {
-        url: `https://api.spotify.com/v1/tracks/${string}`
-        type: 'GET'
+    ['Get a Track' as const]: {
+        url: 'https://api.spotify.com/v1/tracks/{id}' as `https://api.spotify.com/v1/tracks/${string}`,
+        method: 'GET' as const
     },
-    {
-        url: `https://api.spotify.com/v1/audio-features`
-        type: 'GET'
+    ['Get Audio Features for Several Tracks' as const]: {
+        url: 'https://api.spotify.com/v1/audio-features' as `https://api.spotify.com/v1/audio-features`,
+        method: 'GET' as const
     },
-    {
-        url: `https://api.spotify.com/v1/audio-features/${string}`
-        type: 'GET'
+    ['Get Audio Features for a Track' as const]: {
+        url: 'https://api.spotify.com/v1/audio-features/{id}' as `https://api.spotify.com/v1/audio-features/${string}`,
+        method: 'GET' as const
     },
-    {
-        url: `https://api.spotify.com/v1/audio-analysis/${string}`
-        type: 'GET'
-    }
-][i]
-
-export type EndpointInfo<key extends 'name' | 'url' | 'type'> =
-    | Pick<{
-        name: 'Get Several Tracks'
-        url: EndpointInfoByIndex<0>['url']
-        type: EndpointInfoByIndex<0>['type']
-      }, key>
-    | Pick<{
-        name: 'Get a Track'
-        url: EndpointInfoByIndex<1>['url']
-        type: EndpointInfoByIndex<1>['type']
-      }, key>
-    | Pick<{
-        name: 'Get Audio Features for Several Tracks'
-        url: EndpointInfoByIndex<2>['url']
-        type: EndpointInfoByIndex<2>['type']
-      }, key>
-    | Pick<{
-        name: 'Get Audio Features for a Track'
-        url: EndpointInfoByIndex<3>['url']
-        type: EndpointInfoByIndex<3>['type']
-      }, key>
-    | Pick<{
-        name: 'Get Audio Analysis for a Track'
-        url: EndpointInfoByIndex<4>['url']
-        type: EndpointInfoByIndex<4>['type']
-      }, key>
-
-
-export const requestInfo: {
-    [key in EndpointInfo<'name'>['name']]: EndpointInfo<'url' | 'type'>
-} = {
-    'Get Several Tracks': {
-        type: 'GET',
-        url: 'https://api.spotify.com/v1/tracks',
-    },
-    'Get a Track': {
-        type: 'GET',
-        url: 'https://api.spotify.com/v1/tracks/{id}',
-    },
-    "Get Audio Features for Several Tracks": {
-        type: 'GET',
-        url: 'https://api.spotify.com/v1/audio-features'
-    },
-    'Get Audio Features for a Track': {
-        type: 'GET',
-        url: 'https://api.spotify.com/v1/audio-features/{id}',
-    },
-    'Get Audio Analysis for a Track': {
-        type: 'GET',
-        url: 'https://api.spotify.com/v1/audio-analysis/{id}',
+    ['Get Audio Analysis for a Track' as const]: {
+        url: 'https://api.spotify.com/v1/audio-analysis/{id}' as `https://api.spotify.com/v1/audio-analysis/${string}`,
+        method: 'GET' as const
     }
 }
 
-export type RequestParams<
-R extends
-    | EndpointInfo<'name'>['name']
-    | EndpointInfo<'url' | 'type'>
-> =
-      R extends 'Get Several Tracks' ? GetSeveralTracks
-    : R extends EndpointInfoByIndex<0> ? GetSeveralTracks
-    : R extends 'Get a Track' ? GetTrack
-    : R extends EndpointInfoByIndex<1> ? GetTrack
-    : R extends "Get Audio Features for Several Tracks" ? GetAudioFeaturesForSeveralTracks
-    : R extends EndpointInfoByIndex<2> ? GetAudioFeaturesForSeveralTracks
-    : R extends 'Get Audio Features for a Track' ? GetAudioFeaturesForTrack
-    : R extends EndpointInfoByIndex<3> ? GetAudioFeaturesForTrack
-    : R extends 'Get Audio Analysis for a Track' ? GetAudioAnalysisForTrack
-    : R extends EndpointInfoByIndex<4> ? GetAudioAnalysisForTrack
+export type Names = keyof typeof endpoints
+export type EndpointsInfo = typeof endpoints[keyof typeof endpoints]
+
+export type RequestParams<R extends Names | EndpointsInfo> =
+      R extends ('Get Several Tracks' | typeof endpoints['Get Several Tracks']) ? GetSeveralTracks
+    : R extends ('Get a Track' | typeof endpoints['Get a Track']) ? GetTrack
+    : R extends ("Get Audio Features for Several Tracks" | typeof endpoints["Get Audio Features for Several Tracks"]) ? GetAudioFeaturesForSeveralTracks
+    : R extends ('Get Audio Features for a Track' | typeof endpoints['Get Audio Features for a Track']) ? GetAudioFeaturesForTrack
+    : R extends ('Get Audio Analysis for a Track' | typeof endpoints['Get Audio Analysis for a Track']) ? GetAudioAnalysisForTrack
     : {}
 
 /** Get Spotify catalog information for multiple tracks based on their Spotify IDs. */
@@ -140,26 +81,12 @@ interface GetAudioAnalysisForTrack {
     }
 }
 
-
-
-
-
-
-export type Response<
-R extends
-    | EndpointInfo<'name'>['name']
-    | EndpointInfo<'url' | 'type'>
-> =
-      R extends 'Get Several Tracks' ? GetSeveralTracksResponse
-    : R extends EndpointInfoByIndex<0> ? GetSeveralTracksResponse
-    : R extends 'Get a Track' ? GetTrackResponse
-    : R extends EndpointInfoByIndex<1> ? GetTrackResponse
-    : R extends "Get Audio Features for Several Tracks" ? GetAudioFeaturesForSeveralTracksResponse
-    : R extends EndpointInfoByIndex<2> ? GetAudioFeaturesForSeveralTracksResponse
-    : R extends 'Get Audio Features for a Track' ? GetAudioFeaturesForTrackResponse
-    : R extends EndpointInfoByIndex<3> ? GetAudioFeaturesForTrackResponse
-    : R extends 'Get Audio Analysis for a Track' ? GetAudioAnalysisForTrackResponse
-    : R extends EndpointInfoByIndex<4> ? GetAudioAnalysisForTrackResponse
+export type Response<R extends Names | EndpointsInfo> =
+      R extends ('Get Several Tracks' | typeof endpoints['Get Several Tracks']) ? GetSeveralTracksResponse
+    : R extends ('Get a Track' | typeof endpoints['Get a Track']) ? GetTrackResponse
+    : R extends ("Get Audio Features for Several Tracks" | typeof endpoints["Get Audio Features for Several Tracks"]) ? GetAudioFeaturesForSeveralTracksResponse
+    : R extends ('Get Audio Features for a Track' | typeof endpoints['Get Audio Features for a Track']) ? GetAudioFeaturesForTrackResponse
+    : R extends ('Get Audio Analysis for a Track' | typeof endpoints['Get Audio Analysis for a Track']) ? GetAudioAnalysisForTrackResponse
     : {}
 
 /**

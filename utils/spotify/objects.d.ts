@@ -933,9 +933,9 @@ declare interface AuthenticationError {
 }
 
 /** Apart from the response code, unsuccessful responses return a JSON object containing the following information: */
-declare interface AuthenticationError {
-    /** A high level description of the error as specified in [RFC 6749 Section 5.2.](https://tools.ietf.org/html/rfc6749#section-5.2) */
+declare interface RegularError {
+    /**	The HTTP status code that is also returned in the response header. For further information, see [Response Status Codes](https://developer.spotify.com/documentation/web-api/#response-status-codes). */
     status: number
-    /** A more detailed description of the error as specified in [RFC 6749 Section 4.1.2.1.](https://tools.ietf.org/html/rfc6749#section-4.1.2.1) */
+    /** A short description of the cause of the error. */
     message: string
 }

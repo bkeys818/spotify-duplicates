@@ -1,63 +1,25 @@
-type EndpointInfoByIndex<i extends number> = [
-    {
-        url: `https://api.spotify.com/v1/albums`
-        type: 'GET'
+export const endpoints = {
+    ['Get Multiple Albums' as const]: {
+        url: 'https://api.spotify.com/v1/albums' as `https://api.spotify.com/v1/albums`,
+        method: 'GET' as const
     },
-    {
-        url: `https://api.spotify.com/v1/albums/${string}`
-        type: 'GET'
+    ['Get an Album' as const]: {
+        url: 'https://api.spotify.com/v1/albums/{id}' as `https://api.spotify.com/v1/albums/${string}`,
+        method: 'GET' as const
     },
-    {
-        url: `https://api.spotify.com/v1/albums/${string}/tracks`
-        type: 'GET'
+    ["Get an Album's Tracks" as const]: {
+        url: 'https://api.spotify.com/v1/albums/{id}/tracks' as `https://api.spotify.com/v1/albums/${string}/tracks`,
+        method: 'GET' as const
     }
-][i]
-
-export type EndpointInfo<key extends 'name' | 'url' | 'type'> =
-    | Pick<{
-        name: 'Get Multiple Albums'
-        url: EndpointInfoByIndex<0>['url']
-        type: EndpointInfoByIndex<0>['type']
-    }, key>
-    | Pick<{
-        name: 'Get an Album'
-        url: EndpointInfoByIndex<1>['url']
-        type: EndpointInfoByIndex<1>['type']
-    }, key>
-    | Pick<{
-        name: "Get an Album's Tracks"
-        url: EndpointInfoByIndex<2>['url']
-        type: EndpointInfoByIndex<2>['type']
-    }, key>
-
-export const endpointInfo: {
-    [key in EndpointInfo<'name'>['name']]: EndpointInfo<'url' | 'type'>
-} = {
-    'Get Multiple Albums': {
-        url: 'https://api.spotify.com/v1/albums',
-        type: 'GET',
-    },
-    'Get an Album': {
-        url: 'https://api.spotify.com/v1/albums/{id}',
-        type: 'GET',
-    },
-    "Get an Album's Tracks": {
-        url: 'https://api.spotify.com/v1/albums/{id}/tracks',
-        type: 'GET',
-    },
 }
 
-export type RequestParams<
-    R extends
-        | EndpointInfo<'name'>['name']
-        | EndpointInfo<'url' | 'type'>
-> =
-      R extends 'Get Multiple Albums' ? GetMultipleAlbums
-    : R extends EndpointInfoByIndex<0> ? GetMultipleAlbums
-    : R extends 'Get an Album' ? GetAlbum
-    : R extends EndpointInfoByIndex<1> ? GetAlbum
-    : R extends "Get an Album's Tracks" ? GetAlbumTracks
-    : R extends EndpointInfoByIndex<2> ? GetAlbumTracks
+export type Names = keyof typeof endpoints
+export type EndpointsInfo = typeof endpoints[keyof typeof endpoints]
+
+export type RequestParams<R extends Names | EndpointsInfo> =
+      R extends ('Get Multiple Albums' | typeof endpoints['Get Multiple Albums']) ? GetMultipleAlbums
+    : R extends ('Get an Album' | typeof endpoints['Get an Album']) ? GetAlbum
+    : R extends ("Get an Album's Tracks" | typeof endpoints["Get an Album's Tracks"]) ? GetAlbumTracks
     : {}
 
 /** Get Spotify catalog information for multiple albums identified by their Spotify IDs. */
@@ -101,18 +63,11 @@ interface GetAlbumTracks {
     }
 }
 
-export type Response<
-R extends
-    | EndpointInfo<'name'>['name']
-    | EndpointInfo<'url' | 'type'>
-> =
-R extends 'Get Multiple Albums' ? GetMultipleAlbumsResponse
-: R extends EndpointInfoByIndex<0> ? GetMultipleAlbumsResponse
-: R extends 'Get an Album' ? GetAlbumResponse
-: R extends EndpointInfoByIndex<1> ? GetAlbumResponse
-: R extends "Get an Album's Tracks" ? GetAlbumsTracksResponse
-: R extends EndpointInfoByIndex<2> ? GetAlbumsTracksResponse
-: {}
+export type Response<R extends Names | EndpointsInfo> =
+      R extends ('Get Multiple Albums' | typeof endpoints['Get Multiple Albums']) ? GetMultipleAlbumsResponse
+    : R extends ('Get an Album' | typeof endpoints['Get an Album']) ? GetAlbumResponse
+    : R extends ("Get an Album's Tracks" | typeof endpoints["Get an Album's Tracks"]) ? GetAlbumTracksResponse
+    : {}
 
 /**
  * An object whose key is `"albums"` and whose value is an array of [album objects](https://developer.spotify.com/documentation/web-api/reference/#object-albumobject) in JSON format.
@@ -125,4 +80,4 @@ type GetMultipleAlbumsResponse = { albums: (AlbumObject | null)[] }
 type GetAlbumResponse = AlbumObject
 
 /** An [album object](https://developer.spotify.com/documentation/web-api/reference/#object-albumobject) in JSON format */
-type GetAlbumsTracksResponse = PagingObject<AlbumObject>
+type GetAlbumTracksResponse = PagingObject<AlbumObject>

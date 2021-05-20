@@ -1,5 +1,5 @@
 import authorize, { Token } from './authorize'
-import request from './request'
+import { request, requestWithURL} from './request'
 
-export { authorize, request }
+export { authorize, request, requestWithURL }
 export type { Token }

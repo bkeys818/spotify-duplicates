@@ -1,86 +1,138 @@
-import { EndpointInfo, endpointInfo, RequestParams, Response } from './api'
-import fetch, { RequestInit } from 'node-fetch'
+import { endpoints, Names, EndpointsInfo, RequestParams, Response } from './api'
+import fetch, * as Fetch from 'node-fetch'
 
-function request<R extends EndpointInfo<'name'>['name']>(
-    /** The type of request */
-    type: R,
+export async function request<N extends Names>(
+    name: N,
     options: {
         /** The Spotify authentication token. */
         token: string
-    } & RequestParams<R>
-): Promise<Response<R>>
-
-function request<R extends EndpointInfo<'url' | 'type' | 'name'>>(
-    /** The request url. */
-    url: R['url'],
-    options: {
-        /** The Spotify authentication token. */
-        token: string
-        /** The type of the request. */
-        method: R['type']
-    }
-): Promise<Response<R>>
-
-function request<R extends EndpointInfo<'name' | 'url' | 'type'>>(
-    typeOrUrl: R['name'] | R['url'],
-    options: {
-        /** The Spotify authentication token. */
-        token: string
-    } & (RequestParams<R['name']> | {
-        /** The type of the request. */
-        method: R['type']
-    })
-): Promise<Response<R['name']>> {
-    let url: string,
-        info: RequestInit = {};
-
-    if ('method' in options) {
-        url = typeOrUrl
-        info.method = options.method
-    } else {
-        const endpoint = endpointInfo[typeOrUrl as R['name']]
-
-        url = 'https://api.spotify.com/v1/' + endpoint.url
-
-        type dic = { [key: string]: string };
-        if ('pathParamter' in options)
-            for (let key in options['pathParamter'] as dic) {
-                url = url.replace(key, options['pathParameter'][key])
-            }
-        if ('queryParameter' in options) {
-            url += '?'
-            for (const key in options['queryParameter'] as dic) {
-                url += key + '=' + options['queryParameter'][key] + '&'
-            }
-            url.slice(0, -1)
+    } & RequestParams<N>
+): Promise<Response<N>> {
+    let url: string = endpoints[name].url
+    type dic = { [key: string]: string }
+    if ('pathParameter' in options)
+        // @ts-ignore
+        for (let key in options['pathParameter']) {
+            // @ts-ignore
+            url = url.replace(key, options['pathParameter'][key])
         }
-        if ('header' in options) {
-            info.headers = options['header']
+    if ('queryParameter' in options) {
+        url += '?'
+        // @ts-ignore
+        for (let key in options['queryParameter']) {
+            // @ts-ignore
+            url += key + '=' + options['queryParameter'][key] + '&'
         }
-        info.method = endpoint.type
-        info.headers = {
-            Authorization: options.token,
-            ...info.headers
-        }
+        url.slice(0, -1)
     }
 
-    return new Promise((resolve, reject) => {
-        fetch(url, info).then(res => {
-            if (res.status === 200) res.json().then(resolve)
-            else {
-                try {
-                    res.json().then(reject)
-                } catch {
-                    try {
-                        res.text().then(reject)
-                    } catch {
-                        if (res.statusText) reject(res.statusText)
-                        else reject('Uknown error during request.')
-                    }
-                }
-            }
-        })
+    const reqOptions: Fetch.RequestInit = {}
+    if ('header' in options) {
+        reqOptions.headers = options['header']
+    }
+    reqOptions.headers = {
+        Authorization: fixToken(options.token),
+        ...reqOptions.headers,
+    }
+    reqOptions.method = endpoints[name].method
+
+    try {
+        return await sendRequest(url, reqOptions)
+    } catch(error) {
+        throw error
+    }
+}
+
+export async function requestWithURL<E extends EndpointsInfo>({
+    url,
+    method,
+    token,
+}: E & { token: string }): Promise<Response<E>> {
+    return await sendRequest(url, {
+        headers: {
+            Authorization: fixToken(token),
+        },
+        method: method,
     })
 }
 
-export default request
+function fixToken(value: string) {
+    if (!value.startsWith('Bearer ')) value = 'Bearer ' + value
+    return value
+}
+
+async function sendRequest<R extends Names | EndpointsInfo>(
+    url: string,
+    options: Fetch.RequestInit
+): Promise<Response<R>> {
+    try {
+        const res = await fetch(url, options)
+
+        const error = await checkStatus(res)
+        if (error) throw error
+
+        const json = await res.json()
+        if (json) return json as Response<R>
+        return undefined as Response<R>
+
+    } catch(error) {
+        if (error instanceof SpotifyError) throw error
+        else throw new SpotifyError("Uknown error.", ErrorTypes.unknown, error)
+    }
+}
+
+
+enum ErrorTypes {
+    system = "Internal error",
+    authorization = "Failed to authorize",
+    api = "Failure in API",
+    request = "Inavlid request",
+    unknown = "Unknown error"
+}
+
+class SpotifyError extends Error {
+    constructor(message: string, type: ErrorTypes)
+    constructor(message: string, type: ErrorTypes.unknown, internalError: any)
+
+    constructor(message: string, type: ErrorTypes, systemError?: any) {
+        super(`SpotifyError - ${type}! ${message}`)
+        this.name = 'SpotifyError'
+        this.type = type
+        if (systemError) {
+            this.internalError = systemError
+        }
+    }
+
+    /** Error type for machine */
+    readonly type: ErrorTypes
+    /** For Node.js system error */
+    readonly internalError?: any
+}
+
+/** Checks status, and if error is found, a SpotifyError is returned */
+async function checkStatus(res: Fetch.Response) {
+    // no error
+    if (res.status >= 200 && res.status <= 202) return
+    // authorization error
+    if (res.status === 401) {
+        const errorObj = (await res.json()).error as RegularError
+        return new SpotifyError(`Unauthorized: ${errorObj.message}`, ErrorTypes.authorization)
+    }
+    // request error 
+    if (res.status === 400) {
+        const errorObj = (await res.json()).error as RegularError
+        return new SpotifyError(`Bad Request: ${errorObj.message}`, ErrorTypes.request)
+    }
+    if (res.status === 304) return new SpotifyError('Not Modified: See Conditional requests.', ErrorTypes.request)
+    if (res.status === 403) return new SpotifyError('Forbidden: The server understood the request, but is refusing to fulfill it.', ErrorTypes.request)
+    if (res.status === 429) return new SpotifyError('Too Many Requests: Rate limiting has been applied.', ErrorTypes.request)
+    // internal error
+    if (res.status === 204) return new SpotifyError('No Content: The request has succeeded but returns no message body.', ErrorTypes.system)
+    if (res.status === 404) return new SpotifyError('Not Found: The requested resource could not be found. This error can be due to a temporary or permanent condition.', ErrorTypes.system)
+    // api error
+    if (res.status === 500) return new SpotifyError('Internal Server Error: You should never receive this error because our clever coders catch them all … but if you are unlucky enough to get one, please report it to us through a comment at the bottom of this page.', ErrorTypes.api)
+    if (res.status === 502) return new SpotifyError('Bad Gateway: The server was acting as a gateway or proxy and received an invalid response from the upstream server.', ErrorTypes.api)
+    if (res.status === 503) return new SpotifyError('Service Unavailable: The server is currently unable to handle the request due to a temporary condition which will be alleviated after some delay. You can choose to resend the request again.', ErrorTypes.api)
+    // unknown error
+    return new SpotifyError(`Unknown status code (${res.status})`, ErrorTypes.unknown)
+}

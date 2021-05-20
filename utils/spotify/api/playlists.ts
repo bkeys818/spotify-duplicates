@@ -1,183 +1,65 @@
-type EndpointInfoByIndex<i extends number> = [
-    {
-        url: `https://api.spotify.com/v1/me/playlists`
-        type: 'GET'
+export const endpoints = {
+    ["Get a List of Current User's Playlists" as const]: {
+        url: 'https://api.spotify.com/v1/me/playlists' as `https://api.spotify.com/v1/me/playlists`,
+        method: 'GET' as const
     },
-    {
-        url: `https://api.spotify.com/v1/users/${string}/playlists`
-        type: 'GET'
+    ["Get a List of a User's Playlists" as const]: {
+        url: 'https://api.spotify.com/v1/users/{user_id}/playlists' as `https://api.spotify.com/v1/users/${string}/playlists`,
+        method: 'GET' as const
     },
-    {
-        url: `https://api.spotify.com/v1/users/${string}/playlists`
-        type: 'POST'
+    ['Create a Playlist' as const]: {
+        url: 'https://api.spotify.com/v1/users/{user_id}/playlists' as `https://api.spotify.com/v1/users/${string}/playlists`,
+        method: 'POST' as const
     },
-    {
-        url: `https://api.spotify.com/v1/playlists/${string}`
-        type: 'GET'
+    ['Get a Playlist' as const]: {
+        url: 'https://api.spotify.com/v1/playlists/{playlist_id}' as `https://api.spotify.com/v1/playlists/${string}`,
+        method: 'GET' as const
     },
-    {
-        url: `https://api.spotify.com/v1/playlists/${string}`
-        type: 'PUT'
+    ["Change a Playlist's Details" as const]: {
+        url: 'https://api.spotify.com/v1/playlists/{playlist_id}' as `https://api.spotify.com/v1/playlists/${string}`,
+        method: 'PUT' as const
     },
-    {
-        url: `https://api.spotify.com/v1/playlists/${string}/tracks`
-        type: 'GET'
+    ["Get a Playlist's Items" as const]: {
+        url: 'https://api.spotify.com/v1/playlists/{playlist_id}/tracks' as `https://api.spotify.com/v1/playlists/${string}/tracks`,
+        method: 'GET' as const
     },
-    {
-        url: `https://api.spotify.com/v1/playlists/${string}/tracks`
-        type: 'POST'
+    ['Add Items to a Playlist' as const]: {
+        url: 'https://api.spotify.com/v1/playlists/{playlist_id}/tracks' as `https://api.spotify.com/v1/playlists/${string}/tracks`,
+        method: 'POST' as const
     },
-    {
-        url: `https://api.spotify.com/v1/playlists/${string}/tracks`
-        type: 'PUT'
+    ["Reorder or Replace a Playlist's Items" as const]: {
+        url: 'https://api.spotify.com/v1/playlists/{playlist_id}/tracks' as `https://api.spotify.com/v1/playlists/${string}/tracks`,
+        method: 'PUT' as const
     },
-    {
-        url: `https://api.spotify.com/v1/playlists/${string}/tracks`
-        type: 'DELETE'
+    ['Remove Items from a Playlist' as const]: {
+        url: 'https://api.spotify.com/v1/playlists/{playlist_id}/tracks' as `https://api.spotify.com/v1/playlists/${string}/tracks`,
+        method: 'DELETE' as const
     },
-    {
-        url: `https://api.spotify.com/v1/playlists/${string}/images`
-        type: 'GET'
+    ['Get a Playlist Cover Image' as const]: {
+        url: 'https://api.spotify.com/v1/playlists/{playlist_id}/images' as `https://api.spotify.com/v1/playlists/${string}/images`,
+        method: 'GET' as const
     },
-    {
-        url: `https://api.spotify.com/v1/playlists/${string}/images`
-        type: 'PUT'
-    },
-][i]
-
-export type EndpointInfo<key extends 'name' | 'url' | 'type'> =
-    | Pick<{
-        name: "Get a List of Current User's Playlists"
-        url: EndpointInfoByIndex<0>['url']
-        type: EndpointInfoByIndex<0>['type']
-    }, key>
-    | Pick<{
-        name: "Get a List of a User's Playlists"
-        url: EndpointInfoByIndex<1>['url']
-        type: EndpointInfoByIndex<1>['type']
-    }, key>
-    | Pick<{
-        name: 'Create a Playlist'
-        url: EndpointInfoByIndex<2>['url']
-        type: EndpointInfoByIndex<2>['type']
-    }, key>
-    | Pick<{
-        name: 'Get a Playlist'
-        url: EndpointInfoByIndex<3>['url']
-        type: EndpointInfoByIndex<3>['type']
-    }, key>
-    | Pick<{
-        name: "Change a Playlist's Details"
-        url: EndpointInfoByIndex<4>['url']
-        type: EndpointInfoByIndex<4>['type']
-    }, key>
-    | Pick<{
-        name: "Get a Playlist's Items"
-        url: EndpointInfoByIndex<5>['url']
-        type: EndpointInfoByIndex<5>['type']
-    }, key>
-    | Pick<{
-        name: 'Add Items to a Playlist'
-        url: EndpointInfoByIndex<6>['url']
-        type: EndpointInfoByIndex<6>['type']
-    }, key>
-    | Pick<{
-        name: "Reorder or Replace a Playlist's Items"
-        url: EndpointInfoByIndex<7>['url']
-        type: EndpointInfoByIndex<7>['type']
-    }, key>
-    | Pick<{
-        name: 'Remove Items from a Playlist'
-        url: EndpointInfoByIndex<8>['url']
-        type: EndpointInfoByIndex<8>['type']
-    }, key>
-    | Pick<{
-        name: 'Get a Playlist Cover Image'
-        url: EndpointInfoByIndex<9>['url']
-        type: EndpointInfoByIndex<9>['type']
-    }, key>
-    | Pick<{
-        name: 'Upload a Custom Playlist Cover Image'
-        url: EndpointInfoByIndex<10>['url']
-        type: EndpointInfoByIndex<10>['type']
-    }, key>
-
-export const requestInfo: {
-    [key in EndpointInfo<'name'>['name']]: EndpointInfo<'url' | 'type'>
-} = {
-    "Get a List of Current User's Playlists": {
-        type: 'GET',
-        url: 'https://api.spotify.com/v1/me/playlists',
-    },
-    "Get a List of a User's Playlists": {
-        type: 'GET',
-        url: 'https://api.spotify.com/v1/users/{user_id}/playlists',
-    },
-    'Create a Playlist': {
-        type: 'POST',
-        url: 'https://api.spotify.com/v1/users/{user_id}/playlists',
-    },
-    'Get a Playlist': {
-        type: 'GET',
-        url: 'https://api.spotify.com/v1/playlists/{playlist_id}',
-    },
-    "Change a Playlist's Details": {
-        type: 'PUT',
-        url: 'https://api.spotify.com/v1/playlists/{playlist_id}',
-    },
-    "Get a Playlist's Items": {
-        type: 'GET',
-        url: 'https://api.spotify.com/v1/playlists/{playlist_id}/tracks',
-    },
-    'Add Items to a Playlist': {
-        type: 'POST',
-        url: 'https://api.spotify.com/v1/playlists/{playlist_id}/tracks',
-    },
-    "Reorder or Replace a Playlist's Items": {
-        type: 'PUT',
-        url: 'https://api.spotify.com/v1/playlists/{playlist_id}/tracks',
-    },
-    'Remove Items from a Playlist': {
-        type: 'DELETE',
-        url: 'https://api.spotify.com/v1/playlists/{playlist_id}/tracks',
-    },
-    'Get a Playlist Cover Image': {
-        type: 'GET',
-        url: 'https://api.spotify.com/v1/playlists/{playlist_id}/images',
-    },
-    'Upload a Custom Playlist Cover Image': {
-        type: 'PUT',
-        url: 'https://api.spotify.com/v1/playlists/{playlist_id}/images',
+    ['Upload a Custom Playlist Cover Image' as const]: {
+        url: 'https://api.spotify.com/v1/playlists/{playlist_id}/images' as `https://api.spotify.com/v1/playlists/${string}/images`,
+        method: 'PUT' as const
     },
 }
 
-export type RequestParams<
-    R extends
-        | EndpointInfo<'name'>['name']
-        | EndpointInfo<'url' | 'type'>
-> =
-      R extends "Get a List of Current User's Playlists" ? GetListOfCurrentUserPlaylists
-    : R extends EndpointInfoByIndex<0> ? GetListOfCurrentUserPlaylists
-    : R extends "Get a List of a User's Playlists" ? GetListOfUserPlaylists
-    : R extends EndpointInfoByIndex<1> ? GetListOfUserPlaylists
-    : R extends 'Create a Playlist' ? CreatePlaylist
-    : R extends EndpointInfoByIndex<2> ? CreatePlaylist
-    : R extends 'Get a Playlist' ? GetPlaylist
-    : R extends EndpointInfoByIndex<3> ? GetPlaylist
-    : R extends "Change a Playlist's Details" ? ChangePlaylistDetails
-    : R extends EndpointInfoByIndex<4> ? ChangePlaylistDetails
-    : R extends "Get a Playlist's Items" ? GetPlaylistItems
-    : R extends EndpointInfoByIndex<5> ? GetPlaylistItems
-    : R extends 'Add Items to a Playlist' ? AddItemsToPlaylist
-    : R extends EndpointInfoByIndex<6> ? AddItemsToPlaylist
-    : R extends "Reorder or Replace a Playlist's Items" ? ReorderOrReplacePlaylistItems
-    : R extends EndpointInfoByIndex<7> ? ReorderOrReplacePlaylistItems
-    : R extends 'Remove Items from a Playlist' ? RemoveItemsFromPlaylist
-    : R extends EndpointInfoByIndex<8> ? RemoveItemsFromPlaylist
-    : R extends 'Get a Playlist Cover Image' ? GetPlaylistCoverImage
-    : R extends EndpointInfoByIndex<9> ? GetPlaylistCoverImage
-    : R extends 'Upload a Custom Playlist Cover Image' ? UploadCustomPlaylistCoverImage
-    : R extends EndpointInfoByIndex<10> ? UploadCustomPlaylistCoverImage
+export type Names = keyof typeof endpoints
+export type EndpointsInfo = typeof endpoints[keyof typeof endpoints]
+
+export type RequestParams<R extends Names | EndpointsInfo> =
+      R extends ("Get a List of Current User's Playlists" | typeof endpoints["Get a List of Current User's Playlists"]) ? GetListOfCurrentUserPlaylists
+    : R extends ("Get a List of a User's Playlists" | typeof endpoints["Get a List of a User's Playlists"]) ? GetListOfUserPlaylists
+    : R extends ('Create a Playlist' | typeof endpoints['Create a Playlist']) ? CreatePlaylist
+    : R extends ('Get a Playlist' | typeof endpoints['Get a Playlist']) ? GetPlaylist
+    : R extends ("Change a Playlist's Details" | typeof endpoints["Change a Playlist's Details"]) ? ChangePlaylistDetails
+    : R extends ("Get a Playlist's Items" | typeof endpoints["Get a Playlist's Items"]) ? GetPlaylistItems
+    : R extends ('Add Items to a Playlist' | typeof endpoints['Add Items to a Playlist']) ? AddItemsToPlaylist
+    : R extends ("Reorder or Replace a Playlist's Items" | typeof endpoints["Reorder or Replace a Playlist's Items"]) ? ReorderOrReplacePlaylistItems
+    : R extends ('Remove Items from a Playlist' | typeof endpoints['Remove Items from a Playlist']) ? RemoveItemsFromPlaylist
+    : R extends ('Get a Playlist Cover Image' | typeof endpoints['Get a Playlist Cover Image']) ? GetPlaylistCoverImage
+    : R extends ('Upload a Custom Playlist Cover Image' | typeof endpoints['Upload a Custom Playlist Cover Image']) ? UploadCustomPlaylistCoverImage
     : {}
 
 /** Get a list of the playlists owned or followed by the current Spotify user. */
@@ -391,33 +273,18 @@ interface UploadCustomPlaylistCoverImage {
     pathParameter: GetPlaylist['pathParameter']
 }
 
-export type Response<
-    R extends
-        | EndpointInfo<'name'>['name']
-        | EndpointInfo<'url' | 'type'>
-> =
-      R extends "Get a List of Current User's Playlists" ? GetListOfCurrentUserPlaylistsResponse
-    : R extends EndpointInfoByIndex<0> ? GetListOfCurrentUserPlaylistsResponse
-    : R extends "Get a List of a User's Playlists" ? GetListOfUserPlaylistsResponse
-    : R extends EndpointInfoByIndex<1> ? GetListOfUserPlaylistsResponse
-    : R extends 'Create a Playlist' ? CreatePlaylistResponse
-    : R extends EndpointInfoByIndex<2> ? CreatePlaylistResponse
-    : R extends 'Get a Playlist' ? GetPlaylistResponse
-    : R extends EndpointInfoByIndex<3> ? GetPlaylistResponse
-    : R extends "Change a Playlist's Details" ? ChangePlaylistDetailsResponse
-    : R extends EndpointInfoByIndex<4> ? ChangePlaylistDetailsResponse
-    : R extends "Get a Playlist's Items" ? GetPlaylistItemsResponse
-    : R extends EndpointInfoByIndex<5> ? GetPlaylistItemsResponse
-    : R extends 'Add Items to a Playlist' ? AddItemsToPlaylistResponse
-    : R extends EndpointInfoByIndex<6> ? AddItemsToPlaylistResponse
-    : R extends "Reorder or Replace a Playlist's Items" ? ReorderOrReplacePlaylistItemsResponse
-    : R extends EndpointInfoByIndex<7> ? ReorderOrReplacePlaylistItemsResponse
-    : R extends 'Remove Items from a Playlist' ? RemoveItemsFromPlaylistResponse
-    : R extends EndpointInfoByIndex<8> ? RemoveItemsFromPlaylistResponse
-    : R extends 'Get a Playlist Cover Image' ? GetPlaylistCoverImageResponse
-    : R extends EndpointInfoByIndex<9> ? GetPlaylistCoverImageResponse
-    : R extends 'Upload a Custom Playlist Cover Image' ? UploadCustomPlaylistCoverImageResponse
-    : R extends EndpointInfoByIndex<10> ? UploadCustomPlaylistCoverImageResponse
+export type Response<R extends Names | EndpointsInfo> =
+      R extends ("Get a List of Current User's Playlists" | typeof endpoints["Get a List of Current User's Playlists"]) ? GetListOfCurrentUserPlaylistsResponse
+    : R extends ("Get a List of a User's Playlists" | typeof endpoints["Get a List of a User's Playlists"]) ? GetListOfUserPlaylistsResponse
+    : R extends ('Create a Playlist' | typeof endpoints['Create a Playlist']) ? CreatePlaylistResponse
+    : R extends ('Get a Playlist' | typeof endpoints['Get a Playlist']) ? GetPlaylistResponse
+    : R extends ("Change a Playlist's Details" | typeof endpoints["Change a Playlist's Details"]) ? ChangePlaylistDetailsResponse
+    : R extends ("Get a Playlist's Items" | typeof endpoints["Get a Playlist's Items"]) ? GetPlaylistItemsResponse
+    : R extends ('Add Items to a Playlist' | typeof endpoints['Add Items to a Playlist']) ? AddItemsToPlaylistResponse
+    : R extends ("Reorder or Replace a Playlist's Items" | typeof endpoints["Reorder or Replace a Playlist's Items"]) ? ReorderOrReplacePlaylistItemsResponse
+    : R extends ('Remove Items from a Playlist' | typeof endpoints['Remove Items from a Playlist']) ? RemoveItemsFromPlaylistResponse
+    : R extends ('Get a Playlist Cover Image' | typeof endpoints['Get a Playlist Cover Image']) ? GetPlaylistCoverImageResponse
+    : R extends ('Upload a Custom Playlist Cover Image' | typeof endpoints['Upload a Custom Playlist Cover Image']) ? UploadCustomPlaylistCoverImageResponse
     : {}
 
 /** An array of simplified PlaylistObjects (wrapped in a PagingObject) in JSON format. */

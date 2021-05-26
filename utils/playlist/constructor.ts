@@ -1,10 +1,11 @@
-import Playlist from './index'
+import Playlist from '.'
 
+/** Smallest an image can be (comes form scss) */
 export const imageMin = 84
 
-export function filterImages(values: ImageObject[]): ImageObject | null {
+export function filterImages(values: ImageObject[]): string | null {
     if (values.length == 1 && !(values[0].height || values[0].width))
-        return values[0]
+        return values[0].url
     const imgs = values
         .map(img => {
             return {
@@ -18,7 +19,7 @@ export function filterImages(values: ImageObject[]): ImageObject | null {
             }
         })
         .filter(img => {
-            return img.size ? img.size >= imageMin : img
+            return img.size ? img.size >= imageMin : img.url
         })
     const smallest = imgs.find((img, i, array) =>
         img.size
@@ -28,17 +29,7 @@ export function filterImages(values: ImageObject[]): ImageObject | null {
               )
             : false
     )
-    if (smallest) return smallest
-    else if (imgs.length > 0) return imgs[0]
+    if (smallest) return smallest.url
+    else if (imgs.length > 0) return imgs[0].url
     else return null
-}
-
-export function convertResponse(from: PlaylistObject): Playlist {
-    return {
-        id: from.id,
-        name: from.name,
-        coverImage: filterImages(from.images)?.url,
-        tracks: [],
-        tracksURL: from.tracks.href,
-    }
 }

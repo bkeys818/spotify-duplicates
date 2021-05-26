@@ -24,6 +24,12 @@
             "name": "Run test",
             "request": "launch",
             "type": "node-terminal"
+        },
+        {
+            "command": "jest ${relativeFile}",
+            "name": "Run this files test",
+            "request": "launch",
+            "type": "node-terminal"
         }
     ]
 }

@@ -22,7 +22,6 @@
         "public": true,
 
         ".env*": true,
-        "mock": true,
         "coverage": true
     },
 

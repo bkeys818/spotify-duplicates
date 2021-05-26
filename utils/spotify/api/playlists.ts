@@ -288,9 +288,9 @@ export type Response<R extends Names | EndpointsInfo> =
     : {}
 
 /** An array of simplified PlaylistObjects (wrapped in a PagingObject) in JSON format. */
-type GetListOfCurrentUserPlaylistsResponse = PagingObject<PlaylistObject>
+type GetListOfCurrentUserPlaylistsResponse = PagingObject<SimplifiedPlaylistObject>
 /** An array of simplified PlaylistObjects (wrapped in a PagingObject) in JSON format. */
-type GetListOfUserPlaylistsResponse = PagingObject<PlaylistObject>
+type GetListOfUserPlaylistsResponse = PagingObject<SimplifiedPlaylistObject>
 /** Create a playlist for a Spotify user. (The playlist will be empty until you add tracks.) */
 type CreatePlaylistResponse = PagingObject<PlaylistObject> & {
     /** giving the Web API endpoint for the new playlist. */
@@ -301,7 +301,7 @@ type GetPlaylistResponse = PlaylistObject
 /**  */
 type ChangePlaylistDetailsResponse = undefined
 /** An array of TrackObjects and EpisodeObjects (depends on the additional_types parameter), wrapped in a PagingObject in JSON format. */
-type GetPlaylistItemsResponse = PagingObject<TrackObject | EpisodeObject>
+type GetPlaylistItemsResponse = PagingObject<PlaylistTrackObject>
 /** The response body contains a `snapshot_id` in JSON format. The `snapshot_id` can be used to identify your playlist version in future requests. */
 type AddItemsToPlaylistResponse = object
 /** On a successful reorder operation, the response body contains a `snapshot_id` in JSON format. */

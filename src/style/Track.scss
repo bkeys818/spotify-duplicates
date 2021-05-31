@@ -1,29 +1,40 @@
+@use 'global' as global;
+
 .track {
-    margin: .25em 0;
-    padding: .25em 0;
-    border-bottom: 1px solid rgba(119, 136, 153, 0.2);
-}
-
-p {
-    line-height: 1.25em;
-}
-
-@media screen and (max-width: 749px) {
-    .track:first-of-type {
-        display: none;
-        
-    }
-    p:nth-child(3) {
-        display: none;
-    }
-}
-
-@media screen and (min-width: 750px) {
-    .track {
+    box-shadow: global.$box-shadow;
+    .main, .duplicate {
         display: grid;
-        grid-template-columns: [title] 3fr [artist] 2fr [album] 2fr;
-        // justify-items: left;
+        grid-template-columns: [title] 3fr [artist] 3fr [album] 2fr [icon] 48px;
         align-items: center;
-        // border-bottom: 1px solid rgba(119, 136, 153, 0.2);
     }
 }
+
+// .track {
+//     margin: .25em 0;
+//     padding: .25em 0;
+//     border-bottom: 1px solid rgba(119, 136, 153, 0.2);
+// }
+
+// p {
+//     line-height: 1.25em;
+// }
+
+// @media screen and (max-width: 749px) {
+//     .track:first-of-type {
+//         display: none;
+        
+//     }
+//     p:nth-child(3) {
+//         display: none;
+//     }
+// }
+
+// @media screen and (min-width: 750px) {
+//     .track {
+//         display: grid;
+//         grid-template-columns: [title] 3fr [artist] 2fr [album] 2fr [icon] 48px;
+//         // justify-items: left;
+//         align-items: center;
+//         // border-bottom: 1px solid rgba(119, 136, 153, 0.2);
+//     }
+// }

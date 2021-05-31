@@ -2,7 +2,7 @@ import React from 'react'
 import { CSSTransition } from 'react-transition-group'
 
 import CoverImage from './CoverImage'
-import Track from './Track'
+import Track from './_Track'
 import { ModifiedPlaylistObject } from './App'
 
 import '../style/Modal.scss'

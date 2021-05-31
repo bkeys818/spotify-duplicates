@@ -1,22 +1,44 @@
 import React from 'react'
+import IndicatorSvg, { IndicatorSvgState } from '../assets/state-svg'
+import Playlist from '../../utils/playlist'
 
 import '../style/Track.scss'
 
-export interface TrackProps {
-    title: string
-    artist: string
-    album: string
-    id?: string
-}
+type TrackProps = Playlist['items'][number]
 
-const Track = (props: TrackProps) => {
-    const { title, artist, album, id } = props
+export default function Track(props: TrackProps) {
     return (
-        <div className="track" id={id}>
-            <p className="title clip-text_one-line_ellipsis">{title}</p>
-            <p className="artist body2 clip-text_one-line_ellipsis">{artist}</p>
-            <p className="album body2 clip-text_one-line_ellipsis">{album}</p>
+        <div className="track">
+            <MainTrackInfo {...props}/>
+            {props.duplicates.length > 0 && (
+                <div className="duplicates">
+                    {props.duplicates.map(duplicate => (
+                        <DuplicateTrackInfo key={duplicate.track.id} {...props}/>
+                    ))}
+                </div>
+            )}
         </div>
     )
 }
-export default Track
+
+const MainTrackInfo = ({ track, icon }: TrackProps) => (
+    <div className="main">
+        <p className="name clip-text_one-line_ellipsis ">{track.name}</p>
+        <p className="artists clip-text_one-line_ellipsis body2">
+            {track.artists.map(artist => artist.name).join(', ')}
+        </p>
+        <p className="album clip-text_one-line_ellipsis body2">{track.album.name}</p>
+        {icon && <IndicatorSvg state={icon} size={32} />}
+    </div>
+)
+
+const DuplicateTrackInfo = ({ track, similarities }: TrackProps) => (
+    <div className="duplicate">
+        <p className="name clip-text_one-line_ellipsis ">{track.name}</p>
+        <p className="artists clip-text_one-line_ellipsis body2">
+            {track.artists.map(artist => artist.name).join(', ')}
+        </p>
+        <p className="album clip-text_one-line_ellipsis body2">{track.album.name}</p>
+        <p className="tag">{similarities?.join(', ')}</p>
+    </div>
+)

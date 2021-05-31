@@ -1,4 +1,39 @@
-import Playlist from '.'
+import Playlist, { StaticPlaylist } from '.'
+import Item from './item'
+
+export function staticConstructor(value: SimplifiedPlaylistObject | PlaylistObject): StaticPlaylist {
+    return (({ name, id, tracks, images }) => ({
+        name,
+        id,
+        itemsInfo: (({ href, total}) => ({ href, total}))(tracks),
+        coverImage: filterImages(images)
+    } as StaticPlaylist))(value)
+}
+
+function constructor(value: StaticPlaylist): Playlist
+function constructor(value: PlaylistObject): Playlist
+function constructor(value: StaticPlaylist | PlaylistObject): Playlist {
+    const staticPlaylist = 
+        'tracks' in value
+            ? staticConstructor(value)
+            : value
+
+    const results: Playlist = {
+        ...staticPlaylist,
+        items: new Array(staticPlaylist.itemsInfo!.total)
+    }
+
+    if ('tracks' in value) {
+        results.items = value.tracks.items.map(Item.new)
+        if (value.tracks.next) {
+            results.itemsInfo!.href = value.tracks.next
+        } else {
+            delete results.itemsInfo
+        }
+    }
+    return results
+}
+export default constructor
 
 /** Smallest an image can be (comes form scss) */
 export const imageMin = 84

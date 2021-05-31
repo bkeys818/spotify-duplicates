@@ -23,8 +23,8 @@ function SVGTemplate(props: SVGTemplateProps) {
 
 
 
-export const ChevronRight = () =>
-    <SVGTemplate name="chevron-right" viewBox="0 0 14 14">
+export const ChevronRight = (size: number) =>
+    <SVGTemplate name="chevron-right" viewBox="0 0 14 14" height={size} width={size}>
         <path d="m3,1l6,6l-6,6" strokeWidth="2" />
     </SVGTemplate>
 
@@ -32,21 +32,22 @@ export const ChevronRight = () =>
 interface SelectedProps {
     active: boolean
 }
-export const Selected = (props: SelectedProps) =>
+export const Selected = (props: SelectedProps, size: number) =>
     <SVGTemplate name="selected" viewBox="-5 -5 10 10">
         <circle r="2.75" visibility={props.active ? "visible" : "hidden"} />
         <circle r="4.5" fill="none" stroke="currentcolor"/>
     </SVGTemplate>
 
 
-export const Xmark = () =>
-    <SVGTemplate name="xmark" viewBox="0 0 14 14">
+export const Xmark = (size: number) =>
+    <SVGTemplate name="xmark" viewBox="0 0 14 14" height={size} width={size}>
         <path d="m2,2 10,10m-10,0 10,-10" strokeWidth="2" />
     </SVGTemplate>
 
 
 interface LoadStatusProps {
     dataState: "DEFAULT" | "ACTIVE" | "SUCCESS" | "ERROR"
+    size: number
 }
 const loadStatusPaths: { [key in Required<LoadStatusProps>["dataState"]]: [string, string] } = {
     DEFAULT: ["", ""],
@@ -58,8 +59,7 @@ const loadStatusPaths: { [key in Required<LoadStatusProps>["dataState"]]: [strin
     SUCCESS: ["m20,20 80,80", "m20,100 80,-80"],
 }
 export const LoadStatus = (props: LoadStatusProps) =>
-    <SVGTemplate name="load-status" viewBox={"0, 0, 120, 120"}>
+    <SVGTemplate name="load-status" viewBox={"0, 0, 120, 120"} height={props.size} width={props.size}>
         <path d={loadStatusPaths[props.dataState][0]} />
         <path d={loadStatusPaths[props.dataState][1]} />
     </SVGTemplate>
-

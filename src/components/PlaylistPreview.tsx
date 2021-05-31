@@ -6,14 +6,14 @@ import '../style/PlaylistPreview.scss'
 
 interface PlaylistPreviewProps {
     name: string
-    cover?: string
+    cover?: string | null
     handleClick?: React.MouseEventHandler<HTMLDivElement>
 }
 
 const PlaylistPreview = (props: PlaylistPreviewProps) => (
     <div className="playlist" onClick={props.handleClick}>
         <CoverImage src={props.cover} />
-        <h6>{props.name}</h6>
+        <h6 className="title">{props.name}</h6>
     </div>
 )
 export default PlaylistPreview

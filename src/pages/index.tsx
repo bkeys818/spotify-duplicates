@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, navigate } from 'gatsby'
 import Cookies from 'universal-cookie'
 import { request } from '../../utils/spotify'
-import Playlist from '../../utils/playlist'
+import { StaticPlaylist } from '../../utils/playlist'
 
 import type { EditPlaylistLinkProps as EditPlaylistProps } from './edit-playlist'
 
@@ -15,8 +15,8 @@ interface IndexProps {
     location: Location
 }
 interface IndexStates {
-    playlists: Playlist[]
-    selected?: Playlist
+    playlists: StaticPlaylist[]
+    selected?: StaticPlaylist
 }
 export default class Index extends React.Component<IndexProps, IndexStates> {
     private readonly token: string
@@ -42,7 +42,7 @@ export default class Index extends React.Component<IndexProps, IndexStates> {
         })
             .then(response => {
                 this.setState({
-                    playlists: response.items.map(Playlist.convertResponse),
+                    playlists: response.items.map(StaticPlaylist.new),
                 })
             })
             .catch(console.error)
@@ -55,11 +55,12 @@ export default class Index extends React.Component<IndexProps, IndexStates> {
                     {this.state.playlists.map(playlist => (
                         <Link
                             to={`/edit-playlist?id=${playlist.id}`}
+                            key={playlist.id}
+                            className="link"
                             state={linkProps({
                                 playlist: playlist,
                                 token: this.token,
                             })}
-                            key={playlist.id}
                         >
                             <PlaylistPreview
                                 key={playlist.id}

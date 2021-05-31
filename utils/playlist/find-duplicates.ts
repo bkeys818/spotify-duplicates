@@ -33,7 +33,7 @@ export default function findDuplicates(this: EditPlaylist) {
 
 export type Similarities = ['identical'] | /*['track'] |*/ ['track', 'artists'] | ['track', 'artists', 'album']
 
-function compareTracks(a: Item['track'], b: Item['track']): Similarities | void {
+export function compareTracks(a: Item['track'], b: Item['track']): Similarities | void {
     if (a.id === b.id) return ['identical']
 
     if (a.type === 'track' && b.type === 'track') {

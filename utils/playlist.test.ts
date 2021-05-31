@@ -1,5 +1,8 @@
 import Playlist, { StaticPlaylist } from './playlist'
 import { filterImages, imageMin } from './playlist/constructor'
+import Item from './playlist/item'
+import { compareTracks } from './playlist/find-duplicates'
+
 
 import { authorize, request } from './spotify'
 
@@ -8,7 +11,7 @@ describe('Playlist Utility', () => {
         simplifiedPlaylistData: SimplifiedPlaylistObject,
         playlistData: PlaylistObject,
         staticPlaylist: StaticPlaylist
-        // playlist: Playlist
+        
 
     beforeAll(() => {
         return authorize().then(
@@ -143,92 +146,146 @@ describe('Playlist Utility', () => {
         })
     })
 
-    // describe(`${ListItem.name} class’s ${ListItem.prototype.compare.name} method`, () => {
-    //     const testData = new ListItem({
-    //         id: 'main',
-    //         name: 'Some Song Title',
-    //         album: { name: "Cool Lookin’" },
-    //         artists: [
-    //             { id: 'main artist 1' },
-    //             { id: 'main artist 2' },
-    //         ],
-    //         type: 'track'
-    //     })
+    describe(`${compareTracks.name} function`, () => {
+        const testData: Item['track'] = {
+            id: 'main',
+            name: 'Some Song Title',
+            album: {
+                name: "Cool Lookin’",
+                id: 'main',
+            },
+            artists: [
+                {
+                    name: 'main artist',
+                    id: 'main-artist-1',
+                },
+                {
+                    name: 'another main artist',
+                    id: 'main-artist-2',
+                },
+            ],
+            type: 'track',
+        }
 
-    //     test.concurrent('Ignores tracks without similarities or just same track name.', async () => {
-    //         const compareTo = new ListItem({
-    //             id: 'different',
-    //             name: 'Different Song Title',
-    //             album: { name: "Something random" },
-    //             artists: [
-    //                 { id: 'big man 1' },
-    //                 { id: 'little dude' },
-    //             ],
-    //             type: 'track'
-    //         })
-    //         expect(testData.compare(compareTo)).toBeUndefined()
-    //     })
+        test.concurrent('Ignores tracks without similarities or just same track name.', async () => {
+            const compareTo: Item['track'] = {
+                id: 'different',
+                name: 'Different Song Title',
+                album: {
+                    name: "Something random",
+                    id: 'random-album'
+                },
+                artists: [
+                    {
+                        name: 'big man 1',
+                        id: 'big-man'
+                    },
+                    {
+                        name: 'little dude',
+                        id: 'little-dude'
+                    },
+                ],
+                type: 'track'
+            }
+            expect(compareTracks(testData, compareTo)).toBeUndefined()
+        })
 
-    //     test.concurrent('Ignores tracks wiht only same track name.', async () => {
-    //         const compareTo = new ListItem({
-    //             id: 'sameTrackName',
-    //             name: 'Some Song Title',
-    //             album: { name: "Random album" },
-    //             artists: [
-    //                 { id: 'a big artist' },
-    //                 { id: 'a smaller artist' },
-    //             ],
-    //             type: 'track'
-    //         })
-    //         expect(testData.compare(compareTo)).toBeUndefined()
-    //     })
+        test.concurrent('Ignores tracks wiht only same track name.', async () => {
+            const compareTo: Item['track'] = {
+                id: 'sameTrackName',
+                name: 'Some Song Title',
+                album: {
+                    name: "Random album",
+                    id: "random-album",
+                },
+                artists: [
+                    {
+                        name: 'a big artist',
+                        id: '',
+                    },
+                    {
+                        name: 'a smaller artist',
+                        id: '',
+                    },
+                ],
+                type: 'track',
+            }
+            expect(compareTracks(testData, compareTo)).toBeUndefined()
+        })
 
-    //     test.concurrent('Finds tracks with same ID.', async () => {
-    //         const compareTo = new ListItem({
-    //             id: 'main',
-    //             name: 'Has same ID',
-    //             album: { name: "Different album" },
-    //             artists: [
-    //                 { id: 'another artist 1' },
-    //                 { id: 'another artist 2' },
-    //             ],
-    //             type: 'track'
-    //         })
-    //         expect(testData.compare(compareTo)).toStrictEqual(['identical'])
-    //     })
+        test.concurrent('Finds tracks with same ID.', async () => {
+            const compareTo: Item['track'] = {
+                id: 'main',
+                name: 'Has same ID',
+                album: {
+                    name: "Different album",
+                    id: "different-album"
+                },
+                artists: [
+                    {
+                        name: 'another artist 1',
+                        id: 'another-artist-1',
+                    },
+                    {
+                        name: 'another artist 2',
+                        id: 'another-artist-2',
+                    },
+                ],
+                type: 'track'
+            }
+            expect(compareTracks(testData, compareTo)).toStrictEqual(['identical'])
+        })
 
-    //     test.concurrent('Finds tracks with same track name and artist', async () => {
-    //         const compareTo =  new ListItem({
-    //             id: 'sameTrackNameAndArtists',
-    //             name: 'Some Song Title',
-    //             album: { name: "Random" },
-    //             artists: [
-    //                 { id: 'main artist 1' },
-    //                 { id: 'another artist 2' },
-    //             ],
-    //             type: 'track'
-    //         })
-    //         expect(testData.compare(compareTo)).toStrictEqual(['track', 'artists'])
-    //     })
+        test.concurrent('Finds tracks with same track name and artist', async () => {
+            const compareTo: Item['track'] = {
+                id: 'sameTrackNameAndArtists',
+                name: 'Some Song Title',
+                album: {
+                    name: "Random",
+                    id: "random"
+                },
+                artists: [
+                    {
+                        name: 'main artist 1',
+                        id: 'main-artist-1',
+                    },
+                    {
+                        name: 'another artist 2',
+                        id: 'another-artist-2',
+                    },
+                ],
+                type: 'track'
+            }
+            expect(compareTracks(testData, compareTo)).toStrictEqual(['track', 'artists'])
+        })
 
-    //     test.concurrent('Finds tracks with same track name, artist, and album.', async () => {
-    //         const compareTo = new ListItem({
-    //             id: 'sameTrackNameAndArtistsAndAlbum',
-    //             name: 'Some Song Title',
-    //             album: { name: "Cool Lookin’" },
-    //             artists: [
-    //                 { id: 'main artist 1' },
-    //                 { id: 'another artist 2' },
-    //             ],
-    //             type: 'track'
-    //         })
-    //         expect(testData.compare(compareTo)).toStrictEqual(['track', 'artists', 'album'])
-    //         compareTo.track.album.name += ' (Delux)'
-    //         expect(testData.compare(compareTo)).toStrictEqual(['track', 'artists', 'album'])
-    //     })
-    // })
+        test.concurrent('Finds tracks with same track name, artist, and album.', async () => {
+            const compareTo: Item['track'] = {
+                id: 'sameTrackNameAndArtistsAndAlbum',
+                name: 'Some Song Title',
+                album: {
+                    name: "Cool Lookin’",
+                    id: "Cool Lookin’"
+                },
+                artists: [
+                    {
+                        name: 'main artist',
+                        id: 'main-artist-1',
+                    },
+                    {
+                        name: 'another artist 2',
+                        id: 'another-artist-2',
+                    },
+                ],
+                type: 'track'
+            }
+            expect(compareTracks(testData, compareTo)).toStrictEqual(['track', 'artists', 'album'])
+            compareTo.album.name += ' (Delux)'
+            expect(compareTracks(testData, compareTo)).toStrictEqual(['track', 'artists', 'album'])
+        })
+    })
 
-    // describe(`${Playlist.prototype.findDuplicates.name} method`, () => {
+    // describe(`${Playlist.findDuplicates.name} function`, () => {
     //     const songIds = {
     //         'Riri': '1BSUrMIGvz53oIJLwxklS6',
     //         'the.climb.back': '0FlfN5cbUUpIHCRH8X1M44'

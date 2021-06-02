@@ -1,26 +1,25 @@
 import React from 'react'
 
 import PlaylistPreview from '../components/PlaylistPreview'
-import * as Spotify from '../../utils/spotify'
-import Playlist from '../../utils/playlist'
+import { testToken, request } from '../../utils/spotify'
+import { StaticPlaylist } from '../../utils/playlist'
 
 export default {
     component: PlaylistPreview,
     title: 'Playlist Preview',
 }
 
-type Loaders = { loaded: { playlist: Playlist } }
+type Loaders = { loaded: { playlist: StaticPlaylist } }
 const loaders = [
     async () => ({
-        playlist: Playlist.convertResponse(await Spotify.request('Get a Playlist', {
-            token: 'Bearer ' + (await Spotify.authorize({
-                clientID: process.env.STORYBOOK_CLIENT_ID!,
-                clientSecret: process.env.STORYBOOK_CLIENT_SECRET!
-            })).access_token,
-            pathParameter: {
-                '{playlist_id}': '2oGXW218O4QdwjtKEEGKGP'
-            }
-        }))
+        playlist: StaticPlaylist.new(
+            await request('Get a Playlist', {
+                token: await testToken,
+                pathParameter: {
+                    '{playlist_id}': '2oGXW218O4QdwjtKEEGKGP'
+                }
+            })
+        )
     }),
 ];
 

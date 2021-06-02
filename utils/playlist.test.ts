@@ -3,20 +3,16 @@ import { filterImages, imageMin } from './playlist/constructor'
 import Item from './playlist/item'
 import { compareTracks } from './playlist/find-duplicates'
 
-
-import { authorize, request } from './spotify'
+import { testToken, Token, request } from './spotify'
 
 describe('Playlist Utility', () => {
-    let token: string,
+    let token: Token,
         simplifiedPlaylistData: SimplifiedPlaylistObject,
         playlistData: PlaylistObject,
         staticPlaylist: StaticPlaylist
-        
 
     beforeAll(() => {
-        return authorize().then(
-            res => (token = `${res.token_type} ${res.access_token}`)
-        ).then(() => {
+        return testToken.then(res => {token = res}).then(() => {
             const findTestPlaylist = (url: string): Promise<void> => {
                 return request("Get a List of a User's Playlists", {
                     token: token,
@@ -36,61 +32,73 @@ describe('Playlist Utility', () => {
             }
             return findTestPlaylist(
                 'https://api.spotify.com/v1/users/bkeys818/playlists'
-            ).then(() => request('Get a Playlist', {
+            ).then(() =>
+                request('Get a Playlist', {
                     token: token,
                     pathParameter: {
-                        "{playlist_id}": simplifiedPlaylistData.id
-                    }
-                }).then(playlist => { playlistData = playlist })
+                        '{playlist_id}': simplifiedPlaylistData.id,
+                    },
+                }).then(playlist => {
+                    playlistData = playlist
+                })
             )
         })
     })
 
     describe(`${StaticPlaylist.name} constructors`, () => {
         describe(`Cover image value (${filterImages.name} function)`, () => {
-            test.concurrent(`Returns null when all images are smaller than ${imageMin}px.`, async () => {
-                expect(
-                    filterImages([
-                        {
-                            url: 'height too small',
-                            height: imageMin - 1,
-                            width: imageMin + 1,
-                        },
-                        {
-                            url: 'width too small',
-                            height: imageMin + 1,
-                            width: imageMin - 1,
-                        },
-                    ])
-                ).toBe(null)
-            })
+            test.concurrent(
+                `Returns null when all images are smaller than ${imageMin}px.`,
+                async () => {
+                    expect(
+                        filterImages([
+                            {
+                                url: 'height too small',
+                                height: imageMin - 1,
+                                width: imageMin + 1,
+                            },
+                            {
+                                url: 'width too small',
+                                height: imageMin + 1,
+                                width: imageMin - 1,
+                            },
+                        ])
+                    ).toBe(null)
+                }
+            )
 
-            test.concurrent(`Returns smallest Image above ${imageMin}px.`, async () => {
-                expect(
-                    filterImages([
-                        {
-                            url: 'Correct Image',
-                            height: imageMin + 1,
-                            width: imageMin + 1,
-                        },
-                        {
-                            url: 'Larger Image',
-                            height: imageMin + 100,
-                            width: imageMin + 100,
-                        },
-                    ])
-                ).toBe('Correct Image')
-            })
+            test.concurrent(
+                `Returns smallest Image above ${imageMin}px.`,
+                async () => {
+                    expect(
+                        filterImages([
+                            {
+                                url: 'Correct Image',
+                                height: imageMin + 1,
+                                width: imageMin + 1,
+                            },
+                            {
+                                url: 'Larger Image',
+                                height: imageMin + 100,
+                                width: imageMin + 100,
+                            },
+                        ])
+                    ).toBe('Correct Image')
+                }
+            )
 
-            test.concurrent('If no size is defined for img, return it.', async () => {
-                expect(
-                    filterImages([
-                        {
-                            url: 'Correct Image',
-                        },
-                    ])
-                ).toBe('Correct Image')
-            })
+            test.concurrent(
+                'If no size is defined for img, return it.',
+                async () => {
+                    expect(
+                        filterImages([
+                            {
+                                url: 'Correct Image',
+                            },
+                        ])
+                    ).toBe('Correct Image')
+                }
+            )
         })
 
         test('Construct from SimplifiedPlaylistObject', () => {
@@ -99,7 +107,7 @@ describe('Playlist Utility', () => {
                 name: simplifiedPlaylistData.name,
                 id: simplifiedPlaylistData.id,
                 coverImage: expect.any(String) || null,
-                itemsInfo: simplifiedPlaylistData.tracks
+                itemsInfo: simplifiedPlaylistData.tracks,
             })
         })
         test('Construct from PlaylistObject', () => {
@@ -110,8 +118,8 @@ describe('Playlist Utility', () => {
                 coverImage: expect.any(String) || null,
                 itemsInfo: {
                     href: playlistData.tracks.href,
-                    total: playlistData.tracks.total
-                }
+                    total: playlistData.tracks.total,
+                },
             })
         })
     })
@@ -124,7 +132,7 @@ describe('Playlist Utility', () => {
                 id: simplifiedPlaylistData.id,
                 coverImage: expect.any(String) || null,
                 itemsInfo: simplifiedPlaylistData.tracks,
-                items: expect.any(Array)
+                items: expect.any(Array),
             })
         })
         test('Construct from PlaylistObject', () => {
@@ -133,16 +141,18 @@ describe('Playlist Utility', () => {
                 name: playlistData.name,
                 id: playlistData.id,
                 coverImage: expect.any(String) || null,
-                items: expect.any(Array)
+                items: expect.any(Array),
             }
             if (playlistData.tracks.items.length > 99)
                 expected.itemsInfo = {
                     href: playlistData.tracks.href,
-                    total: playlistData.tracks.total
+                    total: playlistData.tracks.total,
                 }
 
             expect(playlist).toEqual<Playlist>(expected)
-            expect(playlist.items).toHaveLength(playlistData.tracks.items.length)
+            expect(playlist.items).toHaveLength(
+                playlistData.tracks.items.length
+            )
         })
     })
 
@@ -151,7 +161,7 @@ describe('Playlist Utility', () => {
             id: 'main',
             name: 'Some Song Title',
             album: {
-                name: "Cool Lookin’",
+                name: 'Cool Lookin’',
                 id: 'main',
             },
             artists: [
@@ -167,59 +177,65 @@ describe('Playlist Utility', () => {
             type: 'track',
         }
 
-        test.concurrent('Ignores tracks without similarities or just same track name.', async () => {
-            const compareTo: Item['track'] = {
-                id: 'different',
-                name: 'Different Song Title',
-                album: {
-                    name: "Something random",
-                    id: 'random-album'
-                },
-                artists: [
-                    {
-                        name: 'big man 1',
-                        id: 'big-man'
+        test.concurrent(
+            'Ignores tracks without similarities or just same track name.',
+            async () => {
+                const compareTo: Item['track'] = {
+                    id: 'different',
+                    name: 'Different Song Title',
+                    album: {
+                        name: 'Something random',
+                        id: 'random-album',
                     },
-                    {
-                        name: 'little dude',
-                        id: 'little-dude'
-                    },
-                ],
-                type: 'track'
+                    artists: [
+                        {
+                            name: 'big man 1',
+                            id: 'big-man',
+                        },
+                        {
+                            name: 'little dude',
+                            id: 'little-dude',
+                        },
+                    ],
+                    type: 'track',
+                }
+                expect(compareTracks(testData, compareTo)).toBeUndefined()
             }
-            expect(compareTracks(testData, compareTo)).toBeUndefined()
-        })
+        )
 
-        test.concurrent('Ignores tracks wiht only same track name.', async () => {
-            const compareTo: Item['track'] = {
-                id: 'sameTrackName',
-                name: 'Some Song Title',
-                album: {
-                    name: "Random album",
-                    id: "random-album",
-                },
-                artists: [
-                    {
-                        name: 'a big artist',
-                        id: '',
+        test.concurrent(
+            'Ignores tracks wiht only same track name.',
+            async () => {
+                const compareTo: Item['track'] = {
+                    id: 'sameTrackName',
+                    name: 'Some Song Title',
+                    album: {
+                        name: 'Random album',
+                        id: 'random-album',
                     },
-                    {
-                        name: 'a smaller artist',
-                        id: '',
-                    },
-                ],
-                type: 'track',
+                    artists: [
+                        {
+                            name: 'a big artist',
+                            id: '',
+                        },
+                        {
+                            name: 'a smaller artist',
+                            id: '',
+                        },
+                    ],
+                    type: 'track',
+                }
+                expect(compareTracks(testData, compareTo)).toBeUndefined()
             }
-            expect(compareTracks(testData, compareTo)).toBeUndefined()
-        })
+        )
 
         test.concurrent('Finds tracks with same ID.', async () => {
             const compareTo: Item['track'] = {
                 id: 'main',
                 name: 'Has same ID',
                 album: {
-                    name: "Different album",
-                    id: "different-album"
+                    name: 'Different album',
+                    id: 'different-album',
                 },
                 artists: [
                     {
@@ -231,58 +247,77 @@ describe('Playlist Utility', () => {
                         id: 'another-artist-2',
                     },
                 ],
-                type: 'track'
+                type: 'track',
             }
-            expect(compareTracks(testData, compareTo)).toStrictEqual(['identical'])
+            expect(compareTracks(testData, compareTo)).toStrictEqual([
+                'identical',
+            ])
         })
 
-        test.concurrent('Finds tracks with same track name and artist', async () => {
-            const compareTo: Item['track'] = {
-                id: 'sameTrackNameAndArtists',
-                name: 'Some Song Title',
-                album: {
-                    name: "Random",
-                    id: "random"
-                },
-                artists: [
-                    {
-                        name: 'main artist 1',
-                        id: 'main-artist-1',
+        test.concurrent(
+            'Finds tracks with same track name and artist',
+            async () => {
+                const compareTo: Item['track'] = {
+                    id: 'sameTrackNameAndArtists',
+                    name: 'Some Song Title',
+                    album: {
+                        name: 'Random',
+                        id: 'random',
                     },
-                    {
-                        name: 'another artist 2',
-                        id: 'another-artist-2',
-                    },
-                ],
-                type: 'track'
+                    artists: [
+                        {
+                            name: 'main artist 1',
+                            id: 'main-artist-1',
+                        },
+                        {
+                            name: 'another artist 2',
+                            id: 'another-artist-2',
+                        },
+                    ],
+                    type: 'track',
+                }
+                expect(compareTracks(testData, compareTo)).toStrictEqual([
+                    'track',
+                    'artists',
+                ])
             }
-            expect(compareTracks(testData, compareTo)).toStrictEqual(['track', 'artists'])
-        })
+        )
 
-        test.concurrent('Finds tracks with same track name, artist, and album.', async () => {
-            const compareTo: Item['track'] = {
-                id: 'sameTrackNameAndArtistsAndAlbum',
-                name: 'Some Song Title',
-                album: {
-                    name: "Cool Lookin’",
-                    id: "Cool Lookin’"
-                },
-                artists: [
-                    {
-                        name: 'main artist',
-                        id: 'main-artist-1',
+        test.concurrent(
+            'Finds tracks with same track name, artist, and album.',
+            async () => {
+                const compareTo: Item['track'] = {
+                    id: 'sameTrackNameAndArtistsAndAlbum',
+                    name: 'Some Song Title',
+                    album: {
+                        name: 'Cool Lookin’',
+                        id: 'Cool Lookin’',
                     },
-                    {
-                        name: 'another artist 2',
-                        id: 'another-artist-2',
-                    },
-                ],
-                type: 'track'
+                    artists: [
+                        {
+                            name: 'main artist',
+                            id: 'main-artist-1',
+                        },
+                        {
+                            name: 'another artist 2',
+                            id: 'another-artist-2',
+                        },
+                    ],
+                    type: 'track',
+                }
+                expect(compareTracks(testData, compareTo)).toStrictEqual([
+                    'track',
+                    'artists',
+                    'album',
+                ])
+                compareTo.album.name += ' (Delux)'
+                expect(compareTracks(testData, compareTo)).toStrictEqual([
+                    'track',
+                    'artists',
+                    'album',
+                ])
             }
-            expect(compareTracks(testData, compareTo)).toStrictEqual(['track', 'artists', 'album'])
-            compareTo.album.name += ' (Delux)'
-            expect(compareTracks(testData, compareTo)).toStrictEqual(['track', 'artists', 'album'])
-        })
+        )
     })
 
     // describe(`${Playlist.findDuplicates.name} function`, () => {

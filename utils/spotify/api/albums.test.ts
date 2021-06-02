@@ -1,8 +1,8 @@
-import { authorize, request, requestWithURL } from '../'
-import { endpoints, RequestParams, Names, Response } from './albums'
+import { testToken, Token, request, requestWithURL } from '../'
+import { endpoints, RequestParams, Names } from './albums'
 
 const albumID = '7gsWAHLeT0w7es6FofOXk1'
-let token: string
+let token: Token
 
 const requetsByName: { [key in Names]: RequestParams<key> } = {
     'Get an Album': {
@@ -24,8 +24,8 @@ const requetsByName: { [key in Names]: RequestParams<key> } = {
 
 describe('Album requests', () => {
     beforeAll(() => {
-        return authorize().then(res => {
-            token = res.token_type + ' ' + res.access_token
+        return testToken.then(res => {
+            token = res
         })
     })
 

@@ -1,4 +1,5 @@
 import { action } from '@storybook/addon-actions'
+import { MINIMAL_VIEWPORTS } from '@storybook/addon-viewport'
 
 // Gatsby's Link overrides:
 // Gatsby Link calls the `enqueue` & `hovering` methods on the global variable ___loader.
@@ -16,4 +17,10 @@ global.__BASE_PATH__ = '/'
 
 window.___navigate = pathname => {
     action('NavigateTo:')(pathname)
+}
+
+export const parameters = {
+    viewport: {
+        viewports: MINIMAL_VIEWPORTS
+    }
 }

@@ -8,6 +8,7 @@
     "email": "bkeys818@gmail.com"
   },
   "dependencies": {
+    "@storybook/addon-viewport": "^6.2.9",
     "gatsby": "^3.2.1",
     "gatsby-plugin-gatsby-cloud": "^2.2.0",
     "gatsby-plugin-image": "^1.2.0",

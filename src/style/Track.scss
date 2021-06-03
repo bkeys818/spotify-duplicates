@@ -2,11 +2,36 @@
 
 .track {
     box-shadow: global.$box-shadow;
-    .main, .duplicate {
-        display: grid;
-        grid-template-columns: [title] 3fr [artist] 3fr [album] 2fr [icon] 48px;
-        align-items: center;
+    border-radius: 1rem;
+
+    .main, .duplicates {
+        padding: 0 .25rem;
     }
+
+    .main, .duplicates>div {
+        display: grid;
+        grid-template-columns: [title] 6fr [artist] 6fr [album] 5fr [icon] 48px;
+        align-items: center;
+
+        height: 42px;
+
+        .name, .artists, .album {
+            margin: 0 1em;
+            &:first-of-type {
+                margin-left: .75em;
+            }
+        }
+
+        [class^=symbol_] {
+            justify-self: center;
+        }
+    }
+
+    .main {
+        border-radius: inherit;
+        background-color: #fff;
+    }
+    background-color: #f9f9f9;
 }
 
 // .track {

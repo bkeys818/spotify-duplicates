@@ -10,7 +10,7 @@ export default function Track(props: TrackProps) {
     const duplicates: JSX.Element[] = []
     for (const duplicate of props.duplicates) {
         duplicates.push(
-            <div className="duplicate" key={duplicate.track.id}>
+            <div key={duplicate.track.id}>
                 {TrackInfo(duplicate.track)}
                 <p className="tag">{duplicate.similarities?.join(', ')}</p>
             </div>

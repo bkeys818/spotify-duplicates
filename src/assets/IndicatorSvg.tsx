@@ -23,7 +23,9 @@ export default function IndicatorSvg(props: IndicatorSvgProps) {
             viewBox="-16 -16 32 32"
             width={props.size}
             height={props.size}
+            className="symbol_indicator"
         >
+            <title>indicator</title>
             <g
                 fill="none"
                 stroke="black"

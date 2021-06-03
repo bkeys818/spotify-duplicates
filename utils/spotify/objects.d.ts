@@ -524,9 +524,9 @@ declare interface PlaylistObject extends Omit<SimplifiedPlaylistObject, 'tracks'
 /** [Playlist Track Object](https://developer.spotify.com/documentation/web-api/reference/#object-playlisttrackobject) */
 declare interface PlaylistTrackObject {
     /** The date and time the track or episode was added. *Note that some very old playlists may return `null` in this field.* */
-    added_at: string
+    added_at: string | null
     /** The Spotify user who added the track or episode. *Note that some very old playlists may return `null` in this field.* */
-    added_by: PublicUserObject
+    added_by: PublicUserObject | null
     /** Whether this track or episode is a [local file](https://developer.spotify.com/web-api/local-files-spotify-playlists/) or not. */
     is_local: boolean
     /** Information about the track or episode. */

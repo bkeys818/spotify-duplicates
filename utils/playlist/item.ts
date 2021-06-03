@@ -14,20 +14,24 @@ interface Track {
 // interface Episode
 type ItemTrack = Pick<PlaylistTrackObject['track'], 'name' | 'id' | 'type'> & (Track /* | Epsiode */)
 
-const Item = {
-    new(value: PlaylistTrackObject): Item {
-        return {
-            added_at: value.added_at,
-            track: (({ id, name, type, album, artists }) => ({
-                id,
-                name,
-                type,
-                album: (({ id, name }) => ({ id, name }))(album),
-                artists: artists.map(({ id, name }) => ({ id, name }))
-           }))(value.track),
-           duplicates: [],
-        }
+function newItem(value: PlaylistTrackObject): Item
+function newItem(value: TrackObject): Item
+function newItem(value: PlaylistTrackObject | TrackObject): Item {
+    return {
+        added_at: 'added_at' in value ? value.added_at : null,
+        track: (({ id, name, type, album, artists }) => ({
+            id,
+            name,
+            type,
+            album: (({ id, name }) => ({ id, name }))(album),
+            artists: artists.map(({ id, name }) => ({ id, name }))
+        }))('added_at' in value ? value.track : value),
+        duplicates: [],
     }
+}
+
+const Item = {
+    new: newItem
 }
 
 export default Item

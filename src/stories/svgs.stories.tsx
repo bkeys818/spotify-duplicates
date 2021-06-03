@@ -1,8 +1,7 @@
 import React from 'react'
 import { Story, Meta } from '@storybook/react'
 
-
-import IndicatorSvg, { IndicatorSvgProps } from '../assets/state-svg'
+import IndicatorSvg, { IndicatorSvgProps } from '../assets/IndicatorSvg'
 
 export default {
     component: IndicatorSvg,
@@ -13,17 +12,19 @@ export default {
                 'success',
                 'error',
                 'warn',
-                'hamburger'
+                'hamburger',
             ] as IndicatorSvgProps['state'][],
-            control: { type: 'select' }
-        }
-    }
+            control: { type: 'select' },
+        },
+    },
 } as Meta
 
-const Template: Story<IndicatorSvgProps> = (args) => <IndicatorSvg {...args} size={128} />;
+const Template: Story<IndicatorSvgProps> = args => (
+    <IndicatorSvg {...args} size={128} />
+)
 
-export const Default = Template.bind({});
+export const Default = Template.bind({})
 Default.args = {
     state: 'success',
-    size: 128
+    size: 128,
 }

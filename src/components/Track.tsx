@@ -1,10 +1,10 @@
 import React from 'react'
-import IndicatorSvg, { IndicatorSvgState } from '../assets/state-svg'
+import IndicatorSvg from '../assets/IndicatorSvg'
 import Playlist from '../../utils/playlist'
 
 import '../style/Track.scss'
 
-type TrackProps = Playlist['items'][number]
+export type TrackProps = Playlist['items'][number]
 
 export default function Track(props: TrackProps) {
     return (

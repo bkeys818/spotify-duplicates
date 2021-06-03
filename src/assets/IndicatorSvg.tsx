@@ -7,7 +7,7 @@ export interface IndicatorSvgProps {
     strokeWidth?: number
 }
 
-export default function IndicatorSVG(props: IndicatorSvgProps) {
+export default function IndicatorSvg(props: IndicatorSvgProps) {
     // const [rotation, setRotation] = useState(0)
     const styles = useSpring({
         config: { duration: 500 },

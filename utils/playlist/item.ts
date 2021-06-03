@@ -1,4 +1,4 @@
-import type { IndicatorSvgState } from '../../src/assets/state-svg'
+import type { IndicatorSvgState } from '../../src/assets/IndicatorSvg'
 import type { Similarities } from './find-duplicates'
 
 interface Item extends Pick<PlaylistTrackObject, 'added_at'> {

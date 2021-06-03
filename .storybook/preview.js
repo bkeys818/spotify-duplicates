@@ -1,6 +1,9 @@
 import { action } from '@storybook/addon-actions'
 import { MINIMAL_VIEWPORTS } from '@storybook/addon-viewport'
 
+import Playlist from '../utils/playlist'
+import { testToken, request } from '../utils/spotify'
+
 // Gatsby's Link overrides:
 // Gatsby Link calls the `enqueue` & `hovering` methods on the global variable ___loader.
 // This global object isn't set in storybook context, requiring you to override it to empty functions (no-op),
@@ -24,3 +27,15 @@ export const parameters = {
         viewports: MINIMAL_VIEWPORTS
     }
 }
+
+/** @type { Promise<{ [key: number]: any; [key: string]: any }> } */
+export const loaders = [
+    async () => ({
+        playlist: Playlist.new(await request('Get a Playlist', {
+            pathParameter: {
+                "{playlist_id}": '6innvmsboMZC5rdrmY292j'
+            },
+            token: await testToken
+        }))
+    }),
+]

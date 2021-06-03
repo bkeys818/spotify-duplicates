@@ -7,38 +7,33 @@ import '../style/Track.scss'
 export type TrackProps = Playlist['items'][number]
 
 export default function Track(props: TrackProps) {
+    const duplicates: JSX.Element[] = []
+    for (const duplicate of props.duplicates) {
+        duplicates.push(
+            <div className="duplicate" key={duplicate.track.id}>
+                {TrackInfo(duplicate.track)}
+                <p className="tag">{duplicate.similarities?.join(', ')}</p>
+            </div>
+        )
+    }
+    
     return (
         <div className="track">
-            <MainTrackInfo {...props}/>
+            <div className="main">
+                {TrackInfo(props.track)}
+                <IndicatorSvg state={props.icon ?? "hamburger"} size={32} />
+            </div>
             {props.duplicates.length > 0 && (
-                <div className="duplicates">
-                    {props.duplicates.map(duplicate => (
-                        <DuplicateTrackInfo key={duplicate.track.id} {...props}/>
-                    ))}
-                </div>
+                <div className="duplicates">{duplicates}</div>
             )}
         </div>
     )
 }
 
-const MainTrackInfo = ({ track, icon }: TrackProps) => (
-    <div className="main">
-        <p className="name clip-text_one-line_ellipsis ">{track.name}</p>
-        <p className="artists clip-text_one-line_ellipsis body2">
-            {track.artists.map(artist => artist.name).join(', ')}
-        </p>
-        <p className="album clip-text_one-line_ellipsis body2">{track.album.name}</p>
-        {icon && <IndicatorSvg state={icon} size={32} />}
-    </div>
-)
-
-const DuplicateTrackInfo = ({ track, similarities }: TrackProps) => (
-    <div className="duplicate">
-        <p className="name clip-text_one-line_ellipsis ">{track.name}</p>
-        <p className="artists clip-text_one-line_ellipsis body2">
-            {track.artists.map(artist => artist.name).join(', ')}
-        </p>
-        <p className="album clip-text_one-line_ellipsis body2">{track.album.name}</p>
-        <p className="tag">{similarities?.join(', ')}</p>
-    </div>
-)
+const TrackInfo = ({ name, album, artists }: TrackProps['track']) => [
+    <p key="name" className="name clip-text_one-line_ellipsis ">{name}</p>,
+    <p key="artists" className="artists clip-text_one-line_ellipsis body2">
+        {artists.map(artist => artist.name).join(', ')}
+    </p>,
+    <p key="album" className="album clip-text_one-line_ellipsis body2">{album.name}</p>
+]

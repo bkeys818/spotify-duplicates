@@ -8,6 +8,7 @@ module.exports = {
         "@storybook/addon-essentials",
         "@storybook/preset-scss",
     ],
+    /** @param { import('webpack').Configuration } config */
     webpackFinal: async config => {
         // Transpile Gatsby module because Gatsby includes un-transpiled ES6 code.
         config.module.rules[0].exclude = [/node_modules\/(?!(gatsby)\/)/]

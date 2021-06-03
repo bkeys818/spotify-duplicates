@@ -5,6 +5,7 @@ export interface IndicatorSvgProps {
     state: IndicatorSvgState
     size?: number
     strokeWidth?: number
+    onClick?: () => void
 }
 
 export default function IndicatorSvg(props: IndicatorSvgProps) {
@@ -24,20 +25,19 @@ export default function IndicatorSvg(props: IndicatorSvgProps) {
             width={props.size}
             height={props.size}
             className="symbol_indicator"
+            onClick={props.onClick}
         >
             <title>indicator</title>
             <g
                 fill="none"
                 stroke="black"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2.5px"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2.5px"
             >
-                {[styles.path1, styles.path2, styles.path3].map(path => (
-                    <animated.path d={path} style={{
-                        // color: styles.color
-                    }}/>
-                ))}
+                <animated.path d={styles.path1} />
+                <animated.path d={styles.path2} />
+                <animated.path d={styles.path3} />
             </g>
         </svg>
     )

@@ -83,7 +83,6 @@ const Template: Story<CustomTrackProps> = (
 
     if (args.duplicates)
         for (const duplicate of args.duplicates) {
-            console.log(duplicate)
             duplicates.push(getTrack(duplicate, playlist))
         }
 

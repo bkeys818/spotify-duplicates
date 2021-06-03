@@ -1,19 +1,26 @@
 @use 'global' as global;
 
+$track-height: 42px;
+
 .track {
-    box-shadow: global.$box-shadow;
-    border-radius: 1rem;
+    // height: $track-height;
+    width: 100%;
 
-    .main, .duplicates {
-        padding: 0 .25rem;
+    position: relative;
+    .main, .duplicate {
+        position: absolute;
+        height: $track-height;
+        width: 100%;
     }
+}
 
-    .main, .duplicates>div {
+.track {
+    .main, .duplicate {
         display: grid;
         grid-template-columns: [title] 6fr [artist] 6fr [album] 5fr [icon] 48px;
         align-items: center;
 
-        height: 42px;
+        padding: 0 .25rem;
 
         .name, .artists, .album {
             margin: 0 1em;
@@ -26,40 +33,21 @@
             justify-self: center;
         }
     }
-
-    .main {
-        border-radius: inherit;
-        background-color: #fff;
-    }
-    background-color: #f9f9f9;
 }
 
-// .track {
-//     margin: .25em 0;
-//     padding: .25em 0;
-//     border-bottom: 1px solid rgba(119, 136, 153, 0.2);
-// }
+.track {
+    box-shadow: global.$box-shadow;
+    background-color: global.$color-secondary-background;
 
-// p {
-//     line-height: 1.25em;
-// }
+    border-radius: 1rem;
+    overflow: hidden;
 
-// @media screen and (max-width: 749px) {
-//     .track:first-of-type {
-//         display: none;
-        
-//     }
-//     p:nth-child(3) {
-//         display: none;
-//     }
-// }
+    .main {
+        background-color: global.$color-primary-background;
+        border-radius: inherit;
+    }
 
-// @media screen and (min-width: 750px) {
-//     .track {
-//         display: grid;
-//         grid-template-columns: [title] 3fr [artist] 2fr [album] 2fr [icon] 48px;
-//         // justify-items: left;
-//         align-items: center;
-//         // border-bottom: 1px solid rgba(119, 136, 153, 0.2);
-//     }
-// }
+    .duplicate {
+        // border-bottom: ;
+    }
+}

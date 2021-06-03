@@ -1,4 +1,5 @@
 @use "./global" as global;
+@use "sass:math";
 
 $ratio: 4;
 $small: 128px;
@@ -20,7 +21,7 @@ $large: 168px;
     @include responsive-design($small);
 
     @media (min-width: $small * $ratio) {
-        @include responsive-design(100vw / $ratio);
+        @include responsive-design(math.div(100vw, $ratio));
     }
 
     @media (min-width: $large * $ratio) {

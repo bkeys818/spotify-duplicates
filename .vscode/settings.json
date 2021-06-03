@@ -70,5 +70,12 @@
             "icon": "link",
             "type": "tag"
         }
-    }
+    },
+    "gitmoji.additionalEmojis": [
+        {
+            "emoji": "📕",
+            "code": ":closed_book:",
+            "description": "Add or update story"
+        }
+    ]
 }

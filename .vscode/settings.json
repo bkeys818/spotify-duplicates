@@ -8,7 +8,7 @@
 
         "tsconfig.json": true,
         "gatsby-config.js": true,
-        "jest.config.js": true,
+        "jest.config.ts": true,
         ".prettierrc": true,
         ".prettierignore": true,
 

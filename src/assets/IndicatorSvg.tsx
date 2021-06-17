@@ -30,7 +30,7 @@ export default function IndicatorSvg(props: IndicatorSvgProps) {
             <title>indicator</title>
             <g
                 fill="none"
-                stroke="black"
+                stroke="currentColor"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="2.5px"
@@ -43,7 +43,7 @@ export default function IndicatorSvg(props: IndicatorSvgProps) {
     )
 }
 
-export type IndicatorSvgState = 'success' | 'error' | 'warn' | 'hamburger'
+export type IndicatorSvgState = 'success' | 'error' | 'warn' | 'hamburger' | 'none'
 
 interface AnimatedProps {
     color: React.CSSProperties['color']
@@ -55,6 +55,12 @@ interface AnimatedProps {
 const animatedProps: {
     [key in IndicatorSvgState]: AnimatedProps
 } = {
+    none: {
+        color: '',
+        path1: 'm0,0',
+        path2: 'm0,0',
+        path3: 'm0,0',
+    },
     success: {
         color: '',
         path1: 'M -14,0 a 14,14 0 1,0 28,0 a 14,14 0 1,0 -28,0',

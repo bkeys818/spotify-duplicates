@@ -4,7 +4,7 @@ import CoverImage from './CoverImage'
 
 import '../style/PlaylistPreview.scss'
 
-interface PlaylistPreviewProps {
+export interface PlaylistPreviewProps {
     name: string
     cover?: string | null
     handleClick?: React.MouseEventHandler<HTMLDivElement>

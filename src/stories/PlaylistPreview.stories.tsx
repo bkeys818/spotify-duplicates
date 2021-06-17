@@ -1,34 +1,21 @@
 import React from 'react'
+import { Meta } from './custom-storybook-types'
 
-import PlaylistPreview from '../components/PlaylistPreview'
+import PlaylistPreview, { PlaylistPreviewProps } from '../components/PlaylistPreview'
 import { testToken, request } from '../../utils/spotify'
 import { StaticPlaylist } from '../../utils/playlist'
 
 export default {
     component: PlaylistPreview,
     title: 'Playlist Preview',
-}
+} as Meta<PlaylistPreviewProps>
 
-type Loaders = { loaded: { playlist: StaticPlaylist } }
-const loaders = [
-    async () => ({
-        playlist: StaticPlaylist.new(
-            await request('Get a Playlist', {
-                token: await testToken,
-                pathParameter: {
-                    '{playlist_id}': '2oGXW218O4QdwjtKEEGKGP'
-                }
-            })
-        )
-    }),
-];
+type Loaders = { loaded: { staticPlaylist: StaticPlaylist } }
 
-export const Default = (args: any, { loaded: { playlist } }: Loaders) => (
-    <PlaylistPreview name={playlist.name} cover={playlist.coverImage} />
+export const Default = (args: any, { loaded: { staticPlaylist } }: Loaders) => (
+    <PlaylistPreview name={staticPlaylist.name} cover={staticPlaylist.coverImage} />
 )
-Default.loaders = loaders
 
-export const NoCover = (args: any, { loaded: { playlist } }: Loaders) => (
-    <PlaylistPreview name={playlist.name} />
+export const NoCover = (args: any, { loaded: { staticPlaylist } }: Loaders) => (
+    <PlaylistPreview name={staticPlaylist.name} />
 )
-NoCover.loaders = loaders

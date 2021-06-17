@@ -19,9 +19,5 @@
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
     },
-    "include": [
-        "src",
-        "utils/playlist",
-        "test",
-    ]
+    "include": [ "spotify" ]
 }

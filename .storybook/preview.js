@@ -1,7 +1,7 @@
 import { action } from '@storybook/addon-actions'
 import { MINIMAL_VIEWPORTS } from '@storybook/addon-viewport'
 
-import Playlist from '../utils/playlist'
+import Playlist, { StaticPlaylist } from '../utils/playlist'
 import { testToken, request } from '../utils/spotify'
 
 // Gatsby's Link overrides:
@@ -30,12 +30,16 @@ export const parameters = {
 
 /** @type { Promise<{ [key: number]: any; [key: string]: any }> } */
 export const loaders = [
-    async () => ({
-        playlist: Playlist.new(await request('Get a Playlist', {
+    async () => {
+        const data = await request('Get a Playlist', {
             pathParameter: {
                 "{playlist_id}": '6innvmsboMZC5rdrmY292j'
             },
             token: await testToken
-        }))
-    }),
+        })
+        return {
+            playlist: Playlist.new(data),
+            staticPlaylist: StaticPlaylist.new(data)
+        }
+    }
 ]

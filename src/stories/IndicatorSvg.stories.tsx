@@ -9,6 +9,7 @@ export default {
     argTypes: {
         state: {
             options: [
+                'none',
                 'success',
                 'error',
                 'warn',

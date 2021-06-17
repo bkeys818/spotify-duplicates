@@ -10,20 +10,15 @@ const defaultHeight = 42
 
 export default function Track({ track, duplicates, icon }: TrackProps) {
     const [isExpanded, setIsExpanded] = useState(false)
-
     const { height } = useSpring({
         height:  isExpanded ? defaultHeight * (duplicates.length + 1) : defaultHeight,
     })
-
-    // const [trackHeight, setTrackHeight] = useState(rowHeight)
 
     const expandsDuplicateTracks = (old: typeof isExpanded) => {
         setIsExpanded(!old)
     }
 
-    const [symbolFunc, setSymbolFunc] = useState(() => {
-        return expandsDuplicateTracks
-    })
+    const [symbolFunc, setSymbolFunc] = useState(() => (initial: boolean) => { setIsExpanded(!initial) })
 
     return (
         <animated.div className="track" style={{ height: height }} >
@@ -79,13 +74,3 @@ const TrackItem = ({ track, className, style, symbol}: TrackItemProps) => (
         {symbol}
     </div>
 )
-
-const TrackInfo = ({name, artists, album}: TrackProps['track']) => [
-    <p key="name" className="name clip-text_one-line_ellipsis ">{name}</p>,
-    <p key="artists" className="artists clip-text_one-line_ellipsis body2">
-        {artists.map(artist => artist.name).join(', ')}
-    </p>,
-    <p key="album" className="album clip-text_one-line_ellipsis body2">
-        {album.name}
-    </p>
-]

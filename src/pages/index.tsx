@@ -4,7 +4,7 @@ import Cookies from 'universal-cookie'
 import { request } from 'spotify-api-request'
 import { StaticPlaylist } from '../../utils/playlist'
 
-import type { EditPlaylistLinkProps as EditPlaylistProps } from './edit-playlist'
+import type { PlaylistViewProps } from './playlist-view'
 
 import PageTemplate from '../template/Page'
 import PlaylistPreview from '../components/PlaylistPreview'
@@ -75,7 +75,7 @@ export default class Index extends React.Component<IndexProps, IndexStates> {
     }
 }
 
-function linkProps(props: EditPlaylistProps) {
+function linkProps(props: PlaylistViewProps) {
     return props
 }
 

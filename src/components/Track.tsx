@@ -8,21 +8,21 @@ import '../style/Track.scss'
 export type TrackProps = Playlist['items'][number]
 const defaultHeight = 42
 
-export default function Track({ track, duplicates, icon }: TrackProps) {
-    const [isExpanded, setIsExpanded] = useState(false)
-    const { height } = useSpring({
-        height:  isExpanded ? defaultHeight * (duplicates.length + 1) : defaultHeight,
-    })
+export function Track({ track, duplicates, icon }: TrackProps) {
+    // const [isExpanded, setIsExpanded] = useState(false)
+    // const { height } = useSpring({
+    //     height: isExpanded ? defaultHeight * (duplicates.length + 1) : defaultHeight,
+    // })
 
-    const expandsDuplicateTracks = (old: typeof isExpanded) => {
-        setIsExpanded(!old)
-    }
-
-    const [symbolFunc, setSymbolFunc] = useState(() => (initial: boolean) => { setIsExpanded(!initial) })
+    // const [symbolFunc, setSymbolFunc] = useState(() => (initial: boolean) => { setIsExpanded(!initial) })
 
     return (
-        <animated.div className="track" style={{ height: height }} >
-
+        <animated.div
+            id={track.id}
+            className="track"
+            style={{ height: 42 /* height */ }}
+        >
+            {/* main track */}
             <TrackItem
                 track={track}
                 className="main"
@@ -32,16 +32,16 @@ export default function Track({ track, duplicates, icon }: TrackProps) {
                     <IndicatorSvg
                         state={icon ?? 'hamburger'}
                         size={32}
-                        onClick={() => { symbolFunc(isExpanded) }}
+                        // onClick={() => { symbolFunc(isExpanded) }}
                     />
                 }
             />
-
+            {/* duplicate tracks */}
             {duplicates.map<JSX.Element>((duplicate, i) => (
                 <TrackItem
                     track={duplicate.track}
                     className="duplicate"
-                    key={duplicate.track.id}
+                    key={duplicate.track.id + '-' + i}
                     style={{
                         zIndex: duplicates.length - 1 - i,
                         top: `calc((100% - ${defaultHeight}px) * ${i+1} / ${duplicates.length})`

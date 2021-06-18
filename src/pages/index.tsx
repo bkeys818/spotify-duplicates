@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, navigate } from 'gatsby'
 import Cookies from 'universal-cookie'
-import { request } from '../../utils/spotify'
+import { request } from 'spotify-api-request'
 import { StaticPlaylist } from '../../utils/playlist'
 
 import type { EditPlaylistLinkProps as EditPlaylistProps } from './edit-playlist'
@@ -37,15 +37,15 @@ export default class Index extends React.Component<IndexProps, IndexStates> {
             replace: true
         })
 
-        request("Get a List of Current User's Playlists", {
-            token: this.token,
-        })
-            .then(response => {
-                this.setState({
-                    playlists: response.items.map(StaticPlaylist.new),
-                })
+        request({
+            name: "Get a List of Current User's Playlists",
+            token: this.token
+        }).then(response => {
+            this.setState({
+                playlists: response.items.map(StaticPlaylist.new),
             })
-            .catch(console.error)
+        })
+        .catch(console.error)
     }
 
     render() {
@@ -54,7 +54,7 @@ export default class Index extends React.Component<IndexProps, IndexStates> {
                 <div className="playlist-container">
                     {this.state.playlists.map(playlist => (
                         <Link
-                            to={`/edit-playlist?id=${playlist.id}`}
+                            to={`/playlist-view?id=${playlist.id}`}
                             key={playlist.id}
                             className="link"
                             state={linkProps({

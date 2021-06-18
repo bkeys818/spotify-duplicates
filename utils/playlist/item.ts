@@ -1,5 +1,9 @@
 import type { IndicatorSvgState } from '../../src/assets/IndicatorSvg'
 import type { Similarities } from './find-duplicates'
+import type {
+    PlaylistTrackObject,
+    TrackObject,
+} from 'spotify-api-request/types/objects'
 
 interface Item extends Pick<PlaylistTrackObject, 'added_at'> {
     track: ItemTrack

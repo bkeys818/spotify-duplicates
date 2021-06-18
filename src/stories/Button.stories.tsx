@@ -1,6 +1,5 @@
 import React from 'react'
 import { Meta, Story } from '@storybook/react'
-import { addons } from "@storybook/addon-essentials";
 import Button, { ButtonProps } from "../components/Button";
 
 export default {

@@ -1,26 +1,31 @@
 import Playlist, { StaticPlaylist } from '.'
 import Item from './item'
+import type {
+    SimplifiedPlaylistObject,
+    PlaylistObject,
+    ImageObject,
+} from 'spotify-api-request/types/objects'
 
-export function staticConstructor(value: SimplifiedPlaylistObject | PlaylistObject): StaticPlaylist {
-    return (({ name, id, tracks, images }) => ({
-        name,
-        id,
-        itemsInfo: (({ href, total}) => ({ href, total}))(tracks),
-        coverImage: filterImages(images)
-    } as StaticPlaylist))(value)
+export function staticConstructor(
+    value: SimplifiedPlaylistObject | PlaylistObject
+): StaticPlaylist {
+    return (({ name, id, tracks, images }) =>
+        ({
+            name,
+            id,
+            itemsInfo: (({ href, total }) => ({ href, total }))(tracks),
+            coverImage: filterImages(images),
+        } as StaticPlaylist))(value)
 }
 
 function constructor(value: StaticPlaylist): Playlist
 function constructor(value: PlaylistObject): Playlist
 function constructor(value: StaticPlaylist | PlaylistObject): Playlist {
-    const staticPlaylist = 
-        'tracks' in value
-            ? staticConstructor(value)
-            : value
+    const staticPlaylist = 'tracks' in value ? staticConstructor(value) : value
 
     const results: Playlist = {
         ...staticPlaylist,
-        items: new Array(staticPlaylist.itemsInfo!.total)
+        items: new Array(staticPlaylist.itemsInfo!.total),
     }
 
     if ('tracks' in value) {

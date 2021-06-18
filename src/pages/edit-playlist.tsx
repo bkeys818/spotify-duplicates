@@ -4,7 +4,7 @@ import Cookies from 'universal-cookie'
 import Playlist, { StaticPlaylist } from '../../utils/playlist'
 
 import TrackList from '../components/TrackList'
-import { request } from '../../utils/spotify'
+import { request } from 'spotify-api-request'
 
 interface EditPlaylistProps {
     token: string
@@ -47,7 +47,8 @@ export default class EditPlaylist extends React.Component<
                 const id = new URL(location.href).searchParams.get('id')
                 if (!id) navigate('/')
                 else {
-                    const response = await request('Get a Playlist', {
+                    const response = await request({
+                        name: 'Get a Playlist',
                         token: this.state.token,
                         pathParameter: {
                             '{playlist_id}': id,

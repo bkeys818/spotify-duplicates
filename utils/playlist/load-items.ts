@@ -1,7 +1,10 @@
 import EditPlaylist from '../../src/pages/edit-playlist'
 import Item from './item'
-
-import { requestWithURL } from '../spotify'
+import { request } from 'spotify-api-request'
+import type {
+    PlaylistObject,
+    PlaylistTrackObject,
+} from 'spotify-api-request/types/objects'
 
 export default function loadItems(this: EditPlaylist): Promise<void> {
 
@@ -9,11 +12,11 @@ export default function loadItems(this: EditPlaylist): Promise<void> {
     const addTracksAndGetNextUrl = (...[url, tracks]: Params): Promise<Params> => {
         return Promise.all([
             url
-                ? requestWithURL({
-                      url: url,
-                      method: 'GET',
-                      token: this.state.token,
-                  })
+                ? request({
+                    url: url,
+                    method: 'GET',
+                    token: this.state.token
+                })
                 : null,
             new Promise((resolve: (value: void) => void) => {
                 if (tracks.length > 0) {

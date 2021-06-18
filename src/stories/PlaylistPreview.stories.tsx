@@ -2,7 +2,6 @@ import React from 'react'
 import { Meta } from './custom-storybook-types'
 
 import PlaylistPreview, { PlaylistPreviewProps } from '../components/PlaylistPreview'
-import { testToken, request } from '../../utils/spotify'
 import { StaticPlaylist } from '../../utils/playlist'
 
 export default {

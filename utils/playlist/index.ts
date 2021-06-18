@@ -2,6 +2,10 @@ import constructor, { staticConstructor } from './constructor'
 import Item from './item'
 import loadItems from './load-items'
 import findDuplicates from './find-duplicates'
+import type {
+    SimplifiedPlaylistObject,
+    PlaylistObject,
+} from 'spotify-api-request/types/objects'
 
 interface StaticPlaylist extends Pick<PlaylistObject, 'id' | 'name'> {
     readonly coverImage: string | null

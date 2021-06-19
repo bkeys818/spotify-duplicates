@@ -62,7 +62,7 @@
     "start": "npm run develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "test": "jest utils/spotify && jest --coverage",
+    "test": "jest --coverage",
     "coverage": "open http://localhost:8080 & http-server -s -a localhost ./coverage/lcov-report",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"

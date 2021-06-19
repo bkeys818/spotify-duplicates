@@ -2,7 +2,7 @@ import { action } from '@storybook/addon-actions'
 import { MINIMAL_VIEWPORTS } from '@storybook/addon-viewport'
 
 import Playlist, { StaticPlaylist } from '../utils/playlist'
-import { testToken, request } from '../utils/spotify'
+import { authorize, request } from 'spotify-api-request'
 
 // Gatsby's Link overrides:
 // Gatsby Link calls the `enqueue` & `hovering` methods on the global variable ___loader.
@@ -28,18 +28,20 @@ export const parameters = {
     }
 }
 
-/** @type { Promise<{ [key: number]: any; [key: string]: any }> } */
+/** @type { Promise<{ [key: string]: any }> } */
 export const loaders = [
     async () => {
-        const data = await request('Get a Playlist', {
+        const token = await authorize()
+        const playlistData = await request({
+            name: 'Get a Playlist',
             pathParameter: {
                 "{playlist_id}": '6innvmsboMZC5rdrmY292j'
             },
-            token: await testToken
+            token: token
         })
         return {
-            playlist: Playlist.new(data),
-            staticPlaylist: StaticPlaylist.new(data)
+            playlist: Playlist.new(playlistData),
+            staticPlaylist: StaticPlaylist.new(playlistData)
         }
     }
 ]

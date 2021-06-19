@@ -9,7 +9,7 @@ import Track from '../components/Track'
 
 import { request } from 'spotify-api-request'
 import Playlist, { StaticPlaylist } from '../../utils/playlist'
-import type { MaybeLinkedProps } from './page-types'
+import type { MaybeLinkedProps } from '../page-types'
 
 import '../style/PlaylistView.scss'
 

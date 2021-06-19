@@ -69,7 +69,6 @@ export default {
             },
         },
         added_at: { table: { disable: true } },
-        icon: { table: { disable: true } },
         similarities: { table: { disable: true } },
     },
 } as Meta<CustomTrackProps>

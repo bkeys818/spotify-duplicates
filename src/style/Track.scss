@@ -1,4 +1,5 @@
 @use 'global' as global;
+@use 'sass:color';
 
 $track-height: 42px;
 
@@ -10,27 +11,45 @@ $track-height: 42px;
     .main, .duplicate {
         position: absolute;
         height: $track-height;
+    }
+
+    // padding outside of seperating border
+    $padding: 12px;
+    .main {
         width: 100%;
+        padding: 0 $padding;
+    }
+    .duplicate {
+        width: calc(100% - (2 * #{$padding}));
+        margin: 0 $padding;
     }
 }
 
 .track {
     .main, .duplicate {
         display: grid;
-        grid-template-columns: [title] 6fr [artist] 6fr [album] 5fr [icon] 48px;
+        grid-template-columns: [title] 6fr [artist] 4fr [album] 0 [icon] 38px;
         align-items: center;
 
-        padding: 0 .25rem;
+        // desktop
+        @media screen and (min-width: 750px) {
+            grid-template-columns: [title] 6fr [artist] 6fr [album] 5fr [icon] 38px;
+        }
 
         .name, .artists, .album {
-            margin: 0 1em;
+            margin: 0 .6em;
             &:first-of-type {
                 margin-left: .75em;
             }
         }
 
+        
+
         [class^=symbol_] {
             justify-self: center;
+            margin-left: 12px;
+            width: 24px;
+            height: 24px;
         }
     }
 }
@@ -48,6 +67,12 @@ $track-height: 42px;
     }
 
     .duplicate {
-        // border-bottom: ;
+        border-bottom: .5px solid color.adjust(
+            global.$color-primary-background,
+            $blackness: 10%
+        );
+        &:last-of-type {
+            border-bottom: none;
+        }
     }
 }

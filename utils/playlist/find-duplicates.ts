@@ -1,7 +1,7 @@
-import EditPlaylist from '../../src/pages/edit-playlist'
+import PlaylistView from '../../src/pages/playlist-view'
 import Item from './item'
 
-export default function findDuplicates(this: EditPlaylist) {
+export default function findDuplicates(this: PlaylistView) {
     const originalIndexs: (number | undefined)[] = []
     const { items } = this.state
 

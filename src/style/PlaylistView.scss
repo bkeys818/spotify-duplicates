@@ -1,10 +1,9 @@
 @use "./global" as global;
 
-// TODO - Improve UI
-
 #playlist-actions {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     .button:nth-child(n+2) {
         margin-left: 14px;
     }
@@ -13,60 +12,52 @@
     &::-webkit-scrollbar {
         display: none;
     }
-
-    @media screen and (min-width: 450px) {
-        justify-content: flex-end;
-    }
 }
 
 #playlist-header {
-    margin: 16px 0;
-
+    margin: 16px 0 22px;
     display: flex;
     justify-content: center;
     flex-direction: column;
+    align-items: center;
 
     .cover {
+        @include global.responsive-size((height, width, min-width), 550px, 150px, 750px, 180px);
+        margin: 0 auto 12px;
         min-width: 150px;
-        @include global.responsive-size(height, 550px, 150px, 750px, 200px);
-        @include global.responsive-size(width, 550px, 150px, 750px, 200px);
-        @include global.responsive-size(min-width, 550px, 150px, 750px, 200px);
-        margin: 0 auto;
     }
 
-    h3 {
+    h4 {
         text-align: center;
         font-family: 'Roboto', sans-serif;
         line-height: 1.2em;
-        max-height: 2.4em;
+        @include global.responsive-size(font-size, 550px, 34px, 750px, 56px);
+        max-height: 201px;
     }
 
+
+    /*** desktop ***/
     @media screen and (min-width: 450px) {
         flex-direction: row;
-        align-items: flex-end;
 
         .cover {
             margin: 0;
         }
 
-        h3 {
+        h4 {
+            align-self: flex-end;
             text-align: left;
             margin-left: 20px;
             overflow: hidden;
         }
     }
 
-    @media screen and (min-width: 750px) {
-        .cover {
-            min-width: 200px;
-        }
-        h3 {
-            font-size: 6.4vw;
-        }
-    }
-    @media screen and (min-width: 1000px) {
-        h3 {
-            font-size: 64px;
-        }
+}
+
+#track-list {
+    max-width: 1200px;
+    margin: 0 auto;
+    .track:nth-child(n+2) {
+        margin-top: 8px;
     }
 }

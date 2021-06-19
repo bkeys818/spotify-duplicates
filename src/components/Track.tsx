@@ -1,40 +1,60 @@
 import React, { useState } from 'react'
-import { useSpring, animated, config, SpringConfig } from 'react-spring'
-import IndicatorSvg from '../assets/IndicatorSvg'
+import { useSpring, animated, SpringValue } from 'react-spring'
+import DuplicateStatus from '../assets/DuplicateStatus'
 import Playlist from '../../utils/playlist'
+import type { CurrentAction } from '../pages/playlist-view'
 
 import '../style/Track.scss'
 
-export type TrackProps = Playlist['items'][number]
+export type TrackProps = Playlist['items'][number] & {
+    currentAction: CurrentAction
+}
 const defaultHeight = 42
 
-export function Track({ track, duplicates, icon }: TrackProps) {
-    // const [isExpanded, setIsExpanded] = useState(false)
-    // const { height } = useSpring({
-    //     height: isExpanded ? defaultHeight * (duplicates.length + 1) : defaultHeight,
-    // })
+export default function Track({
+    track,
+    duplicates,
+    currentAction,
+}: TrackProps) {
+    let mainSymbol: JSX.Element | undefined
+    // let duplicateSymbol
+    let height: number | SpringValue<number> = defaultHeight
 
-    // const [symbolFunc, setSymbolFunc] = useState(() => (initial: boolean) => { setIsExpanded(!initial) })
+    if (currentAction == 'findDuplicates' && duplicates.length > 0) {
+        const [isExpanded, setIsExpanded] = useState(false)
+        height = useSpring({
+            height: isExpanded
+                ? defaultHeight * (duplicates.length + 1)
+                : defaultHeight,
+        }).height
+
+        mainSymbol = (
+            <DuplicateStatus
+                status={
+                    duplicates.some(
+                        duplicate => duplicate.similarities == ['identical']
+                    )
+                        ? 'error'
+                        : 'warn'
+                }
+                onClick={() => { setIsExpanded(!isExpanded) }}
+            />
+        )
+    }
 
     return (
         <animated.div
             id={track.id}
             className="track"
-            style={{ height: 42 /* height */ }}
+            style={{ height: height }}
         >
             {/* main track */}
             <TrackItem
                 track={track}
                 className="main"
                 key="main"
-                style={{ zIndex: duplicates.length, }}
-                symbol={
-                    <IndicatorSvg
-                        state={icon ?? 'hamburger'}
-                        size={32}
-                        // onClick={() => { symbolFunc(isExpanded) }}
-                    />
-                }
+                style={{ zIndex: duplicates.length }}
+                symbol={mainSymbol}
             />
             {/* duplicate tracks */}
             {duplicates.map<JSX.Element>((duplicate, i) => (
@@ -44,11 +64,15 @@ export function Track({ track, duplicates, icon }: TrackProps) {
                     key={duplicate.track.id + '-' + i}
                     style={{
                         zIndex: duplicates.length - 1 - i,
-                        top: `calc((100% - ${defaultHeight}px) * ${i+1} / ${duplicates.length})`
+                        top: `calc((100% - ${defaultHeight}px) * ${i + 1} / ${
+                            duplicates.length
+                        })`,
                     }}
-                    symbol={
-                        <p className="tag">{duplicate.similarities?.join(', ')}</p>
-                    }
+                    // symbol={
+                    //     <p className="tag">
+                    //         {duplicate.similarities?.join(', ')}
+                    //     </p>
+                    // }
                 />
             ))}
         </animated.div>
@@ -56,14 +80,14 @@ export function Track({ track, duplicates, icon }: TrackProps) {
 }
 
 interface TrackItemProps {
-    track: TrackProps['track'],
+    track: TrackProps['track']
     className: string
     style?: React.CSSProperties
-    symbol: JSX.Element
+    symbol?: JSX.Element
 }
 
-const TrackItem = ({ track, className, style, symbol}: TrackItemProps) => (
-    <div className={className} style={style} >
+const TrackItem = ({ track, className, style, symbol }: TrackItemProps) => (
+    <div className={className} style={style}>
         <p className="name clip-text_one-line_ellipsis ">{track.name}</p>
         <p className="artists clip-text_one-line_ellipsis body2">
             {track.artists.map(artist => artist.name).join(', ')}

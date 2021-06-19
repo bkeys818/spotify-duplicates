@@ -8,8 +8,7 @@ import type {
 interface Item extends Pick<PlaylistTrackObject, 'added_at'> {
     track: ItemTrack
     duplicates: Item[]
-    icon?: IndicatorSvgState
-    similarities?: Exclude<Similarities, 0>
+    similarities?: Similarities
 }
 interface Track {
     album: Pick<TrackObject['album'], 'id' | 'name'>
